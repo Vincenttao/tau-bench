@@ -1,0 +1,103 @@
+{
+  "scope": "One authorized diagnostic rerun; not a paired benchmark or general efficacy claim",
+  "baseline": {
+    "batch": "zh-e2e-20261116-a02",
+    "task_id": "task_054_zh",
+    "reward": 0.0,
+    "reward_basis": [
+      "DB"
+    ],
+    "db_check": {
+      "db_match": false,
+      "db_reward": 0.0
+    },
+    "duration_seconds": 181.73552367699995,
+    "termination_reason": "user_stop",
+    "java_model_responses": 25,
+    "java_tokens": 893368,
+    "user_model_calls": 5,
+    "user_tokens": 16266,
+    "total_tokens": 909634,
+    "official_tool_calls": 26,
+    "todo_mutations": 3,
+    "guides_loaded": [
+      "guides/disputes/transaction-dispute.md",
+      "guides/accounts/account-changes.md",
+      "guides/credit-card/limit-adjustment.md"
+    ],
+    "pending_replacement_query_calls": 0,
+    "source_result": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/result.json",
+    "source_result_sha256": "10306b673371845ff9e94798809bcff6879cc2219c8356bd4a24bd6af20ad327",
+    "source_events": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/deepagent/be7a0154-3a05-413e-a8c7-3c25c442e6d6/deepagent-events.jsonl",
+    "source_events_sha256": "db9631bbe1f1f2779766ea0b76902710e594d76c9e6edb17e59d06eeeaa6673b"
+  },
+  "rerun": {
+    "batch": "zh-todo-20261116-a00",
+    "task_id": "task_054_zh",
+    "reward": 0.0,
+    "reward_basis": [
+      "DB"
+    ],
+    "db_check": {
+      "db_match": false,
+      "db_reward": 0.0
+    },
+    "duration_seconds": 224.74482586500017,
+    "termination_reason": "user_stop",
+    "java_model_responses": 28,
+    "java_tokens": 1204802,
+    "user_model_calls": 6,
+    "user_tokens": 18741,
+    "total_tokens": 1223543,
+    "official_tool_calls": 27,
+    "todo_mutations": 4,
+    "guides_loaded": [
+      "guides/disputes/transaction-dispute.md",
+      "guides/accounts/account-changes.md",
+      "guides/credit-card/limit-adjustment.md"
+    ],
+    "pending_replacement_query_calls": 0,
+    "source_result": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-todo-20261116-a00/episodes/task_054_zh/result.json",
+    "source_result_sha256": "3d388149f77428a2eb367984583eb800af345600894a75703d820a91cb66d036",
+    "source_events": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-todo-20261116-a00/episodes/task_054_zh/deepagent/e8735461-9855-443a-b6a6-121cfd0f58c2/deepagent-events.jsonl",
+    "source_events_sha256": "7c5ac0db3fb03b90690cde5a920821d2c05de403d12eeaf1f886f07b7d2a5e71"
+  },
+  "system_prompt": {
+    "version": "evidence-todo-v1",
+    "sha256": "c0bc9403f617fa91b889cfa1c52467816363faec73d9896e5709e7f2d578ec7a"
+  },
+  "unchanged_conditions": [
+    "model",
+    "api_base",
+    "benchmark_commit",
+    "skill_release",
+    "seed",
+    "concurrency",
+    "trials",
+    "token_limit",
+    "episode_timeout"
+  ],
+  "run_config_changed_fields": [
+    "task_ids"
+  ],
+  "validation": {
+    "java_build": "passed; unit tests skipped",
+    "offline_tests_passed": 6,
+    "new_prompt_java_mcp_fixture": "passed; no external model",
+    "baseline_prompt_java_mcp_fixture": "passed; no external model",
+    "baseline_prompt_prefix_matches_history": true,
+    "strict_db_replay": "passed; no network or model calls",
+    "baseline_result_hash_unchanged": true,
+    "raw_artifacts_git_ignored": true,
+    "frozen_inputs_verified": 1801,
+    "prepared_freeze_hash_verified": true,
+    "viewer_api_events": 281,
+    "viewer_api_warnings": [],
+    "browser_rendering": "not checked",
+    "credential_prefix_absent_from_run_text": true
+  },
+  "limitations": [
+    "Prompt guidance only; no programmatic prerequisite gate",
+    "Single previously exposed case; no general improvement or causal efficacy claim"
+  ]
+}

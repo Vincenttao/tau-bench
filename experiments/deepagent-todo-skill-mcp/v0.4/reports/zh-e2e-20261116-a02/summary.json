@@ -1,0 +1,200 @@
+{
+  "experiment_id": "deepagent-todo-skill-mcp-v0.4",
+  "validation_kind": "official-zh-banking-text-two-case-e2e-not-paired",
+  "status": "completed",
+  "benchmark_commit": "c06b07dd7c4d4ec61ba6ff9bcdf0b15dd7ef36d4",
+  "benchmark_version": "2.0.0",
+  "skill_release": {
+    "version": "3.1.0",
+    "release_sha256": "3dfdf4869548a1cecd2d28ff11e5f3a69f45f7ffea28151784bac368178d13ef",
+    "files": {
+      "banking-mcp/SKILL.md": "7fc5292f8264abc2e8fbfa6d81671e6ad2bb5fdecf49e3946c4aa0a833109dc9",
+      "banking-mcp/guides/accounts/account-changes.md": "bac9a9751e203e4f35bbef9e8083a8adaa5835b0f81344d4ac57cda69c13c33f",
+      "banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+      "banking-mcp/guides/accounts/account-opening.md": "968695db702dd291a1229d59793411941fd2f9cec0c0b64765eea97fb0f7af2a",
+      "banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+      "banking-mcp/guides/credit-card/limit-adjustment.md": "725b6ef7701d0237ee7dde018bfed6855cf7fe8d3be0590a4bf4c9dd2d912aec",
+      "banking-mcp/guides/disputes/transaction-dispute.md": "d5f7ab261e3b457e39227663518059093802805fced731d6bae24e12d5e330aa",
+      "banking-mcp/guides/payments/transfer.md": "7bfec2fa63e0f05c02d1c601a14b1134ad318c74793ea953f499e36ed5b6ada2",
+      "catalog.json": "6c137898ba1f26d198e9fb5adce0a671bd6472f7f1e5835aa2ed61ef464858cd"
+    }
+  },
+  "language": "zh",
+  "language_artifacts": {
+    "pack_sha256": "8d76ae48ed8a5b3cdc4ffd4d0be645e7652526dbe78c996c7e025af72f02e09b",
+    "tasks_sha256": "6591ea52c64a3a2dfc5b2e161e409fa6d00e9387748cc472c465fdbf795a4fb7",
+    "metadata_sha256": "8e734e1de294bcbc6324454b4b3d43030ed28d77c9a89a15629476bb6e4ec1c4",
+    "scenario_mode": "regional",
+    "scenario_sha256": "689af5b2aee734aae12b7b2c34fa0d26be5ec5545536f24bc20867727fd89906",
+    "localization_map_sha256": "8396266852ba4b1ee4cd41f813c1240de34b7ef4dea0cb678fd290bfad2493e6",
+    "localization_revision": "banking-entities-draft-v1-banking-regional-entities-v5-gender-v1-native-review-v1-criteria-v1-name-orthography-dedup-v1+banking-domestic-debit-shipping-v1+banking-hi-ko-zh-scenario-text-v1",
+    "runtime_rules_version": "regional-tools-v1",
+    "runtime_rules_sha256": "953aa68f3b7db713833d8d078643b12a73a4020be0a23c7e75e4006ffa5d6d08"
+  },
+  "pack_extension": "banking-dates-v1",
+  "planned": 2,
+  "scored": 2,
+  "passed": 1,
+  "failed": 1,
+  "unscored": 0,
+  "episode_duration_sum_seconds": 298.56779058100074,
+  "observed_tokens": 1396619,
+  "cases": [
+    {
+      "task_id": "task_003_zh",
+      "canonical_task_id": "task_003",
+      "trial": 0,
+      "status": "scored",
+      "reward": 1.0,
+      "duration": 116.83226690400079,
+      "termination_reason": "user_stop",
+      "reward_basis": [
+        "DB"
+      ],
+      "db_check": {
+        "db_match": true,
+        "db_reward": 1.0
+      },
+      "language": "zh",
+      "task_sha256": "1d0b87b202b524cbff141c032982f7e7d6bce94449c4d306861a7b639831638e",
+      "pack_sha256": "8d76ae48ed8a5b3cdc4ffd4d0be645e7652526dbe78c996c7e025af72f02e09b",
+      "guides_loaded": [
+        "guides/credit-card/card-application.md"
+      ],
+      "java_model_responses": 14,
+      "java_usage_records": 14,
+      "java_observed_tokens": 474372,
+      "python_model_responses": 4,
+      "python_observed_tokens": 12613,
+      "mcp_business_calls": 20,
+      "mcp_methods": {
+        "initialize": 1,
+        "notifications/initialized": 1,
+        "tools/call": 20
+      },
+      "official_message_count": 48,
+      "chinese_dialogue_observed": {
+        "user": true,
+        "assistant": true
+      },
+      "final_assistant_message_index": 44,
+      "final_reply_excerpt": "好的，资料核实完毕。根据您的需求（**境外消费多、必须 0% 境外交易手续费、主要旅行消费、年费越低越好、已有 Rho-Bank+**），我从银行产品库中筛选出以下符合条件的候选卡，供您对比：\n\n---\n\n**⭐ 推荐首选：Silver Rewards Card（个人银卡）**\n- **境外交易手续费：0%**（需搭配 Rho-Bank+ 订阅，您已有 ✓）\n- **年费：$0**\n- **返现**：旅行 + 软件消费 **4.0%**"
+    },
+    {
+      "task_id": "task_054_zh",
+      "canonical_task_id": "task_054",
+      "trial": 0,
+      "status": "scored",
+      "reward": 0.0,
+      "duration": 181.73552367699995,
+      "termination_reason": "user_stop",
+      "reward_basis": [
+        "DB"
+      ],
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "language": "zh",
+      "task_sha256": "96d63287e205eeb1c3d487e1f9b7b10bd554815167de71ed8e1a0809c95bbd9e",
+      "pack_sha256": "8d76ae48ed8a5b3cdc4ffd4d0be645e7652526dbe78c996c7e025af72f02e09b",
+      "guides_loaded": [
+        "guides/disputes/transaction-dispute.md",
+        "guides/accounts/account-changes.md",
+        "guides/credit-card/limit-adjustment.md"
+      ],
+      "java_model_responses": 25,
+      "java_usage_records": 25,
+      "java_observed_tokens": 893368,
+      "python_model_responses": 5,
+      "python_observed_tokens": 16266,
+      "mcp_business_calls": 26,
+      "mcp_methods": {
+        "initialize": 1,
+        "notifications/initialized": 1,
+        "tools/call": 26
+      },
+      "official_message_count": 62,
+      "chinese_dialogue_observed": {
+        "user": true,
+        "assistant": true
+      },
+      "final_assistant_message_index": 60,
+      "final_reply_excerpt": "三件事都办妥了，也都经过了系统核实！为您总结如下：\n\n**1. 信用额度提升 ✅ 已生效**\n- Gold Rewards 卡额度从 $5,000 提升至 **$7,500**（增加 $2,500）\n- 生效日期：11/14/2025，随后会收到确认邮件\n- 当前额度 $7,500 我已在系统中核实到\n\n**2. 欺诈争议（坚果云 $487.50）✅ 已受理**\n- 争议号：dsp_f8aab53ad42b，状态：已提交（SUBMITT"
+    }
+  ],
+  "validation": {
+    "java_build": "passed",
+    "zh_offline_tests": 5,
+    "skill_release_tests": 7,
+    "zh_protocol": "passed",
+    "en_protocol_regression": "passed",
+    "frozen_inputs_verified": 1801,
+    "official_checkouts_modified": false,
+    "workbench_run_id": "514f4375b0663d2f",
+    "workbench_parsing": [
+      {
+        "task_id": "task_003_zh",
+        "event_count": 171,
+        "warnings": []
+      },
+      {
+        "task_id": "task_054_zh",
+        "event_count": 243,
+        "warnings": []
+      }
+    ],
+    "browser_rendering": "not_checked"
+  },
+  "earlier_attempts": [
+    {
+      "batch": "zh-e2e-20261116-a00",
+      "status": "prepare_error",
+      "external_model_calls": 0,
+      "reason": "uv package inventory attempted cache access in restricted environment; replaced with read-only importlib metadata."
+    },
+    {
+      "batch": "zh-e2e-20261116-a01",
+      "task": "task_003_zh",
+      "status": "execution_error",
+      "reward": null,
+      "successful_provider_responses_before_error": 1,
+      "tokens": null,
+      "reason": "SDK nested usage object was not JSON serializable; metering failed before Java agent start. Original unscored attempt retained; a02 uses corrected code."
+    }
+  ],
+  "limits": [
+    "Two exposed diagnostic cases; no multilingual generalization or paired improvement claim.",
+    "Business benchmark is simulated banking, not production banking.",
+    "Chinese evidence is observed conversation, not an independent fluency judge.",
+    "Earlier a01 token usage was not recorded; reported token sum covers a02 only.",
+    "No original raw trajectories are added to Git."
+  ],
+  "source_sha256": {
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_003_zh/status.json": "c0e7ce2f7493730e5b6559260739ce32fb554e8c33d2a034c534b53e01e9da99",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_003_zh/result.json": "3ca7fa54e8a067d61acee09f814729c2c7d712d35c187e6f272dc9ed1a3bd09c",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_003_zh/official-trajectory.jsonl": "d3eaadb0e915fa17d8c7bc808a624ae6ca6f13b416bf2f97294a72c37d417578",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_003_zh/user-usage.jsonl": "15e8be246e5ec57159ec0ee1b6ee6a1185e07b615c1613c37745ebb9f740e23c",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_003_zh/deepagent/357e7bf9-6717-4905-8d5b-8d7cb4af51d7/deepagent-events.jsonl": "36f7934072364b8f04942a803a5195097c681887e21545abdbecc4b55d8718e8",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_003_zh/deepagent/357e7bf9-6717-4905-8d5b-8d7cb4af51d7/mcp/evidence.jsonl": "d034373314de27da405c555c0e7f63a96897e8a02da00467de9f902ab9d00a86",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_003_zh/deepagent/357e7bf9-6717-4905-8d5b-8d7cb4af51d7/mcp/mcp.jsonl": "b165f3ef408e1a45d83190b22073a50f9b85738191f7aa87de0f287edeb1ffa8",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_003_zh/deepagent/357e7bf9-6717-4905-8d5b-8d7cb4af51d7/mcp/skill.jsonl": "a272c3c9c063b921b012506674700a844f7f82772337e015f08644115586c79d",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/status.json": "2df26211e25668718bf73e81ccea8be51ce6db21807f96896d3ba0bc86af964d",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/result.json": "10306b673371845ff9e94798809bcff6879cc2219c8356bd4a24bd6af20ad327",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/official-trajectory.jsonl": "88fd6e9e36bd12c551b7605f39fbbd1f1bf41ebe589164ef238e6824d4b438e6",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/user-usage.jsonl": "4e17366dd4e5bd963bf07ab46f472d14ea7f6cff10819b38552a77ed03c3c37c",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/deepagent/be7a0154-3a05-413e-a8c7-3c25c442e6d6/deepagent-events.jsonl": "db9631bbe1f1f2779766ea0b76902710e594d76c9e6edb17e59d06eeeaa6673b",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/deepagent/be7a0154-3a05-413e-a8c7-3c25c442e6d6/mcp/evidence.jsonl": "d21e34bd89017ad2b10c688b4464d8857e9283d92bc5104696e172f0e715c8e2",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/deepagent/be7a0154-3a05-413e-a8c7-3c25c442e6d6/mcp/mcp.jsonl": "af174ba2321db83909beb96e6ea9b9c66d3b2c3aebbf936d91b78f89a4785958",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/deepagent/be7a0154-3a05-413e-a8c7-3c25c442e6d6/mcp/skill.jsonl": "98053184f7e4402f758cde73195366026a27eb97bec20d16fe44b37913d3b601",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/validation/zh-tests.log": "d4270f2bee7343806a59b6ce17025743e9374f51193e1156b8c59d19d250d16a",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/validation/release-tests.log": "f80a17b75457eea4f653da352b17b1dcbf2aa157f4798e009846cc57bd094024",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/validation/java-build.log": "3a572a483d6f909109cf30600f85b017d2b04c0500538be3ae859bc034090b98",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/manifest.json": "44fc3b443f0cb42bcaa69f182b893eecec30645f0f1064038353fd79472e064c",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/freeze.json": "96aafffce8c339fdabdc2885f663667503c7b357b992424ce28ec05a4c12ac3e",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/python-packages.txt": "a3f35f74260df4ca172e2aa9bf367718991c7797cc0b3765d675fb8bb6cf336f",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/protocol-zh-20261116-a00/result.json": "625893b6727b22a7669aa80d449abe3bb71ed7ab1800c1907404d08a31097b2d",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/protocol-en-regression-20261116-a00/result.json": "0f66c0e276d8d33b5ce3a93fe9dc4787abb35d7d11a6172e15de0cde0a17f1cf",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/diagnostics/task_054_zh-db-diff.json": "5a7d82bbd98c19b6af5b8b13c42e06e60370f3874107cba4a857e5535be46c47"
+  }
+}

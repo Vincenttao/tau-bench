@@ -73,7 +73,17 @@ B组及隔离OTLP解析环境的构建、启动和协议检查见 [企业接入�
 
 ## DeepAgent＋Todo＋Skill/MCP 新装配
 
-实现入口、沙箱外验证方法和证据边界见 [搭建与验证 V0.3.1](DeepAgent搭建与验证-V0.3.1.md)。使用 `python/run_deepagent.py`，旧NativeSkill入口保留。当前为开发验证，不代表97题正式测试已经通过。
+当前设计与评审见 [测试方案与架构评审 V0.4](experiments/deepagent-todo-skill-mcp/v0.4/测试方案与架构评审.md)：以 Skill 3.0.0 的七项业务指南为基线，明确调用链、业务覆盖、成功/失败标准、版本对照和待补能力。配对实验尚未启动；以下独立诊断结果不替代总体业务收益验证。
+
+2026-11-16 已完成[官方中文两题端到端验证](experiments/deepagent-todo-skill-mcp/v0.4/reports/zh-e2e-20261116-a02/端到端测试报告.md)：独立 τ-bench 2.0 中文银行数据＋Skill 3.1.0，1 通过、1 失败。中文链路可用；组合题因漏查待处理补卡订单未通过，不与旧英文成绩混比。
+
+随后按用户要求增加系统提示词的证据化 Todo 约束，并[独立复验失败的组合题](experiments/deepagent-todo-skill-mcp/v0.4/reports/zh-todo-20261116-a00/提示词复验报告.md)：仍为 0 分。模型将前置条件写入 Todo 并标为满足，但没有执行必要的补卡状态查询；程序级前置校验尚未实现。
+
+最新 [Skill 3.2.0 单题复验](experiments/deepagent-todo-skill-mcp/v0.4/reports/zh-skill32-20261116-a00/Skill3.2复验报告.md)：固定上述系统提示词，强化提额、争议、账户/卡变更三份指南后，组合题官方 reward=1。补齐了提额前的补卡查询与独立检查 Todo；父 Todo 收尾及对客物流状态表述仍有缺口，不能据单题通过推断总体稳定性。
+
+[多轮优化总结](experiments/deepagent-todo-skill-mcp/v0.4/多轮优化总结.md)汇总业务指南、中文接入、系统提示词与 Skill 3.2.0 的推进过程、三次同题对照、成本变化、遗留问题和后续建议。
+
+历史实现入口、沙箱外验证方法和证据边界见 [搭建与验证 V0.3.1](DeepAgent搭建与验证-V0.3.1.md)。使用 `python/run_deepagent.py`，旧NativeSkill入口保留。当前为开发验证，不代表97题正式测试已经通过。
 
 ## DeepAgent 第一轮分类抽样结果
 

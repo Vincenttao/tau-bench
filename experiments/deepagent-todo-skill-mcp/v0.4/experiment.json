@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "experiment_id": "deepagent-todo-skill-mcp-v0.4",
+  "experiment_version": "0.4",
+  "status": "design_only_not_executed",
+  "kind": "experiment_descriptor_not_runner_plan",
+  "description": "同环境 Skill 1.0.0/3.0.0 配对诊断回归；执行器与新增场景待实施。",
+  "path_base": "directory_containing_this_file",
+  "design": "测试方案与架构评审.md",
+  "reviewed_code_revision": "a789152cc1dd67e3736bebaacf132d259b486383",
+  "runtime_freeze_status": "not_prepared",
+  "shared_sources": {
+    "python": "../python",
+    "java": "../java",
+    "skills": "../skills/releases",
+    "tests": "../tests"
+  },
+  "arms": [
+    {
+      "arm": "A",
+      "skill_version": "1.0.0",
+      "release_manifest": "../skills/releases/1.0.0/release.json",
+      "release_sha256": "193fbec5dbfd62cc877a2356ce7c1cfbb940f44558c5d290f0ba2b1159488362"
+    },
+    {
+      "arm": "B",
+      "skill_version": "3.0.0",
+      "release_manifest": "../skills/releases/3.0.0/release.json",
+      "release_sha256": "6faae8d2ad43a1157460fc08a3f205c30e47aaef782a445c0872fa4b26189501"
+    }
+  ],
+  "cohort": {
+    "source_plan": "../plans/round-01/plan.json",
+    "source_plan_sha256": "d72448203a5fa48609edc2e9bb5239ad6b7eb5be3d9f8b67937ab7b2780e1313",
+    "reuse_scope": "case_selection_and_order_only",
+    "exposure": "diagnostic_regression_not_holdout",
+    "task_ids": [
+      "task_003",
+      "task_017",
+      "task_031",
+      "task_036",
+      "task_043",
+      "task_051",
+      "task_060",
+      "task_076",
+      "task_077",
+      "task_093",
+      "task_098",
+      "task_016",
+      "task_022",
+      "task_033",
+      "task_041",
+      "task_049",
+      "task_054",
+      "task_062",
+      "task_072",
+      "task_087",
+      "task_097",
+      "task_100"
+    ]
+  },
+  "proposed_design": {
+    "task_count": 22,
+    "arm_count": 2,
+    "attempts_per_task_per_arm": 1,
+    "planned_attempts": 44,
+    "order": "alternating_AB_BA_by_case",
+    "concurrency": 1,
+    "checkpoint_seconds": 21600,
+    "batch_wall_time_seconds": 28800
+  },
+  "execution": {
+    "supported": false,
+    "paired_controller": null,
+    "blockers": [
+      "F3: MCP tool contract alignment",
+      "F5: paired scheduling and resume controller",
+      "Selected scenario validation gates"
+    ]
+  },
+  "future_outputs": {
+    "plans": "plans/",
+    "reports": "reports/",
+    "raw_runs": "runs/",
+    "raw_runs_tracked": false
+  }
+}

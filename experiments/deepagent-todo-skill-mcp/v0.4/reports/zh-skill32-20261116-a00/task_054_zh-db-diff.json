@@ -1,0 +1,26 @@
+{
+  "task_id": "task_054_zh",
+  "strict_replay_completed": true,
+  "model_calls": 0,
+  "source_result_sha256": "03730b40c431c4de83cc954996a3bfddfcd480ba62d5617f7af6c4b21a43754c",
+  "official_reward_unchanged": 1.0,
+  "language_artifacts": {
+    "pack_sha256": "8d76ae48ed8a5b3cdc4ffd4d0be645e7652526dbe78c996c7e025af72f02e09b",
+    "tasks_sha256": "6591ea52c64a3a2dfc5b2e161e409fa6d00e9387748cc472c465fdbf795a4fb7",
+    "metadata_sha256": "8e734e1de294bcbc6324454b4b3d43030ed28d77c9a89a15629476bb6e4ec1c4",
+    "scenario_mode": "regional",
+    "scenario_sha256": "689af5b2aee734aae12b7b2c34fa0d26be5ec5545536f24bc20867727fd89906",
+    "localization_map_sha256": "8396266852ba4b1ee4cd41f813c1240de34b7ef4dea0cb678fd290bfad2493e6",
+    "localization_revision": "banking-entities-draft-v1-banking-regional-entities-v5-gender-v1-native-review-v1-criteria-v1-name-orthography-dedup-v1+banking-domestic-debit-shipping-v1+banking-hi-ko-zh-scenario-text-v1",
+    "runtime_rules_version": "regional-tools-v1",
+    "runtime_rules_sha256": "953aa68f3b7db713833d8d078643b12a73a4020be0a23c7e75e4006ffa5d6d08"
+  },
+  "deepdiff_gold_to_actual": {},
+  "user_deepdiff_gold_to_actual": {},
+  "hashes": {
+    "gold_agent": "4a3d69190a635cd22f4c099dc8f4096f628e1b51b40e00d66e61d70d152dcc48",
+    "actual_agent": "4a3d69190a635cd22f4c099dc8f4096f628e1b51b40e00d66e61d70d152dcc48",
+    "gold_user": "4a3d69190a635cd22f4c099dc8f4096f628e1b51b40e00d66e61d70d152dcc48",
+    "actual_user": "4a3d69190a635cd22f4c099dc8f4096f628e1b51b40e00d66e61d70d152dcc48"
+  }
+}

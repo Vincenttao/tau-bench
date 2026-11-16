@@ -1,0 +1,150 @@
+{
+  "scope": "One authorized diagnostic rerun with Skill 3.2.0; previous exposed case, not general efficacy validation",
+  "runs": [
+    {
+      "batch": "zh-e2e-20261116-a02",
+      "task_id": "task_054_zh",
+      "skill_version": "3.1.0",
+      "reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "duration_seconds": 181.73552367699995,
+      "termination_reason": "user_stop",
+      "java_model_responses": 25,
+      "java_tokens": 893368,
+      "user_model_calls": 5,
+      "user_tokens": 16266,
+      "total_tokens": 909634,
+      "official_tool_calls": 26,
+      "pending_replacement_query_calls": 0,
+      "source_result": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/result.json",
+      "source_result_sha256": "10306b673371845ff9e94798809bcff6879cc2219c8356bd4a24bd6af20ad327",
+      "source_events": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-e2e-20261116-a02/episodes/task_054_zh/deepagent/be7a0154-3a05-413e-a8c7-3c25c442e6d6/deepagent-events.jsonl",
+      "source_events_sha256": "db9631bbe1f1f2779766ea0b76902710e594d76c9e6edb17e59d06eeeaa6673b"
+    },
+    {
+      "batch": "zh-todo-20261116-a00",
+      "task_id": "task_054_zh",
+      "skill_version": "3.1.0",
+      "reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "duration_seconds": 224.74482586500017,
+      "termination_reason": "user_stop",
+      "java_model_responses": 28,
+      "java_tokens": 1204802,
+      "user_model_calls": 6,
+      "user_tokens": 18741,
+      "total_tokens": 1223543,
+      "official_tool_calls": 27,
+      "pending_replacement_query_calls": 0,
+      "source_result": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-todo-20261116-a00/episodes/task_054_zh/result.json",
+      "source_result_sha256": "3d388149f77428a2eb367984583eb800af345600894a75703d820a91cb66d036",
+      "source_events": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-todo-20261116-a00/episodes/task_054_zh/deepagent/e8735461-9855-443a-b6a6-121cfd0f58c2/deepagent-events.jsonl",
+      "source_events_sha256": "7c5ac0db3fb03b90690cde5a920821d2c05de403d12eeaf1f886f07b7d2a5e71"
+    },
+    {
+      "batch": "zh-skill32-20261116-a00",
+      "task_id": "task_054_zh",
+      "skill_version": "3.2.0",
+      "reward": 1.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "db_check": {
+        "db_match": true,
+        "db_reward": 1.0
+      },
+      "duration_seconds": 353.5364786950013,
+      "termination_reason": "user_stop",
+      "java_model_responses": 30,
+      "java_tokens": 1438615,
+      "user_model_calls": 8,
+      "user_tokens": 27757,
+      "total_tokens": 1466372,
+      "official_tool_calls": 30,
+      "pending_replacement_query_calls": 3,
+      "source_result": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-skill32-20261116-a00/episodes/task_054_zh/result.json",
+      "source_result_sha256": "03730b40c431c4de83cc954996a3bfddfcd480ba62d5617f7af6c4b21a43754c",
+      "source_events": "experiments/deepagent-todo-skill-mcp/v0.4/runs/zh-skill32-20261116-a00/episodes/task_054_zh/deepagent/fe0d9b07-18a1-434e-bdec-87dfcfbd76bc/deepagent-events.jsonl",
+      "source_events_sha256": "770eefd2736565b1b81c5cbd3f5abbc8952a7c4a4464cfcc741fa0427b9997d2"
+    }
+  ],
+  "system_prompt": {
+    "sha256": "c0bc9403f617fa91b889cfa1c52467816363faec73d9896e5709e7f2d578ec7a",
+    "version": "evidence-todo-v1"
+  },
+  "skill_release": {
+    "version": "3.2.0",
+    "release_sha256": "fd292870afa7bb821c61ab2b8ac04ced9687284985f997ea4cc296d5e3cfdc78",
+    "files": {
+      "banking-mcp/SKILL.md": "7fc5292f8264abc2e8fbfa6d81671e6ad2bb5fdecf49e3946c4aa0a833109dc9",
+      "banking-mcp/guides/accounts/account-changes.md": "78f01d6dace4c57528092449ecfdb20189a5c085fdde908c49a65a00fd665179",
+      "banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+      "banking-mcp/guides/accounts/account-opening.md": "968695db702dd291a1229d59793411941fd2f9cec0c0b64765eea97fb0f7af2a",
+      "banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+      "banking-mcp/guides/credit-card/limit-adjustment.md": "32183c8fc9822b19fc79669352f5f1242bc7920297cda107c688e1ea2c327a57",
+      "banking-mcp/guides/disputes/transaction-dispute.md": "7183c8b38419d2e7a8a4abf4455d67ed63ef722deeabb805b74054e60ac4bb45",
+      "banking-mcp/guides/payments/transfer.md": "7bfec2fa63e0f05c02d1c601a14b1134ad318c74793ea953f499e36ed5b6ada2",
+      "catalog.json": "6c137898ba1f26d198e9fb5adce0a671bd6472f7f1e5835aa2ed61ef464858cd"
+    }
+  },
+  "changed_skill_files": [
+    "banking-mcp/guides/accounts/account-changes.md",
+    "banking-mcp/guides/credit-card/limit-adjustment.md",
+    "banking-mcp/guides/disputes/transaction-dispute.md"
+  ],
+  "unchanged_conditions": [
+    "run_config",
+    "system_prompt_version",
+    "model",
+    "api_base",
+    "benchmark_commit",
+    "seed",
+    "concurrency",
+    "trials",
+    "token_limit",
+    "episode_timeout",
+    "episodes"
+  ],
+  "todo_items": 17,
+  "todo_items_completed": 16,
+  "remaining_todos": [
+    {
+      "id": "cli_request",
+      "content": "申请信用额度提升（CLI）",
+      "status": "PENDING"
+    }
+  ],
+  "validation": {
+    "offline_tests_passed": 8,
+    "skill32_java_mcp_fixture": "passed; no external model calls",
+    "java_and_system_prompt_unchanged": true,
+    "baseline_skill_and_results_preserved": true,
+    "strict_db_replay": "passed; empty agent and user DB differences; no network or model calls",
+    "frozen_inputs_verified": 1801,
+    "prepared_freeze_hash_verified": true,
+    "viewer_api_events": 310,
+    "viewer_api_warnings": [],
+    "viewer_official_reward": 1.0,
+    "browser_rendering": "not checked",
+    "raw_run_evidence_git_ignored": true,
+    "credential_prefix_absent_from_run_text": true
+  },
+  "limitations": [
+    "Single exposed diagnostic case; no general stability or causal attribution claim",
+    "Prompt/guide instructions only; no programmatic prerequisite gate",
+    "Parent cli_request Todo remains PENDING although actual increase completed",
+    "Final farewell says card shipped; authoritative order status is ORDERED"
+  ]
+}

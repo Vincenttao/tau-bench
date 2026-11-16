@@ -1,0 +1,54 @@
+{
+  "experiment_id": "deepagent-todo-skill-mcp-v0.4",
+  "validation_kind": "skill-3.0.0-two-case-live-e2e-smoke-not-paired",
+  "status": "awaiting_credential_authorization",
+  "skill_version": "3.0.0",
+  "tasks": [
+    {
+      "task_id": "task_003",
+      "status": "not_started",
+      "reward": null
+    },
+    {
+      "task_id": "task_054",
+      "status": "not_started",
+      "reward": null
+    }
+  ],
+  "build": "passed",
+  "unit_tests": {
+    "skill_assets": 7,
+    "mcp": 6,
+    "failed": 0
+  },
+  "protocol": {
+    "status": "passed",
+    "external_model_calls": 0,
+    "fixture_model_calls": 9,
+    "checks": [
+      "native Todo visible",
+      "Skill-only boundary",
+      "MCP initialize",
+      "MCP tools/call",
+      "official queue roundtrip",
+      "ask_user interrupt/resume",
+      "Todo completion",
+      "same conversation",
+      "Skill assets deployed byte-for-byte; dispute content observed in model context"
+    ]
+  },
+  "live_external_model_calls": 0,
+  "frozen_files": 1454,
+  "evidence": {
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/e2e-20261116-114117/skill-tests.log": "5912740c3342eaa11d1af02c7b33acfe51c738538f31c89c42f33b33096faaaf",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/e2e-20261116-114117/mcp-tests.log": "66878898f32854bb8bbfa97770cc97cecf2be3ff2a1276ea737c92cc15aa4077",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/e2e-20261116-114117/protocol/result.json": "23758262067ac3d775491ab5f223249f6f104df82f687192259a0b5e6a66a5bf",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/e2e-20261116-114117/freeze.json": "a90403cebd4a9ecbce9e20440ddca0dad75c85a8c3faf26953eca1b4cc539c75",
+    "experiments/deepagent-todo-skill-mcp/v0.4/runs/e2e-20261116-114117/live/manifest.json": "7b2f085077a6695d55692b290655b8df377956d55ca71a5fb11787457733c592"
+  },
+  "limits": [
+    "Live execution has not started; credential source authorization is pending.",
+    "Protocol fixture uses a scripted model and synthetic business data.",
+    "This two-case smoke is not the 44-attempt paired experiment."
+  ]
+}
