@@ -38,6 +38,7 @@ def summarize(directory):
         row['mcp_methods'] = dict(collections.Counter(x['method'] for x in mcp))
         row['individual_mcp_tools'] = dict(collections.Counter(x['tool_name'] for x in mcp if x.get('tool_name')))
         row['bundled_dispute_guide_in_model_request'] = any(x['event']=='model_request' and 'Bundled business guide: dispute-processing' in json.dumps(x['data']) for x in events)
+        row['dispute_guide_content_observed_in_model_request'] = any(x['event']=='model_request' and '## Provisional credit' in json.dumps(x['data']) and '# Card dispute handling' in json.dumps(x['data']) for x in events)
         row['mcp_call_interval_seconds'] = sum(x['end']-x['start'] for x in mcp if x['method']=='tools/call')
         row['note'] = 'MCP intervals include official scheduler waiting; nested Skill/MCP/tool times cannot be added. Tool start events include interrupt/resume callbacks and are not unique calls. Python usage may include judge. No separate planning token value.'
         rows.append(row)

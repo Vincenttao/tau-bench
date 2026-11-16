@@ -14,7 +14,8 @@
 
 当前MCP Server按官方初始暴露的工具名逐项注册，不向模型直接注册底层银行工具。MCP各工具保留官方参数schema在`arguments`字段内，外层携带会话和Skill调用标识；这是本评测适配契约。隐藏业务能力仍走官方发现和解锁工具，不将隐藏全集提前暴露。
 
-当前可执行Skill ID仍是`banking-mcp`。`dispute-processing`是随入口一起加载的业务指南，尚无独立的逐Skill权限配置。`python/skill_assets.py`统一生成实际注入文本；冻结manifest同时记录两份Skill文档及加载器hash。模型可调用工具仍为Skill入口、Skill读取、Todo及ask_user。
+当前可执行Skill ID为`banking-mcp`。默认发布版本3.0.0按信用卡、支付结算、账户和争议领域组织七项业务指南；模型按入口条件读取`guides/<领域>/<业务>.md`。版本1.0.0保留第一轮原始合并文档，2.0.0保留三指南开发快照。新manifest锁定版本与hash，执行前验证；历史manifest不改写。设计与复原命令见[银行业务Skill设计](skills/README.md)。逐指南独立权限和完整业务前置状态机尚未实现。
+
 
 - `runs/protocol-a06/result.json`：最新文档加载与真实Java/MCP确定性集成验证，使用合成业务数据和本机模拟模型。
 - `runs/live-a03/`：更新文档后的真实DeepSeek银行端到端验证，原始状态和评分见各episode。

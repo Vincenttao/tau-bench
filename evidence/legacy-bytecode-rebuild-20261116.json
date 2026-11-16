@@ -1,0 +1,20 @@
+{
+  "directory": "/tmp/tau3-original-bytecode-96qq9fo9",
+  "command": "javac --release 17 -g -cp <unchanged historical classpath> -d <isolated folder> <frozen Java sources>",
+  "matching_class_files": [
+    "java/target/classes/eval/BridgeErrorSelfTest.class",
+    "java/target/classes/eval/ContextSelfTest.class",
+    "java/target/classes/eval/CoreTimeoutSelfTest$1$1.class",
+    "java/target/classes/eval/CoreTimeoutSelfTest$1.class",
+    "java/target/classes/eval/CoreTimeoutSelfTest.class",
+    "java/target/classes/eval/DeepAgentAssembly$1.class",
+    "java/target/classes/eval/DeepAgentAssembly$Boundary.class",
+    "java/target/classes/eval/DeepAgentAssembly$SkillOperationTool.class",
+    "java/target/classes/eval/DeepAgentAssembly.class",
+    "java/target/classes/eval/DeepAgentBridge.class",
+    "java/target/classes/eval/ObservedToolContext.class",
+    "java/target/classes/eval/Tau2Bridge.class"
+  ],
+  "unmatched_class_files": [],
+  "scope": "Bytecode hash comparison only; no historical business rerun."
+}

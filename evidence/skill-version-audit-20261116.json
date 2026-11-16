@@ -1,0 +1,57 @@
+{
+  "run": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00",
+  "frozen_files": 1432,
+  "changed": [
+    "/home/vincent/openjiuwen/tau3/java/target/classes/eval/DeepAgentAssembly$1.class",
+    "/home/vincent/openjiuwen/tau3/java/target/classes/eval/DeepAgentAssembly$Boundary.class",
+    "/home/vincent/openjiuwen/tau3/java/target/classes/eval/DeepAgentAssembly$SkillOperationTool.class",
+    "/home/vincent/openjiuwen/tau3/java/target/classes/eval/DeepAgentAssembly.class",
+    "/home/vincent/openjiuwen/tau3/java/src/main/java/eval/DeepAgentAssembly.java",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/skills/banking-mcp/SKILL.md",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/skills/dispute-processing/SKILL.md",
+    "/home/vincent/openjiuwen/tau3/python/collect_deepagent.py",
+    "/home/vincent/openjiuwen/tau3/python/skill_assets.py",
+    "/home/vincent/openjiuwen/tau3/python/episode.py",
+    "/home/vincent/openjiuwen/tau3/python/full_run.py",
+    "/home/vincent/openjiuwen/tau3/python/run_deepagent.py",
+    "/home/vincent/openjiuwen/tau3/python/check_deepagent_protocol.py",
+    "/home/vincent/openjiuwen/tau3/python/deepagent_java_agent.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/collect_deepagent.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/skill_assets.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/run_round.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/run_deepagent.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/check_deepagent_protocol.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/deepagent_java_agent.py"
+  ],
+  "missing": [],
+  "matching_source_snapshots": [
+    "/home/vincent/openjiuwen/tau3/java/src/main/java/eval/DeepAgentAssembly.java",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/skills/banking-mcp/SKILL.md",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/skills/dispute-processing/SKILL.md",
+    "/home/vincent/openjiuwen/tau3/python/collect_deepagent.py",
+    "/home/vincent/openjiuwen/tau3/python/skill_assets.py",
+    "/home/vincent/openjiuwen/tau3/python/episode.py",
+    "/home/vincent/openjiuwen/tau3/python/full_run.py",
+    "/home/vincent/openjiuwen/tau3/python/run_deepagent.py",
+    "/home/vincent/openjiuwen/tau3/python/check_deepagent_protocol.py",
+    "/home/vincent/openjiuwen/tau3/python/deepagent_java_agent.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/collect_deepagent.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/skill_assets.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/run_round.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/run_deepagent.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/check_deepagent_protocol.py",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/deepagent_java_agent.py"
+  ],
+  "unrestored_files": [
+    "/home/vincent/openjiuwen/tau3/java/target/classes/eval/DeepAgentAssembly$1.class",
+    "/home/vincent/openjiuwen/tau3/java/target/classes/eval/DeepAgentAssembly$Boundary.class",
+    "/home/vincent/openjiuwen/tau3/java/target/classes/eval/DeepAgentAssembly$SkillOperationTool.class",
+    "/home/vincent/openjiuwen/tau3/java/target/classes/eval/DeepAgentAssembly.class"
+  ],
+  "local_files_match": false,
+  "limits": [
+    "Read-only file hash audit; does not restore or execute the run.",
+    "Source snapshots do not replace missing historical Java bytecode.",
+    "Remote model weights, service state and sampling cannot be restored by Skill version."
+  ]
+}

@@ -8,6 +8,8 @@ import json
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+from trace_inspection import aggregate, case_verdict, inspection
+
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'viewer'
 
@@ -73,10 +75,12 @@ def run_summary(ident, item):
         status = read_json(path / 'status.json', {}) or {}
         episodes.append({'id': str(index), 'task_id': episode.get('task_id', episode['key']),
                          'trial': episode.get('trial'), 'status': status.get('status', 'unknown'),
+                         'verdict': case_verdict(path, episode, status),
                          'reward': status.get('reward'), 'duration': status.get('duration'),
                          'termination_reason': status.get('termination_reason')})
     return {'id': ident, 'name': folder.name, 'path': relative, 'model': manifest.get('model'),
-            'implementation': manifest.get('implementation'), 'episodes': episodes}
+            'implementation': manifest.get('implementation'), 'episodes': episodes,
+            'assessment': aggregate(episodes)}
 
 
 def text(value):
@@ -210,7 +214,8 @@ def load_episode(folder, episode):
     counts = dict(Counter(e['category'] for e in events))
     if not events:
         warnings.append('此尝试尚无可读取轨迹，或文件格式暂不支持。')
-    return {'events': events, 'counts': counts, 'warnings': warnings, 'sources': sources}, raw
+    return {'events': events, 'counts': counts, 'warnings': warnings, 'sources': sources,
+            'inspection': inspection(folder, episode, events, raw)}, raw
 
 
 class Handler(BaseHTTPRequestHandler):

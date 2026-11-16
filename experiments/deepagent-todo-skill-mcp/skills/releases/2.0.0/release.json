@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "version": "2.0.0",
+  "origin": "three on-demand guides, development snapshot",
+  "files": {
+    "banking-mcp/SKILL.md": "cf403c246e2ffb47cecc8a56aa6597f80be8bf12cafb0956fcfe1764aa46a29e",
+    "banking-mcp/guides/account-changes.md": "bac9a9751e203e4f35bbef9e8083a8adaa5835b0f81344d4ac57cda69c13c33f",
+    "banking-mcp/guides/dispute-processing.md": "d5f7ab261e3b457e39227663518059093802805fced731d6bae24e12d5e330aa",
+    "banking-mcp/guides/product-advice.md": "00ff928320f4cbabf7b30f26c9d1f7d93f8ce52ad8b95038dfea98cd8eb824db"
+  }
+}

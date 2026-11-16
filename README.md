@@ -83,4 +83,4 @@ B组及隔离OTLP解析环境的构建、启动和协议检查见 [企业接入�
 
 ## 本地轨迹工作台
 
-运行 `python python/trace_viewer.py --port 8877`，打开 <http://127.0.0.1:8877>，即可按批次、用例查看用户与 Agent 对话、Skill 加载/执行、Todo、MCP 和业务工具记录。页面只读，不调用模型。数据来源、筛选范围及证据边界见 [使用说明](viewer/README.md)。
+运行 `python python/trace_viewer.py --port 8877`，打开 <http://127.0.0.1:8877>，即可按批次、用例查看用户与 Agent 对话、Skill 加载/执行、Todo、MCP 和业务工具记录。新增“本轮能力与判定”面板，可查看部署 Skill 文档、可调用工具的说明与参数，以及本轮和单题的成功/失败标准、预期动作及实际评分。页面只读，不调用模型。数据来源、筛选范围及证据边界见 [使用说明](viewer/README.md)。

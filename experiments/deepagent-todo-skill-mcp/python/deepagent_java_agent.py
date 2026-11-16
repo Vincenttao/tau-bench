@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from java_agent import JavaMoaAgent
 from benchmark_mcp import BenchmarkMcpFacade
-from skill_assets import bundled_skill_document
+from skill_assets import skill_init_payload
 
 FACADES = []
 @atexit.register
@@ -26,7 +26,7 @@ class DeepAgentJavaAgent(JavaMoaAgent):
 
     def _init_extra(self):
         return {'mcp_url': self.facade.url, 'mcp_token': self.facade.token, 'workspace': str(self.workspace),
-                'skill_document': bundled_skill_document()}
+                **skill_init_payload()}
 
     def _send(self, value):
         if value.get('type') == 'tool_result':

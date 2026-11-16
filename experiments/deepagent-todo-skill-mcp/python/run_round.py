@@ -211,7 +211,7 @@ def prepare(directory,plan_path):
             if path.is_file() and '__pycache__' not in path.parts and path.suffix!='.pyc':files[str(path)]=sha(path)
     write(directory/'freeze.json',{'benchmark_commit':manifest['benchmark_commit'],'created_at':time.time(),'files':files})
     snapshots=directory/'freeze-sources'
-    for path in [*list((ROOT/'python').glob('*.py')),*list((ROOT/'experiments/deepagent-todo-skill-mcp/python').glob('*.py')),*list((ROOT/'experiments/deepagent-todo-skill-mcp/skills').rglob('*.md')),*list((ROOT/'java/src').rglob('*.java'))]:
+    for path in [*list((ROOT/'python').glob('*.py')),*list((ROOT/'experiments/deepagent-todo-skill-mcp/python').glob('*.py')),*[p for p in (ROOT/'experiments/deepagent-todo-skill-mcp/skills').rglob('*') if p.is_file()],*list((ROOT/'java/src').rglob('*.java'))]:
         target=snapshots/path.relative_to(ROOT);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(path.read_bytes())
     verify_frozen(directory)
     progress(directory,manifest,'prepared')

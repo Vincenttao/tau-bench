@@ -9,6 +9,9 @@ os.environ['OPENAI_API_BASE']=m['api_base']
 os.environ['OPENAI_BASE_URL']=m['api_base']
 os.environ['JAVA_AGENT_EVENT_TIMEOUT']=str(m['event_timeout'])
 os.environ['JAVA_AGENT_COMPLETION_TIMEOUT']=str(m.get('core_completion_timeout',600))
+if m.get('implementation') == 'deepagent-todo-skill-mcp':
+ from skill_assets import pin_manifest_skill
+ pin_manifest_skill(m)
 from loguru import logger
 logger.remove();logger.add(str(out/'runner.log'),level='WARNING')
 from tau2.utils import llm_utils

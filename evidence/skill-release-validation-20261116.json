@@ -1,0 +1,25 @@
+{
+  "source_run": "round-01-20261115-a00",
+  "restored_directory": "experiments/deepagent-todo-skill-mcp/runs/restored-round01-inputs-20261116",
+  "verified_frozen_inputs": 1432,
+  "rebuilt_to_original_hash": 4,
+  "legacy_skill_matches_historical_sessions": 22,
+  "protocol_checks": {
+    "1.0.0": {
+      "status": "passed",
+      "guide_loading": "legacy-bundled",
+      "external_model_calls": 0
+    },
+    "3.0.0": {
+      "status": "passed",
+      "guide_loading": "on-demand",
+      "external_model_calls": 0
+    }
+  },
+  "validation": "Java build; 7 release/restore tests; 11 trace tests; 5 round-controller tests; local browser version/guide checks",
+  "limits": [
+    "Verified frozen input archive, not an automatically runnable checkout.",
+    "Original absolute paths remain in historical metadata; relocate paths for a new run explicitly.",
+    "Python environment and remote model state are not captured by this archive."
+  ]
+}

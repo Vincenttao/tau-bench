@@ -8,21 +8,27 @@ import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from benchmark_mcp import BenchmarkMcpFacade
-from skill_assets import project_root, bundled_skill_document
+from skill_assets import project_root, skill_init_payload, skill_documents
 
-p=argparse.ArgumentParser();p.add_argument('--output',required=True);args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--output',required=True);p.add_argument('--skill-version',default='3.0.0');args=p.parse_args()
+os.environ['TAU3_SKILL_VERSION']=args.skill_version
+documents=skill_documents()
+dispute_guide=next((name for name in documents if name != 'SKILL.md' and '# Card dispute handling' in documents[name]),None)
 root=project_root();out=Path(args.output).resolve();out.mkdir(parents=True,exist_ok=False)
 events=queue.Queue();requests=[]
 schema=[{'function':{'name':'write_fixture','description':'Write a synthetic value after customer confirmation.','parameters':{'type':'object','properties':{'amount':{'type':'number'}},'required':['amount']}}}]
 script=[
  ('skill_tool',{'skill_name':'banking-mcp'}),
  ('skill_tool',{'skill_name':'banking-mcp','relative_path':'operations.json'}),
+
  ('todo_create',{'tasks':[{'id':'fixture','content':'Confirm customer input and execute fixture','activeForm':'Executing fixture','description':'Synthetic integration check'}]}),
  ('ask_user',{'questions':[{'header':'Confirm','question':'Confirm the synthetic value 8?','options':[{'label':'Yes','description':'Proceed'},{'label':'No','description':'Stop'}]}]}),
  ('invoke_skill',{'skill_id':'banking-mcp','operation':'write_fixture','arguments':{'amount':'invalid'}}),
  ('invoke_skill',{'skill_id':'banking-mcp','operation':'write_fixture','arguments':{'amount':8}}),
  ('todo_modify',{'action':'update','todos':[{'id':'fixture','status':'completed'}]}),
  (None,'Synthetic operation completed.')]
+if dispute_guide:
+ script.insert(2,('skill_tool',{'skill_name':'banking-mcp','relative_path':dispute_guide}))
 class ModelHandler(BaseHTTPRequestHandler):
  def log_message(self,*a):pass
  def do_POST(self):
@@ -53,7 +59,7 @@ threading.Thread(target=reader,daemon=True).start()
 def send(value):proc.stdin.write(json.dumps(value)+'\n');proc.stdin.flush()
 try:
  workspace=out/'workspace';workspace.mkdir()
- send({'type':'session_init','session_id':'protocol-fixture','domain_policy':'Synthetic test only. Confirm before writing.','tools':schema,'messages':[],'model':'fixture','workspace':str(workspace),'skill_document':bundled_skill_document(),'mcp_url':facade.url,'mcp_token':facade.token})
+ send({'type':'session_init','session_id':'protocol-fixture','domain_policy':'Synthetic test only. Confirm before writing.','tools':schema,'messages':[],'model':'fixture','workspace':str(workspace),**skill_init_payload(),'mcp_url':facade.url,'mcp_token':facade.token})
  ready=events.get(timeout=60);assert ready['type']=='ready',ready
  send({'type':'user','content':'Please write synthetic value 8 after confirmation.'})
  question=events.get(timeout=60);assert question['type']=='content' and question['waiting'],question
@@ -66,9 +72,14 @@ try:
  records=[json.loads(s) for s in (workspace/'deepagent-events.jsonl').read_text().splitlines()]
  assert any(x['event']=='tool_end' and x['data']['name']=='todo_modify' and 'Successfully updated' in str(x['data']['result']) for x in records)
  assert any(x['event']=='tool_end' and x['data']['name']=='invoke_skill' and 'Invalid operation arguments' in str(x['data']['result']) for x in records)
- assert any('Bundled business guide: dispute-processing' in json.dumps(r['messages']) for r in requests)
+ for name, content in skill_documents().items():
+  assert (workspace/'skills/banking-mcp'/name).read_text()==content, name
+ if dispute_guide:
+  assert not any('## Provisional credit' in json.dumps(r['messages']) for r in requests[:3])
+  assert any('## Provisional credit' in json.dumps(r['messages']) for r in requests[3:])
+ assert any(x['event']=='tool_end' and x['data']['name']=='skill_tool' and '## Provisional credit' in str(x['data']['result']) for x in records)
  (out/'model-requests.json').write_text(json.dumps(requests,indent=2))
- (out/'result.json').write_text(json.dumps({'status':'passed','external_model_calls':0,'fixture_model_calls':len(requests),'question':question,'final':final,'checks':['native Todo visible','Skill-only boundary','MCP initialize','MCP tools/call','official queue roundtrip','ask_user interrupt/resume','Todo completion','same conversation','bundled dispute guide in actual model request']},indent=2))
+ (out/'result.json').write_text(json.dumps({'status':'passed','skill_version':args.skill_version,'guide_loading':'on-demand' if dispute_guide else 'legacy-bundled','external_model_calls':0,'fixture_model_calls':len(requests),'question':question,'final':final,'checks':['native Todo visible','Skill-only boundary','MCP initialize','MCP tools/call','official queue roundtrip','ask_user interrupt/resume','Todo completion','same conversation','Skill assets deployed byte-for-byte; dispute content observed in model context']},indent=2))
  print('PASS deterministic DeepAgent + Todo + Skill + real MCP + interrupt/resume:',out)
 finally:
  if proc.poll() is None:proc.terminate();proc.wait(timeout=10)

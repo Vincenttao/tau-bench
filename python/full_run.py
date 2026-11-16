@@ -44,6 +44,9 @@ if cp.exists():
 for f in sorted((source_root/'java/target/classes').rglob('*.class')):
  artifacts[str(f.relative_to(source_root))]=hashlib.sha256(f.read_bytes()).hexdigest()
 manifest=dict(core_completion_timeout=float(os.getenv('JAVA_AGENT_COMPLETION_TIMEOUT','600')),schema_version=2,skill_asset_sha256={str(f.relative_to(source_root)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted((source_root/'experiments/deepagent-todo-skill-mcp/skills').rglob('*')) if f.is_file()},implementation=a.implementation,api_base=api_base,api_protocol='chat_completions',trial_seed_mode=a.trial_seed_mode,java_source_sha256=java_hashes,artifact_sha256=artifacts,source_repositories={n:repo_evidence(source_root.parent/n) for n in ['agent-core-java','agent-runtime-java','agent-solution']},episode_timeout=a.episode_timeout,event_timeout=float(os.environ['JAVA_AGENT_EVENT_TIMEOUT']),concurrency=a.concurrency,max_hours=a.max_hours,token_limit=a.token_limit,reserve_per_active=a.reserve_per_active,adapter_sha256=adapter_hashes,java_bridge_sha256=bridge_hash,retrieval_config='bm25',judge='gpt-4.1-2025-04-14 via authorized gateway only',dataset_sha256=dataset_sha256,benchmark_commit='fc0055dc4e0a316c3f83133267fbd6faaa770992',model=model,trials=a.trials,seed=a.seed,max_steps=a.max_steps,max_errors=a.max_errors,output=str(root),episodes=episodes)
+if a.implementation == 'deepagent-todo-skill-mcp':
+ from skill_assets import skill_release_identity
+ manifest['skill_release']=skill_release_identity()
 mp=root/'manifest.json'
 if mp.exists():
  if json.loads(mp.read_text())!=manifest:raise ValueError('Existing manifest differs; use new output directory')
