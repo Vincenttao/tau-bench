@@ -1,0 +1,72 @@
+[
+  {
+    "task_id": "task_022",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-9b10e5bb66f7fb72/result.json",
+    "sha256": "2186b78ea14753238feabfa9143956c5b33bc240cf0c7c436fd064184c6d8288",
+    "messages": 104,
+    "appendix": "task_022-官方轨迹.md"
+  },
+  {
+    "task_id": "task_041",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-0a3ce53efc59171b/result.json",
+    "sha256": "e7082c65701b5023e7078cbb31e09be0afb913529bb6e22730591008f397fce9",
+    "messages": 84,
+    "appendix": "task_041-官方轨迹.md"
+  },
+  {
+    "task_id": "task_051",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-6127e8bcfc84713b/result.json",
+    "sha256": "3f5b2708418c9421e20f770b0c912f642b7b1475a9bf5f70f433c508c6f9c5b1",
+    "messages": 86,
+    "appendix": "task_051-官方轨迹.md"
+  },
+  {
+    "task_id": "task_060",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-4da6289e0a0584f8/result.json",
+    "sha256": "9886859631d2b5452162d77b53989714fdff5378e7b0c8bbfc002dd1e8492d0e",
+    "messages": 62,
+    "appendix": "task_060-官方轨迹.md"
+  },
+  {
+    "task_id": "task_077",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-3cf7c038f0e4f5ae/result.json",
+    "sha256": "478956b06087a0025bae4db883e640708c8f504970d267e59ca5fa5727c1ca32",
+    "messages": 102,
+    "appendix": "task_077-官方轨迹.md"
+  },
+  {
+    "task_id": "task_062",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-d266369c6a4699fa/official-trajectory.jsonl",
+    "sha256": "a917076b9cead5b35ff13632df6db3cdb45c69253ec73be342e745c753a4ba45",
+    "messages": 31,
+    "appendix": "task_062-官方轨迹.md"
+  },
+  {
+    "task_id": "task_072",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-71ad90d194fca666/result.json",
+    "sha256": "696d439e33b7062802f2a86aea7e29e0a0a25efc77290a0f5aab8cf394975946",
+    "messages": 56,
+    "appendix": "task_072-官方轨迹.md"
+  },
+  {
+    "task_id": "task_087",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-4dd0e5c8baf2ec4a/result.json",
+    "sha256": "3529d04d0849914367c475eb9c6b39bac975e426741f36fa8827f416b4a6388e",
+    "messages": 60,
+    "appendix": "task_087-官方轨迹.md"
+  },
+  {
+    "task_id": "task_097",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-a480b84aae7d1b8a/result.json",
+    "sha256": "79b8c009343cc262847aa65bd86fbc46312e95b0a8978b8f8217de4a217e5d5d",
+    "messages": 92,
+    "appendix": "task_097-官方轨迹.md"
+  },
+  {
+    "task_id": "task_100",
+    "source": "experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-f3e8254f10130092/result.json",
+    "sha256": "34c956d4526d18e966821c220266cb2ff33171b24c3edb45e34d86240f06461c",
+    "messages": 62,
+    "appendix": "task_100-官方轨迹.md"
+  }
+]

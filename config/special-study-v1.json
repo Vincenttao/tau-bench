@@ -1,0 +1,38 @@
+{
+  "version": "v1",
+  "state": "PREPARATION_ONLY_NOT_EXECUTED",
+  "scope": "P13/P14/P15 technical acceptance scenarios; production thresholds and business acceptance remain unspecified",
+  "execution": "outside sandbox, isolated official mock bank state; no real customer accounts",
+  "token_limit": null,
+  "prerequisite": "P11 actual bank task and P12 controlled comparison completed before formal special-stage execution",
+  "fault_scenarios": [
+    {"id":"F01","target":"read-only official KB_search","inject":"single timed-out call, unique event id","assertions":["actual error propagated","retry count within frozen rule","terminal or waiting state explained"],"missing":"callback deadline/retry policy must be wired and frozen; existing structured error tests are not full F01"},
+    {"id":"F02","target":"one official write operation after independent resource commit record","inject":"lose response only after the mock bank records success","assertions":["independent before/after resource state retained","at most one effect for the business intent","agent checks result or stops safely before an ambiguous retry"],"missing":"independent authoritative write ledger and actual injection adapter"},
+    {"id":"F03","target":"INPUT_REQUIRED bank task","inject":"restart host after complete durable snapshots","assertions":["same Runtime task and pending question restored","Core and Skill state plus full observed data restored","official agent/user resource state preserved","completed writes not duplicated"],"missing":"durable Core/Runtime providers and official mock resource snapshots; explicit in-memory state copy is not restart recovery"},
+    {"id":"F04","target":"active task A and an independent task B","inject":"pause A, handle B, request confirmation to resume A","assertions":["actual A suspension distinguished from command accepted","B does not mutate A state","resume confirmation distinct from business write authorization"],"missing":"actual pause/control transport and task assertions"},
+    {"id":"F05","target":"pending callback binding","inject":"duplicate, expired and wrong-task callbacks in separate cases","assertions":["no wrong task awakened","duplicate callback has no repeated effect","stale callback result recorded"],"missing":"trusted callback fixture, expiry rule and independent event ledger"},
+    {"id":"F06","target":"permission-dependent operation","inject":"revoke permission at a predeclared execution boundary","assertions":["authoritative revocation timestamp recorded","probe confirms enforcement boundary","later unauthorized operation has no resource effect"],"missing":"trusted test identities, policy truth and revocation provider"},
+    {"id":"F07","target":"actual model context growth","inject":"grow full tool data until a genuine configured boundary","assertions":["no silent full-data truncation","actual failure layer identified","partial usage retained"],"missing":"gateway/model supported limit verification; large local strings alone do not prove real model context limit"},
+    {"id":"F08","target":"isolated upgrade fixture, never active baseline jars","inject":"advertise a new version while one task uses a frozen artifact","assertions":["selected retain/migrate/controlled-stop policy recorded before injection","version association follows policy"],"missing":"deployment/version-change fixture and supported migration scope"},
+    {"id":"F09","target":"long waiting task","inject":"predeclared waiting interval with validity probes","assertions":["necessary state retained","permission and resource reference validity rechecked"],"missing":"business waiting period, validity policy and acceptance deadline; short sleeps do not prove long-cycle capability"},
+    {"id":"F10","target":"remote delegation, when configured","inject":"remote waiting/error and bounded callback cases","assertions":["supported remote scope explicit","no unsupported onsite recovery counted as success"],"missing":"current B assembly only configures local Skill, not a remote agent"}
+  ],
+  "security_scenarios": [
+    {"id":"S01","missing":"trusted business identities, allow/deny policy matrix and independent resource effects"},
+    {"id":"S02","missing":"data classification policy and internal-read/output assertions; Core context cache component tested separately"},
+    {"id":"S03","missing":"actual confirmation-to-arguments binding and resource effects; official bank consent text is not Runtime authorization proof"},
+    {"id":"S04","missing":"authoritative permission update event and execution-side probe"},
+    {"id":"S05","missing":"independent expected-event ledger, not inferred from existing application logs"},
+    {"id":"S06","missing":"preexisting tamper-evidence mechanism and controlled mutation tests; post-collection hashes are insufficient"},
+    {"id":"S07","missing":"audit query/export role matrix and marked test data"},
+    {"id":"S08","missing":"retention, cleanup, backup scope and legal-hold policy"}
+  ],
+  "P15": {
+    "state": "PLANNED_NOT_EXECUTED",
+    "precondition": "same actual Runtime JVM with correctly routed independent official bank environments; one JVM per episode is not a shared-host isolation test",
+    "phase1": {"sessions":2,"tasks_per_session":1,"cases":["task_001","task_041"],"assertions":["tenant/session/task identities preserved","no cross-session internal data read or output","independent resource state","correct user-question/result routing"]},
+    "phase2": {"concurrent_sessions":4,"arrival_model":"closed loop: one active task per session; next independent task after terminal status","active_load_seconds":1800,"drain_max_seconds":1800,"case_selection":"fixed round-robin task_001, task_041","seed":300,"max_steps":200,"max_errors":10,"episode_timeout_seconds":1800},
+    "collection": ["independent admission and task ledger","all terminal/error/unscored outcomes","actual concurrency and isolation evidence","duration distribution with N","available Token usage and missing counts"],
+    "limitation": "30-minute technical load is not multi-day durability or production SLA. Current stdio callback broker is single-episode and must be multiplexed before this test."
+  }
+}

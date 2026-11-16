@@ -1,0 +1,2669 @@
+{
+  "summary": {
+    "planned": 22,
+    "categories": 11,
+    "started": 22,
+    "scored": 21,
+    "passed": 12,
+    "failed_scored": 9,
+    "unscored_started": 1,
+    "not_started": 0,
+    "official_pass_rate_scored_only": 0.5714285714285714,
+    "passed_over_planned_coverage": 0.5454545454545454,
+    "round_state": "completed",
+    "stop_reason": null,
+    "wall_seconds": 4427.754262001981,
+    "median_scored_duration_seconds": 180.0616208200081,
+    "max_scored_duration_seconds": 351.8283377869957,
+    "passed_duration_seconds_sum": 1821.4116834119486,
+    "failed_scored_duration_seconds_sum": 2214.241972746022,
+    "observed_tokens": 20390417,
+    "token_observation_missing_cases": 0,
+    "ordered_single_attempt_verified": true,
+    "frozen_file_count": 1432,
+    "repeatability": "无法收集：每题一次",
+    "production_bank_mcp": "无法收集：官方模拟环境",
+    "runtime_lifecycle": "无法收集：未通过Runtime托管",
+    "slowest_scored_cases": [
+      {
+        "task_id": "task_022",
+        "seconds": 351.8283377869957,
+        "reward": 0.0
+      },
+      {
+        "task_id": "task_049",
+        "seconds": 307.4406180429942,
+        "reward": 1.0
+      },
+      {
+        "task_id": "task_077",
+        "seconds": 295.4335938220029,
+        "reward": 0.0
+      },
+      {
+        "task_id": "task_041",
+        "seconds": 265.67015164499753,
+        "reward": 0.0
+      },
+      {
+        "task_id": "task_097",
+        "seconds": 255.10050674001104,
+        "reward": 0.0
+      }
+    ],
+    "java_observed_tokens": 19903579,
+    "python_observed_tokens": 486838,
+    "frozen_files_reverified_at_report": true,
+    "reporter_sha256": "5acba1563e9fd2f087bdd0663b736c1180a237c0ee56da9923faaa224d8d08a8"
+  },
+  "cases": [
+    {
+      "order": 1,
+      "wave": 1,
+      "category": "产品咨询、推荐奖励与服务升级",
+      "task_id": "task_003",
+      "title": "旅行信用卡的多条件筛选",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 105.96790884299844,
+      "java_tokens": 277001,
+      "python_tokens": 11498,
+      "model_calls": 10,
+      "official_business_results": 12,
+      "todo_start_events": 0,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 177.74744958500014,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 2,
+      "wave": 1,
+      "category": "返现核算、卡片收益与审批状态",
+      "task_id": "task_017",
+      "title": "单张Silver卡返现异常调查",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 169.798438318001,
+      "java_tokens": 837416,
+      "python_tokens": 15221,
+      "model_calls": 25,
+      "official_business_results": 21,
+      "todo_start_events": 6,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 343.43661863499983,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    },
+    {
+      "order": 3,
+      "wave": 1,
+      "category": "消费争议与紧急转接",
+      "task_id": "task_031",
+      "title": "酒店房型不符的消费争议",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 113.57567319199734,
+      "java_tokens": 576724,
+      "python_tokens": 18774,
+      "model_calls": 19,
+      "official_business_results": 15,
+      "todo_start_events": 4,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 139.5391795459982,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    },
+    {
+      "order": 4,
+      "wave": 1,
+      "category": "盗刷补卡与多卡争议",
+      "task_id": "task_036",
+      "title": "查看交易后发现盗刷并补卡",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 157.10094546199252,
+      "java_tokens": 769442,
+      "python_tokens": 17075,
+      "model_calls": 22,
+      "official_business_results": 20,
+      "todo_start_events": 5,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 145.3866420239974,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    },
+    {
+      "order": 5,
+      "wave": 1,
+      "category": "销卡、留客与虚假陈述",
+      "task_id": "task_043",
+      "title": "年费过高销卡与免年费挽留",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 170.5574008239928,
+      "java_tokens": 1164121,
+      "python_tokens": 13854,
+      "model_calls": 31,
+      "official_business_results": 26,
+      "todo_start_events": 6,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 220.19913059900136,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    },
+    {
+      "order": 6,
+      "wave": 1,
+      "category": "提额与跨操作依赖",
+      "task_id": "task_051",
+      "title": "提额比例与高使用率整改后重申",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 236.54817674700462,
+      "java_tokens": 1395194,
+      "python_tokens": 13248,
+      "model_calls": 33,
+      "official_business_results": 35,
+      "todo_start_events": 7,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 296.0457498430005,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    },
+    {
+      "order": 7,
+      "wave": 1,
+      "category": "开户、资金迁移与组合收益优化",
+      "task_id": "task_060",
+      "title": "先关旧支票账户可能破坏储蓄开户资格",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 235.19753263899474,
+      "java_tokens": 1192225,
+      "python_tokens": 17460,
+      "model_calls": 29,
+      "official_business_results": 25,
+      "todo_start_events": 3,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 354.22897613199893,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 8,
+      "wave": 1,
+      "category": "ATM费用核查与账户选择",
+      "task_id": "task_076",
+      "title": "海外取现成本与提前到账联合要求",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 156.62046349799493,
+      "java_tokens": 942230,
+      "python_tokens": 11122,
+      "model_calls": 22,
+      "official_business_results": 17,
+      "todo_start_events": 5,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 105.82629566300602,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    },
+    {
+      "order": 9,
+      "wave": 1,
+      "category": "借记卡生命周期、争议与安全处置",
+      "task_id": "task_077",
+      "title": "两张借记卡遗失、隐藏信用卡与激活",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 295.4335938220029,
+      "java_tokens": 1776285,
+      "python_tokens": 23109,
+      "model_calls": 36,
+      "official_business_results": 41,
+      "todo_start_events": 4,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 322.1165138629949,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 10,
+      "wave": 1,
+      "category": "储蓄利息核算与差额纠正",
+      "task_id": "task_093",
+      "title": "单储蓄账户利息差额补发及报告",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 88.6411732879933,
+      "java_tokens": 336150,
+      "python_tokens": 7666,
+      "model_calls": 18,
+      "official_business_results": 14,
+      "todo_start_events": 5,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 152.2240014840063,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    },
+    {
+      "order": 11,
+      "wave": 1,
+      "category": "复杂推荐资格与奖励优化",
+      "task_id": "task_098",
+      "title": "“室友”关系澄清与双方推荐奖励最大化",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 113.87764618299843,
+      "java_tokens": 288960,
+      "python_tokens": 10246,
+      "model_calls": 11,
+      "official_business_results": 16,
+      "todo_start_events": 0,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 200.61915544800286,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    },
+    {
+      "order": 12,
+      "wave": 2,
+      "category": "产品咨询、推荐奖励与服务升级",
+      "task_id": "task_016",
+      "title": "推荐奖励未到账与剩余消费门槛",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 159.0092934389977,
+      "java_tokens": 278998,
+      "python_tokens": 20025,
+      "model_calls": 14,
+      "official_business_results": 10,
+      "todo_start_events": 0,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 100.82196296099937,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 13,
+      "wave": 2,
+      "category": "返现核算、卡片收益与审批状态",
+      "task_id": "task_022",
+      "title": "四卡全量返现审计",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 351.8283377869957,
+      "java_tokens": 1741093,
+      "python_tokens": 125229,
+      "model_calls": 40,
+      "official_business_results": 25,
+      "todo_start_events": 7,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 834.178127084997,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 14,
+      "wave": 2,
+      "category": "消费争议与紧急转接",
+      "task_id": "task_033",
+      "title": "已扣款还款未入账的紧急升级",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 82.59373183098796,
+      "java_tokens": 249242,
+      "python_tokens": 11037,
+      "model_calls": 13,
+      "official_business_results": 9,
+      "todo_start_events": 0,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 53.43294454900024,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 15,
+      "wave": 2,
+      "category": "盗刷补卡与多卡争议",
+      "task_id": "task_041",
+      "title": "四卡十六笔争议与全局限制",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 265.67015164499753,
+      "java_tokens": 805475,
+      "python_tokens": 49527,
+      "model_calls": 23,
+      "official_business_results": 30,
+      "todo_start_events": 4,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 235.02866672399978,
+      "historical_reward": 0.0,
+      "development_exposed": true
+    },
+    {
+      "order": 16,
+      "wave": 2,
+      "category": "销卡、留客与虚假陈述",
+      "task_id": "task_049",
+      "title": "多卡销户中的虚假状态与权益索取",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 307.4406180429942,
+      "java_tokens": 1950982,
+      "python_tokens": 42853,
+      "model_calls": 45,
+      "official_business_results": 40,
+      "todo_start_events": 4,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 504.89776793200144,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 17,
+      "wave": 2,
+      "category": "提额与跨操作依赖",
+      "task_id": "task_054",
+      "title": "盗刷争议、补卡与提额三任务排序",
+      "started": true,
+      "status": "scored",
+      "reward": 1.0,
+      "duration_seconds": 196.22839049100003,
+      "java_tokens": 789846,
+      "python_tokens": 9217,
+      "model_calls": 20,
+      "official_business_results": 28,
+      "todo_start_events": 6,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 313.1035563159967,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 18,
+      "wave": 2,
+      "category": "开户、资金迁移与组合收益优化",
+      "task_id": "task_062",
+      "title": "个人账户关闭与新企业账户的资金重组",
+      "started": true,
+      "status": "execution_error",
+      "reward": null,
+      "duration_seconds": null,
+      "java_tokens": 327648,
+      "python_tokens": 9130,
+      "model_calls": 12,
+      "official_business_results": 12,
+      "todo_start_events": 2,
+      "bundled_guide_in_request": true,
+      "official_result_available": false,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": false,
+      "historical_duration_seconds": 461.8881683869986,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 19,
+      "wave": 2,
+      "category": "ATM费用核查与账户选择",
+      "task_id": "task_072",
+      "title": "两账户ATM费用核查与退款",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 210.80423778199474,
+      "java_tokens": 1046389,
+      "python_tokens": 12263,
+      "model_calls": 24,
+      "official_business_results": 21,
+      "todo_start_events": 6,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 702.275524533994,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 20,
+      "wave": 2,
+      "category": "借记卡生命周期、争议与安全处置",
+      "task_id": "task_087",
+      "title": "相同拒付代码背后的三种原因",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 183.59781476401258,
+      "java_tokens": 980906,
+      "python_tokens": 26883,
+      "model_calls": 26,
+      "official_business_results": 22,
+      "todo_start_events": 3,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 295.57316229699063,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 21,
+      "wave": 2,
+      "category": "储蓄利息核算与差额纠正",
+      "task_id": "task_097",
+      "title": "四储蓄账户与不准确余额的全量核算",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 255.10050674001104,
+      "java_tokens": 1339497,
+      "python_tokens": 9926,
+      "model_calls": 23,
+      "official_business_results": 42,
+      "todo_start_events": 3,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 564.2094367370009,
+      "historical_reward": 0.0,
+      "development_exposed": false
+    },
+    {
+      "order": 22,
+      "wave": 2,
+      "category": "复杂推荐资格与奖励优化",
+      "task_id": "task_100",
+      "title": "已持有高阶账户但资历不足的推荐",
+      "started": true,
+      "status": "scored",
+      "reward": 0.0,
+      "duration_seconds": 180.0616208200081,
+      "java_tokens": 837755,
+      "python_tokens": 11475,
+      "model_calls": 20,
+      "official_business_results": 27,
+      "todo_start_events": 2,
+      "bundled_guide_in_request": true,
+      "official_result_available": true,
+      "step_journal_available": true,
+      "full_episode_trajectory_available": true,
+      "historical_duration_seconds": 400.9986187930044,
+      "historical_reward": 1.0,
+      "development_exposed": false
+    }
+  ],
+  "categories": [
+    {
+      "category": "产品咨询、推荐奖励与服务升级",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 2,
+      "failed_scored": 0,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 264.97720228199614
+    },
+    {
+      "category": "返现核算、卡片收益与审批状态",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 1,
+      "failed_scored": 1,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 521.6267761049967
+    },
+    {
+      "category": "消费争议与紧急转接",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 2,
+      "failed_scored": 0,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 196.1694050229853
+    },
+    {
+      "category": "盗刷补卡与多卡争议",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 1,
+      "failed_scored": 1,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 422.77109710699006
+    },
+    {
+      "category": "销卡、留客与虚假陈述",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 2,
+      "failed_scored": 0,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 477.99801886698697
+    },
+    {
+      "category": "提额与跨操作依赖",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 1,
+      "failed_scored": 1,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 432.77656723800465
+    },
+    {
+      "category": "开户、资金迁移与组合收益优化",
+      "planned": 2,
+      "started": 2,
+      "scored": 1,
+      "passed": 0,
+      "failed_scored": 1,
+      "unscored_started": 1,
+      "not_started": 0,
+      "duration_seconds_sum": 235.19753263899474
+    },
+    {
+      "category": "ATM费用核查与账户选择",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 1,
+      "failed_scored": 1,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 367.4247012799897
+    },
+    {
+      "category": "借记卡生命周期、争议与安全处置",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 0,
+      "failed_scored": 2,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 479.03140858601546
+    },
+    {
+      "category": "储蓄利息核算与差额纠正",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 1,
+      "failed_scored": 1,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 343.74168002800434
+    },
+    {
+      "category": "复杂推荐资格与奖励优化",
+      "planned": 2,
+      "started": 2,
+      "scored": 2,
+      "passed": 1,
+      "failed_scored": 1,
+      "unscored_started": 0,
+      "not_started": 0,
+      "duration_seconds_sum": 293.93926700300653
+    }
+  ],
+  "failures": [
+    {
+      "task_id": "task_051",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "dictionary_item_removed": {
+          "root['agent_discoverable_tools']['data']['67b5d746b18c8002']": {
+            "tool_name": "get_user_dispute_history_7291",
+            "status": "CALLED"
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "051_2e",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_user_dispute_history_7291"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "051_2f",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_user_dispute_history_7291",
+            "arguments": "{\"user_id\": \"5e4c1a83b0\"}"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "051_2e",
+            "requestor": "assistant",
+            "name": "unlock_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "get_user_dispute_history_7291"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "051_2f",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "get_user_dispute_history_7291",
+              "arguments": "{\"user_id\": \"5e4c1a83b0\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        }
+      ],
+      "verified_result_categories": [
+        "预期记录/字段缺失",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-6127e8bcfc84713b/status.json"
+    },
+    {
+      "task_id": "task_060",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "dictionary_item_removed": {
+          "root['accounts']['data']['89fbc464fa6f2c5e']": {
+            "account_id": "89fbc464fa6f2c5e",
+            "user_id": "jm60a8b9c2",
+            "account_type": "savings",
+            "account_class": "Silver Plus Account",
+            "current_holdings": "0.00",
+            "status": "OPEN",
+            "date_opened": "11/14/2025"
+          },
+          "root['agent_discoverable_tools']['data']['0ad053d0e69ae023']": {
+            "tool_name": "open_bank_account_4821",
+            "status": "CALLED"
+          }
+        },
+        "values_changed": {
+          "root['accounts']['data']['58d57780cc15e32d']['closure_reason']": {
+            "new_value": "Customer request - consolidating to a single checking account (Blue Account)",
+            "old_value": "Customer requested closure"
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "060_3",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "open_bank_account_4821"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "060_4",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "open_bank_account_4821",
+            "arguments": "{\"user_id\": \"jm60a8b9c2\", \"account_type\": \"savings\", \"account_class\": \"Silver Plus Account\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "060_6",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "close_bank_account_7392",
+            "arguments": "{\"account_id\": \"58d57780cc15e32d\"}"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "060_3",
+            "requestor": "assistant",
+            "name": "unlock_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "open_bank_account_4821"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "060_4",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "open_bank_account_4821",
+              "arguments": "{\"user_id\": \"jm60a8b9c2\", \"account_type\": \"savings\", \"account_class\": \"Silver Plus Account\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "060_6",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "close_bank_account_7392",
+              "arguments": "{\"account_id\": \"58d57780cc15e32d\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 1,
+          "actual_candidates": [
+            {
+              "id": "skill-20",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "close_bank_account_7392",
+                "arguments": "{\"account_id\": \"58d57780cc15e32d\", \"reason\": \"Customer request - consolidating to a single checking account (Blue Account)\"}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        }
+      ],
+      "verified_result_categories": [
+        "预期记录/字段缺失",
+        "业务字段值不符",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-4da6289e0a0584f8/status.json"
+    },
+    {
+      "task_id": "task_077",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "values_changed": {
+          "root['debit_cards']['data']['dbc_8eed7b16caeb']['card_design']": {
+            "new_value": "CLASSIC",
+            "old_value": "PREMIUM"
+          },
+          "root['debit_card_orders']['data']": {
+            "new_value": {
+              "dcord_f70a304ee8c8": {
+                "order_id": "dcord_f70a304ee8c8",
+                "account_id": "chk_lj82d4f1a9",
+                "user_id": "lj82d4f1a9",
+                "delivery_option": "STANDARD",
+                "card_design": "CLASSIC",
+                "shipping_address": "1420 Lake Shore Drive, Chicago, IL 60610",
+                "delivery_fee": 0.0,
+                "design_fee": 0.0,
+                "excess_replacement_fee": 0.0,
+                "total_fee": 0.0,
+                "order_date": "11/14/2025",
+                "expected_delivery": "7-10 business days",
+                "status": "PENDING"
+              }
+            },
+            "old_value": {
+              "dcord_53e617fda768": {
+                "order_id": "dcord_53e617fda768",
+                "account_id": "chk_lj82d4f1a9",
+                "user_id": "lj82d4f1a9",
+                "delivery_option": "RUSH",
+                "card_design": "PREMIUM",
+                "shipping_address": "1420 Lake Shore Drive, Chicago, IL 60610",
+                "delivery_fee": 0.0,
+                "design_fee": 0.0,
+                "excess_replacement_fee": 0.0,
+                "total_fee": 0.0,
+                "order_date": "11/14/2025",
+                "expected_delivery": "1-2 business days",
+                "status": "PENDING"
+              }
+            }
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "077_6",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "order_replacement_credit_card_7291",
+            "arguments": "{\"credit_card_account_id\": \"cc_lj82d4f1a9_silver\", \"user_id\": \"lj82d4f1a9\", \"shipping_address\": \"1420 Lake Shore Drive, Chicago, IL 60610\", \"reason\": \"lost\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "077_14",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "order_debit_card_5739",
+            "arguments": "{\"account_id\": \"chk_lj82d4f1a9\", \"user_id\": \"lj82d4f1a9\", \"delivery_option\": \"RUSH\", \"delivery_fee\": 0, \"card_design\": \"PREMIUM\", \"design_fee\": 0, \"shipping_address\": \"1420 Lake Shore Drive, Chicago, IL 60610\"}"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "077_6",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "order_replacement_credit_card_7291",
+              "arguments": "{\"credit_card_account_id\": \"cc_lj82d4f1a9_silver\", \"user_id\": \"lj82d4f1a9\", \"shipping_address\": \"1420 Lake Shore Drive, Chicago, IL 60610\", \"reason\": \"lost\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 1,
+          "actual_candidates": [
+            {
+              "id": "skill-23",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "order_replacement_credit_card_7291",
+                "arguments": "{\"credit_card_account_id\": \"cc_lj82d4f1a9_silver\", \"user_id\": \"lj82d4f1a9\", \"shipping_address\": \"1420 Lake Shore Drive, Chicago, IL 60610\", \"reason\": \"lost\", \"expedited_shipping\": false}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "077_14",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "order_debit_card_5739",
+              "arguments": "{\"account_id\": \"chk_lj82d4f1a9\", \"user_id\": \"lj82d4f1a9\", \"delivery_option\": \"RUSH\", \"delivery_fee\": 0, \"card_design\": \"PREMIUM\", \"design_fee\": 0, \"shipping_address\": \"1420 Lake Shore Drive, Chicago, IL 60610\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 1,
+          "actual_candidates": [
+            {
+              "id": "skill-36",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "order_debit_card_5739",
+                "arguments": "{\"account_id\": \"chk_lj82d4f1a9\", \"user_id\": \"lj82d4f1a9\", \"delivery_option\": \"STANDARD\", \"delivery_fee\": 0, \"card_design\": \"CLASSIC\", \"design_fee\": 0, \"shipping_address\": \"1420 Lake Shore Drive, Chicago, IL 60610\", \"excess_replacement_fee\": 0}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        }
+      ],
+      "verified_result_categories": [
+        "业务字段值不符",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-3cf7c038f0e4f5ae/status.json"
+    },
+    {
+      "task_id": "task_022",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "dictionary_item_removed": {
+          "root['user_discoverable_tool_calls']['data']['4e7f8302fd2775b2']": {
+            "tool_name": "submit_cash_back_dispute_0589",
+            "arguments": {
+              "user_id": "f9bf8de0be",
+              "transaction_id": "txn_ffeede5eeacd"
+            },
+            "called_at": "11/14/2025",
+            "status": "CALLED"
+          },
+          "root['cash_back_disputes']['data']['dsp_d18836cecf5d']": {
+            "dispute_id": "dsp_d18836cecf5d",
+            "user_id": "f9bf8de0be",
+            "transaction_id": "txn_ffeede5eeacd",
+            "submitted_at": "11/14/2025",
+            "status": "SUBMITTED"
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "022_1",
+          "requestor": "assistant",
+          "name": "give_discoverable_user_tool",
+          "arguments": {
+            "discoverable_tool_name": "submit_cash_back_dispute_0589"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "022_3",
+          "requestor": "user",
+          "name": "call_discoverable_user_tool",
+          "arguments": {
+            "discoverable_tool_name": "submit_cash_back_dispute_0589",
+            "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_ffeede5eeacd\"}"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "022_1",
+            "requestor": "assistant",
+            "name": "give_discoverable_user_tool",
+            "arguments": {
+              "discoverable_tool_name": "submit_cash_back_dispute_0589"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 9,
+          "actual_candidates": [
+            {
+              "id": "skill-17",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_8a8873edaac2\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-18",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_4d2b795c6f98\"}",
+                "discoverable_tool_name": "submit_cash_back_dispute_0589"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-19",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_508e275e27af\"}",
+                "discoverable_tool_name": "submit_cash_back_dispute_0589"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-20",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_f84fa27a1b54\"}",
+                "discoverable_tool_name": "submit_cash_back_dispute_0589"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-21",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_097c072e7df3\"}",
+                "discoverable_tool_name": "submit_cash_back_dispute_0589"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-22",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_30cb41175311\"}",
+                "discoverable_tool_name": "submit_cash_back_dispute_0589"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-23",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_1a4918670323\"}",
+                "discoverable_tool_name": "submit_cash_back_dispute_0589"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-24",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_4f5e249acc6c\"}",
+                "discoverable_tool_name": "submit_cash_back_dispute_0589"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-25",
+              "name": "give_discoverable_user_tool",
+              "arguments": {
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_ba8b473f295d\"}",
+                "discoverable_tool_name": "submit_cash_back_dispute_0589"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "022_3",
+            "requestor": "user",
+            "name": "call_discoverable_user_tool",
+            "arguments": {
+              "discoverable_tool_name": "submit_cash_back_dispute_0589",
+              "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_ffeede5eeacd\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 10,
+          "actual_candidates": [
+            {
+              "id": "call_prpk5oa53903ax6gjcctthxs",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": {
+                  "user_id": "f9bf8de0be",
+                  "transaction_id": "txn_8a8873edaac2"
+                }
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_00_ik13obubp6vvvj20djsy7vqt",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_8a8873edaac2\"}"
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_3lhw4xx6i9np6xqu3ahzrkvv",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_4d2b795c6f98\"}"
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_fnm6lzprk444c4ap7y74cf4l",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_508e275e27af\"}"
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_wvdb8bayztykgwsf21t25q49",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_f84fa27a1b54\"}"
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_0yljaikscgdh07l3oea8ds38",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_097c072e7df3\"}"
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_4apzftk9dq9h49fsovte8cmr",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_30cb41175311\"}"
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_4n5iu8h6029b0pzuypo4ld3b",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_1a4918670323\"}"
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_q8s2irigk4gfjksgo9ofkyhr",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_4f5e249acc6c\"}"
+              },
+              "requestor": "user"
+            },
+            {
+              "id": "call_yw4ijwq22wg4q4756qtji4lh",
+              "name": "call_discoverable_user_tool",
+              "arguments": {
+                "discoverable_tool_name": "submit_cash_back_dispute_0589",
+                "arguments": "{\"user_id\": \"f9bf8de0be\", \"transaction_id\": \"txn_ba8b473f295d\"}"
+              },
+              "requestor": "user"
+            }
+          ],
+          "candidate_list_truncated": false
+        }
+      ],
+      "verified_result_categories": [
+        "预期记录/字段缺失",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-9b10e5bb66f7fb72/status.json"
+    },
+    {
+      "task_id": "task_041",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "values_changed": {
+          "root['transaction_disputes']['data']['dsp_e80b9e61bd15']['eligible_for_provisional_credit']": {
+            "new_value": false,
+            "old_value": true
+          },
+          "root['transaction_disputes']['data']['dsp_e80b9e61bd15']['provisional_credit_given']": {
+            "new_value": false,
+            "old_value": true
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "041_10",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+            "arguments": "{\"transaction_id\": \"txn_1b4cc30a928e\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"3081\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": false, \"purchase_date\": \"10/12/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"unauthorized_fraudulent_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": true}"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "041_10",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+              "arguments": "{\"transaction_id\": \"txn_1b4cc30a928e\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"3081\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": false, \"purchase_date\": \"10/12/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"unauthorized_fraudulent_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": true}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 16,
+          "actual_candidates": [
+            {
+              "id": "skill-13",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_107c4fa829bd\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"0573\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": false, \"purchase_date\": \"10/08/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"unauthorized_fraudulent_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-14",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_4f6e48543e07\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"0573\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": true, \"purchase_date\": \"10/15/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"duplicate_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-15",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_a42ce2e4156d\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"0573\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": true, \"purchase_date\": \"10/05/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"goods_services_not_received\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-16",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_dd095dee227f\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"0573\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": true, \"purchase_date\": \"10/28/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"incorrect_amount\", \"resolution_requested\": \"partial_refund\", \"partial_refund_amount\": 69.99, \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-17",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_1b4cc30a928e\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"3081\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": false, \"purchase_date\": \"10/12/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"unauthorized_fraudulent_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-18",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_816986054539\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"3081\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": true, \"purchase_date\": \"10/22/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"duplicate_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-19",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_ca1257bc2218\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"3081\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": true, \"purchase_date\": \"10/25/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"goods_services_not_as_described\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-20",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_79a44bbd7177\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"3081\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": true, \"purchase_date\": \"11/01/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"canceled_subscription_still_charging\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-21",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_b4f90f6ee392\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"3604\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": false, \"purchase_date\": \"10/10/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"unauthorized_fraudulent_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-22",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+                "arguments": "{\"transaction_id\": \"txn_5e6ad271fefb\", \"card_action\": \"keep_active\", \"card_last_4_digits\": \"3604\", \"full_name\": \"Claire Dubois\", \"user_id\": \"a6a7d745b2\", \"phone\": \"504-555-0847\", \"email\": \"jazzy_cat_lady@yahoo.com\", \"address\": \"1723 Santana Ave, Charleston, WV 25301\", \"contacted_merchant\": true, \"purchase_date\": \"10/18/2025\", \"issue_noticed_date\": \"11/14/2025\", \"dispute_reason\": \"duplicate_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": false}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": true
+        }
+      ],
+      "verified_result_categories": [
+        "业务字段值不符",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-0a3ce53efc59171b/status.json"
+    },
+    {
+      "task_id": "task_062",
+      "status": "execution_error",
+      "official_reward": null,
+      "reward_basis": null,
+      "reward_breakdown": null,
+      "db_check": null,
+      "strict_replay_completed": null,
+      "db_differences": null,
+      "unmatched_expected_actions": [],
+      "actual_action_evidence": [],
+      "verified_result_categories": [
+        "执行/评分异常；保留原状态，未计官方零分"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-d266369c6a4699fa/status.json"
+    },
+    {
+      "task_id": "task_072",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "dictionary_item_added": {
+          "root['bank_account_transaction_history']['data']['txn_4888821ae84b17c5']": {
+            "transaction_id": "txn_4888821ae84b17c5",
+            "account_id": "chk_538bfb9cba",
+            "date": "11/14/2025",
+            "description": "FEE REFUND - CUSTOMER SERVICE",
+            "amount": 5.0,
+            "type": "fee_refund",
+            "status": "posted"
+          }
+        },
+        "dictionary_item_removed": {
+          "root['bank_account_transaction_history']['data']['txn_58833f56abbc6a61']": {
+            "transaction_id": "txn_58833f56abbc6a61",
+            "account_id": "chk_538bfb9cba",
+            "date": "11/14/2025",
+            "description": "FEE REFUND - CUSTOMER SERVICE",
+            "amount": 3.5,
+            "type": "fee_refund",
+            "status": "posted"
+          }
+        },
+        "values_changed": {
+          "root['accounts']['data']['chk_538bfb9cba']['current_holdings']": {
+            "new_value": "$1852.50",
+            "old_value": "$1851.00"
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "072_7",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "apply_checking_account_credit_5829",
+            "arguments": "{\"account_id\": \"chk_lj82d4f1a9\", \"amount\": 14.00, \"credit_type\": \"fee_refund\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "072_8",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "apply_checking_account_credit_5829",
+            "arguments": "{\"account_id\": \"chk_538bfb9cba\", \"amount\": 3.50, \"credit_type\": \"fee_refund\"}"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "072_7",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "apply_checking_account_credit_5829",
+              "arguments": "{\"account_id\": \"chk_lj82d4f1a9\", \"amount\": 14.00, \"credit_type\": \"fee_refund\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 2,
+          "actual_candidates": [
+            {
+              "id": "skill-18",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_checking_account_credit_5829",
+                "arguments": "{\"account_id\": \"chk_lj82d4f1a9\", \"amount\": 14.0, \"credit_type\": \"fee_refund\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-19",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_checking_account_credit_5829",
+                "arguments": "{\"account_id\": \"chk_538bfb9cba\", \"amount\": 5.0, \"credit_type\": \"fee_refund\"}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "072_8",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "apply_checking_account_credit_5829",
+              "arguments": "{\"account_id\": \"chk_538bfb9cba\", \"amount\": 3.50, \"credit_type\": \"fee_refund\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 2,
+          "actual_candidates": [
+            {
+              "id": "skill-18",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_checking_account_credit_5829",
+                "arguments": "{\"account_id\": \"chk_lj82d4f1a9\", \"amount\": 14.0, \"credit_type\": \"fee_refund\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-19",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_checking_account_credit_5829",
+                "arguments": "{\"account_id\": \"chk_538bfb9cba\", \"amount\": 5.0, \"credit_type\": \"fee_refund\"}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        }
+      ],
+      "verified_result_categories": [
+        "额外记录/字段",
+        "预期记录/字段缺失",
+        "业务字段值不符",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-71ad90d194fca666/status.json"
+    },
+    {
+      "task_id": "task_087",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "dictionary_item_removed": {
+          "root['debit_cards']['data']['dbc_8cad03dd0d56']": {
+            "card_id": "dbc_8cad03dd0d56",
+            "account_id": "chk_mt35a7c9d2_evergreen",
+            "user_id": "mt35a7c9d2",
+            "cardholder_name": "MARCUS THOMPSON",
+            "last_4_digits": "0165",
+            "cvv": "030",
+            "status": "PENDING",
+            "issue_date": "11/14/2025",
+            "expiration_date": "11/30/2029",
+            "card_design": "PREMIUM",
+            "issue_reason": "fraud"
+          },
+          "root['debit_cards']['data']['dbc_mt35a7c9d2_evergreen']['closed_date']": "11/14/2025",
+          "root['debit_cards']['data']['dbc_mt35a7c9d2_evergreen']['closure_reason']": "fraud_suspected",
+          "root['agent_discoverable_tools']['data']['db2cecf4fb06ddb7']": {
+            "tool_name": "file_debit_card_transaction_dispute_6281",
+            "status": "CALLED"
+          },
+          "root['agent_discoverable_tools']['data']['63560e8d09d99795']": {
+            "tool_name": "close_debit_card_4721",
+            "status": "CALLED"
+          },
+          "root['agent_discoverable_tools']['data']['dd16126aba16cc39']": {
+            "tool_name": "order_debit_card_5739",
+            "status": "CALLED"
+          },
+          "root['debit_card_orders']['data']['dcord_b9afcdaba8b5']": {
+            "order_id": "dcord_b9afcdaba8b5",
+            "account_id": "chk_mt35a7c9d2_evergreen",
+            "user_id": "mt35a7c9d2",
+            "delivery_option": "EXPEDITED",
+            "card_design": "PREMIUM",
+            "shipping_address": "2847 Pine Street, Apt 12B, Seattle, WA 98101",
+            "delivery_fee": 0.0,
+            "design_fee": 0.0,
+            "excess_replacement_fee": 0.0,
+            "total_fee": 0.0,
+            "order_date": "11/14/2025",
+            "expected_delivery": "3-5 business days",
+            "status": "PENDING"
+          },
+          "root['debit_card_disputes']['data']['dsp_8aa70a7acbbf']": {
+            "dispute_id": "dsp_8aa70a7acbbf",
+            "transaction_id": "btxn_70fb52ef4e29",
+            "account_id": "chk_mt35a7c9d2_evergreen",
+            "card_id": "dbc_mt35a7c9d2_evergreen",
+            "user_id": "mt35a7c9d2",
+            "dispute_category": "card_present_fraud",
+            "transaction_date": "11/06/2025",
+            "discovery_date": "11/06/2025",
+            "disputed_amount": 499.99,
+            "transaction_type": "pin_purchase",
+            "card_in_possession": true,
+            "pin_compromised": "no",
+            "contacted_merchant": false,
+            "police_report_filed": false,
+            "written_statement_provided": true,
+            "provisional_credit_eligible": true,
+            "provisional_credit_issued": true,
+            "provisional_credit_amount": 499.99,
+            "customer_max_liability_amount": 50.0,
+            "card_action": "close_and_reissue",
+            "is_fraud_category": true,
+            "pin_shared_voluntarily": false,
+            "submitted_at": "11/14/2025",
+            "status": "OPEN"
+          }
+        },
+        "values_changed": {
+          "root['debit_cards']['data']['dbc_mt35a7c9d2_evergreen']['status']": {
+            "new_value": "ACTIVE",
+            "old_value": "CLOSED"
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "087_13",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "file_debit_card_transaction_dispute_6281"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "087_14",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "file_debit_card_transaction_dispute_6281",
+            "arguments": "{\"transaction_id\": \"btxn_70fb52ef4e29\", \"account_id\": \"chk_mt35a7c9d2_evergreen\", \"card_id\": \"dbc_mt35a7c9d2_evergreen\", \"user_id\": \"mt35a7c9d2\", \"dispute_category\": \"card_present_fraud\", \"transaction_date\": \"11/06/2025\", \"discovery_date\": \"11/06/2025\", \"disputed_amount\": 499.99, \"transaction_type\": \"pin_purchase\", \"card_in_possession\": true, \"pin_compromised\": \"no\", \"contacted_merchant\": false, \"police_report_filed\": false, \"written_statement_provided\": true, \"provisional_credit_eligible\": true, \"customer_max_liability_amount\": 50, \"card_action\": \"close_and_reissue\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "087_15",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "close_debit_card_4721"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "087_16",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "close_debit_card_4721",
+            "arguments": "{\"card_id\": \"dbc_mt35a7c9d2_evergreen\", \"reason\": \"fraud_suspected\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "087_17",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "order_debit_card_5739"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "087_18",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "order_debit_card_5739",
+            "arguments": "{\"account_id\": \"chk_mt35a7c9d2_evergreen\", \"user_id\": \"mt35a7c9d2\", \"delivery_option\": \"EXPEDITED\", \"delivery_fee\": 0, \"card_design\": \"PREMIUM\", \"design_fee\": 0, \"shipping_address\": \"2847 Pine Street, Apt 12B, Seattle, WA 98101\"}"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "087_13",
+            "requestor": "assistant",
+            "name": "unlock_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "file_debit_card_transaction_dispute_6281"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "087_14",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "file_debit_card_transaction_dispute_6281",
+              "arguments": "{\"transaction_id\": \"btxn_70fb52ef4e29\", \"account_id\": \"chk_mt35a7c9d2_evergreen\", \"card_id\": \"dbc_mt35a7c9d2_evergreen\", \"user_id\": \"mt35a7c9d2\", \"dispute_category\": \"card_present_fraud\", \"transaction_date\": \"11/06/2025\", \"discovery_date\": \"11/06/2025\", \"disputed_amount\": 499.99, \"transaction_type\": \"pin_purchase\", \"card_in_possession\": true, \"pin_compromised\": \"no\", \"contacted_merchant\": false, \"police_report_filed\": false, \"written_statement_provided\": true, \"provisional_credit_eligible\": true, \"customer_max_liability_amount\": 50, \"card_action\": \"close_and_reissue\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "087_15",
+            "requestor": "assistant",
+            "name": "unlock_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "close_debit_card_4721"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "087_16",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "close_debit_card_4721",
+              "arguments": "{\"card_id\": \"dbc_mt35a7c9d2_evergreen\", \"reason\": \"fraud_suspected\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "087_17",
+            "requestor": "assistant",
+            "name": "unlock_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "order_debit_card_5739"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "087_18",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "order_debit_card_5739",
+              "arguments": "{\"account_id\": \"chk_mt35a7c9d2_evergreen\", \"user_id\": \"mt35a7c9d2\", \"delivery_option\": \"EXPEDITED\", \"delivery_fee\": 0, \"card_design\": \"PREMIUM\", \"design_fee\": 0, \"shipping_address\": \"2847 Pine Street, Apt 12B, Seattle, WA 98101\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 0,
+          "actual_candidates": [],
+          "candidate_list_truncated": false
+        }
+      ],
+      "verified_result_categories": [
+        "预期记录/字段缺失",
+        "业务字段值不符",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-4dd0e5c8baf2ec4a/status.json"
+    },
+    {
+      "task_id": "task_097",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "dictionary_item_added": {
+          "root['bank_account_transaction_history']['data']['txn_e011944692118207']": {
+            "transaction_id": "txn_e011944692118207",
+            "account_id": "sav_mc80w7k3x9_silver",
+            "date": "11/14/2025",
+            "description": "INTEREST CORRECTION - CUSTOMER SERVICE",
+            "amount": 222.92,
+            "type": "interest_correction",
+            "status": "posted"
+          },
+          "root['bank_account_transaction_history']['data']['txn_54763a1662d6fc2e']": {
+            "transaction_id": "txn_54763a1662d6fc2e",
+            "account_id": "sav_mc80w7k3x9_silverplus",
+            "date": "11/14/2025",
+            "description": "INTEREST CORRECTION - CUSTOMER SERVICE",
+            "amount": 12.38,
+            "type": "interest_correction",
+            "status": "posted"
+          }
+        },
+        "dictionary_item_removed": {
+          "root['bank_account_transaction_history']['data']['txn_aa55b31a00bcb52b']": {
+            "transaction_id": "txn_aa55b31a00bcb52b",
+            "account_id": "sav_mc80w7k3x9_silver",
+            "date": "11/14/2025",
+            "description": "INTEREST CORRECTION - CUSTOMER SERVICE",
+            "amount": 220.84,
+            "type": "interest_correction",
+            "status": "posted"
+          },
+          "root['bank_account_transaction_history']['data']['txn_8212876563a29e25']": {
+            "transaction_id": "txn_8212876563a29e25",
+            "account_id": "sav_mc80w7k3x9_silverplus",
+            "date": "11/14/2025",
+            "description": "INTEREST CORRECTION - CUSTOMER SERVICE",
+            "amount": 12.0,
+            "type": "interest_correction",
+            "status": "posted"
+          }
+        },
+        "values_changed": {
+          "root['accounts']['data']['sav_mc80w7k3x9_silver']['current_holdings']": {
+            "new_value": "100222.92",
+            "old_value": "100220.84"
+          },
+          "root['accounts']['data']['sav_mc80w7k3x9_silverplus']['current_holdings']": {
+            "new_value": "18012.38",
+            "old_value": "18012.00"
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "097_9",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "apply_savings_account_credit_6831",
+            "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"amount\": 220.84, \"credit_type\": \"interest_correction\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "097_12",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "apply_savings_account_credit_6831",
+            "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"amount\": 12.00, \"credit_type\": \"interest_correction\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "097_14",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "submit_interest_discrepancy_report_7294",
+            "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 6.65, \"actual_apy\": 4.0, \"amount_difference\": 220.84}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "097_16",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "submit_interest_discrepancy_report_7294",
+            "arguments": "{\"account_id\": \"sav_mc80w7k3x9_diamond\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 8.2, \"actual_apy\": 7.5, \"amount_difference\": 70.00}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        {
+          "action_id": "097_17",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "submit_interest_discrepancy_report_7294",
+            "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 5.3, \"actual_apy\": 4.5, \"amount_difference\": 12.00}"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "097_9",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "apply_savings_account_credit_6831",
+              "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"amount\": 220.84, \"credit_type\": \"interest_correction\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 4,
+          "actual_candidates": [
+            {
+              "id": "skill-31",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_savings_account_credit_6831",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"amount\": 222.92, \"credit_type\": \"interest_correction\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-32",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_savings_account_credit_6831",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_platinum\", \"amount\": 67.08, \"credit_type\": \"interest_correction\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-33",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_savings_account_credit_6831",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_diamond\", \"amount\": 70.00, \"credit_type\": \"interest_correction\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-34",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_savings_account_credit_6831",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"amount\": 12.38, \"credit_type\": \"interest_correction\"}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "097_12",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "apply_savings_account_credit_6831",
+              "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"amount\": 12.00, \"credit_type\": \"interest_correction\"}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 4,
+          "actual_candidates": [
+            {
+              "id": "skill-31",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_savings_account_credit_6831",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"amount\": 222.92, \"credit_type\": \"interest_correction\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-32",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_savings_account_credit_6831",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_platinum\", \"amount\": 67.08, \"credit_type\": \"interest_correction\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-33",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_savings_account_credit_6831",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_diamond\", \"amount\": 70.00, \"credit_type\": \"interest_correction\"}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-34",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "apply_savings_account_credit_6831",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"amount\": 12.38, \"credit_type\": \"interest_correction\"}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "097_14",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "submit_interest_discrepancy_report_7294",
+              "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 6.65, \"actual_apy\": 4.0, \"amount_difference\": 220.84}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 4,
+          "actual_candidates": [
+            {
+              "id": "skill-35",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_platinum\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 7.65, \"actual_apy\": 6.5, \"amount_difference\": 67.08}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-36",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 6.675, \"actual_apy\": 4.0, \"amount_difference\": 222.92}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-37",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_diamond\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 8.2, \"actual_apy\": 7.5, \"amount_difference\": 70.0}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-38",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 5.325, \"actual_apy\": 4.5, \"amount_difference\": 12.38}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "097_16",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "submit_interest_discrepancy_report_7294",
+              "arguments": "{\"account_id\": \"sav_mc80w7k3x9_diamond\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 8.2, \"actual_apy\": 7.5, \"amount_difference\": 70.00}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 4,
+          "actual_candidates": [
+            {
+              "id": "skill-35",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_platinum\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 7.65, \"actual_apy\": 6.5, \"amount_difference\": 67.08}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-36",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 6.675, \"actual_apy\": 4.0, \"amount_difference\": 222.92}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-37",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_diamond\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 8.2, \"actual_apy\": 7.5, \"amount_difference\": 70.0}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-38",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 5.325, \"actual_apy\": 4.5, \"amount_difference\": 12.38}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        },
+        {
+          "expected_action": {
+            "action_id": "097_17",
+            "requestor": "assistant",
+            "name": "call_discoverable_agent_tool",
+            "arguments": {
+              "agent_tool_name": "submit_interest_discrepancy_report_7294",
+              "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 5.3, \"actual_apy\": 4.5, \"amount_difference\": 12.00}"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 4,
+          "actual_candidates": [
+            {
+              "id": "skill-35",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_platinum\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 7.65, \"actual_apy\": 6.5, \"amount_difference\": 67.08}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-36",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silver\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 6.675, \"actual_apy\": 4.0, \"amount_difference\": 222.92}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-37",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_diamond\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 8.2, \"actual_apy\": 7.5, \"amount_difference\": 70.0}"
+              },
+              "requestor": "assistant"
+            },
+            {
+              "id": "skill-38",
+              "name": "call_discoverable_agent_tool",
+              "arguments": {
+                "agent_tool_name": "submit_interest_discrepancy_report_7294",
+                "arguments": "{\"account_id\": \"sav_mc80w7k3x9_silverplus\", \"user_id\": \"mc80w7k3x9\", \"expected_apy\": 5.325, \"actual_apy\": 4.5, \"amount_difference\": 12.38}"
+              },
+              "requestor": "assistant"
+            }
+          ],
+          "candidate_list_truncated": false
+        }
+      ],
+      "verified_result_categories": [
+        "额外记录/字段",
+        "预期记录/字段缺失",
+        "业务字段值不符",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-a480b84aae7d1b8a/status.json"
+    },
+    {
+      "task_id": "task_100",
+      "status": "scored",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "reward_breakdown": {
+        "DB": 0.0
+      },
+      "db_check": {
+        "db_match": false,
+        "db_reward": 0.0
+      },
+      "strict_replay_completed": true,
+      "db_differences": {
+        "dictionary_item_added": {
+          "root['referrals']['data']['ef27b31bcbaaee97']": {
+            "referral_id": "ef27b31bcbaaee97",
+            "referrer_id": "ti87k4x9m2",
+            "referred_account_type": "Sky Blue Account",
+            "referral_status": "NO_PROGRESS",
+            "date": "11/14/2025"
+          }
+        },
+        "dictionary_item_removed": {
+          "root['referrals']['data']['6606c58053595be6']": {
+            "referral_id": "6606c58053595be6",
+            "referrer_id": "ti87k4x9m2",
+            "referred_account_type": "Hunter Green Account",
+            "referral_status": "NO_PROGRESS",
+            "date": "11/14/2025"
+          }
+        }
+      },
+      "unmatched_expected_actions": [
+        {
+          "action_id": "100_3",
+          "requestor": "user",
+          "name": "submit_referral",
+          "arguments": {
+            "user_id": "ti87k4x9m2",
+            "account_type": "Hunter Green Account"
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ],
+      "actual_action_evidence": [
+        {
+          "expected_action": {
+            "action_id": "100_3",
+            "requestor": "user",
+            "name": "submit_referral",
+            "arguments": {
+              "user_id": "ti87k4x9m2",
+              "account_type": "Hunter Green Account"
+            },
+            "info": null,
+            "compare_args": null
+          },
+          "actual_candidate_count": 1,
+          "actual_candidates": [
+            {
+              "id": "call_v3iw9ks6cjtw6onclmjham6o",
+              "name": "submit_referral",
+              "arguments": {
+                "user_id": "ti87k4x9m2",
+                "account_type": "Sky Blue Account"
+              },
+              "requestor": "user"
+            }
+          ],
+          "candidate_list_truncated": false
+        }
+      ],
+      "verified_result_categories": [
+        "额外记录/字段",
+        "预期记录/字段缺失",
+        "官方辅助动作检查未匹配；需结合reward_basis解释"
+      ],
+      "evidence_level": "verified score and state/action differences; causal policy interpretation requires trace review",
+      "status_path": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/runs/round-01-20261115-a00/episodes/banking_knowledge-t0-f3e8254f10130092/status.json"
+    }
+  ],
+  "evidence": {
+    "episodes/banking_knowledge-t0-8d088ee24adb412d/status.json": {
+      "sha256": "03cb755d800fe495127f47475747a7a3a4c3af6bc583fd57dbf7179ff4c56453",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-8d088ee24adb412d/result.json": {
+      "sha256": "fbe702c6b1c15ccb4089c493d37a31b52712d9ee34a1a82d642d0d279eb82d7c",
+      "bytes": 249546
+    },
+    "episodes/banking_knowledge-t0-8d088ee24adb412d/official-trajectory.jsonl": {
+      "sha256": "4f864348dbfc932895b39babd797765bc244311bb3008c3dd0bea5b72ef60146",
+      "bytes": 216173
+    },
+    "episodes/banking_knowledge-t0-9ca412cf4e6a3918/status.json": {
+      "sha256": "65b4c438e3ad94d731caed314081a974aa440323a7dd948b6050395193d76dbf",
+      "bytes": 182
+    },
+    "episodes/banking_knowledge-t0-9ca412cf4e6a3918/result.json": {
+      "sha256": "9394d95545a0c037702ad99ceadf152136f6e23f7c8aa3fc9bb856077653dbf2",
+      "bytes": 291581
+    },
+    "episodes/banking_knowledge-t0-9ca412cf4e6a3918/official-trajectory.jsonl": {
+      "sha256": "14454db870d7292f4723e5028761d6463b00d713037b2fc9bf55f5b5bca557fd",
+      "bytes": 246929
+    },
+    "episodes/banking_knowledge-t0-f6d7fb9427534151/status.json": {
+      "sha256": "0d72350ab7f2f065aa73dba6b4fe64e8f1c7177f5e4f19b2b73f32a4e22b9fe8",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-f6d7fb9427534151/result.json": {
+      "sha256": "dae2f65cc4306ea3bf5c0454a03bb3119401d9be3a4d9b8a6e693de5c60861bf",
+      "bytes": 214491
+    },
+    "episodes/banking_knowledge-t0-f6d7fb9427534151/official-trajectory.jsonl": {
+      "sha256": "ef0842009c69eedc87708d8ff087a23bda390540ea276cbd91086b2f2ca0e095",
+      "bytes": 169439
+    },
+    "episodes/banking_knowledge-t0-2e9bde14bf632566/status.json": {
+      "sha256": "2a7cbed823f9ea8e77b385c76ed668d1836bbd6ffa4c1929f88ec1aa0147312e",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-2e9bde14bf632566/result.json": {
+      "sha256": "aca5432ed053a7e0ac2c4e19bc28f0e1c1ac8dab6df9f42e432e0b6fe4b6b3b8",
+      "bytes": 315096
+    },
+    "episodes/banking_knowledge-t0-2e9bde14bf632566/official-trajectory.jsonl": {
+      "sha256": "7ac56151d6caf0e1b8dde7cf9e1cf59754aaf0a96276b669e58a2e68eba42b16",
+      "bytes": 270919
+    },
+    "episodes/banking_knowledge-t0-51f079acbf42fde2/status.json": {
+      "sha256": "03069bd2047aa34e996f88fa99dd36bb3e13cc9f3a8298bd04ca445d749ff751",
+      "bytes": 183
+    },
+    "episodes/banking_knowledge-t0-51f079acbf42fde2/result.json": {
+      "sha256": "3d22ba3b3048e880d2a211db05f310cbac935d1005fe741540881d6a814e7294",
+      "bytes": 293800
+    },
+    "episodes/banking_knowledge-t0-51f079acbf42fde2/official-trajectory.jsonl": {
+      "sha256": "c7b4ba520d5fd2f3880c138d14d565b5780e19fd6ce8edc830aa972d11049a37",
+      "bytes": 235468
+    },
+    "episodes/banking_knowledge-t0-6127e8bcfc84713b/status.json": {
+      "sha256": "32f8cae3fbd820cb33902b68a8198d3d0e3f862b7d967aa47736d2c3c301fcf7",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-6127e8bcfc84713b/result.json": {
+      "sha256": "3f5b2708418c9421e20f770b0c912f642b7b1475a9bf5f70f433c508c6f9c5b1",
+      "bytes": 311338
+    },
+    "episodes/banking_knowledge-t0-6127e8bcfc84713b/official-trajectory.jsonl": {
+      "sha256": "360cfa13fb05d380db3f55bf5e0e941eeed2e31a0ad7cdd0506a5fad68279774",
+      "bytes": 237358
+    },
+    "episodes/banking_knowledge-t0-4da6289e0a0584f8/status.json": {
+      "sha256": "8a727c5054365c5ff7fafae20e308386ca691a42f58e3c0cd99628e8bda0fd0f",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-4da6289e0a0584f8/result.json": {
+      "sha256": "9886859631d2b5452162d77b53989714fdff5378e7b0c8bbfc002dd1e8492d0e",
+      "bytes": 409016
+    },
+    "episodes/banking_knowledge-t0-4da6289e0a0584f8/official-trajectory.jsonl": {
+      "sha256": "70f14680846b26db0ad14ff2d40b3ec5d35f776468ed0a2fd477fd7e5656aeda",
+      "bytes": 355791
+    },
+    "episodes/banking_knowledge-t0-26428b6f4bdba3c4/status.json": {
+      "sha256": "d9135d40f7f3ba982389ffac05e742cfe768f8a724597c3448d7014b47c0fef9",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-26428b6f4bdba3c4/result.json": {
+      "sha256": "8a73f781f324bd949eea814e7d6504c44465e0beadc436c6b5f6d309441039bb",
+      "bytes": 250836
+    },
+    "episodes/banking_knowledge-t0-26428b6f4bdba3c4/official-trajectory.jsonl": {
+      "sha256": "f58ab7492d8d34f361484ce887417f0d5840e5ad3b3af9d81a5eb91bd93aaae6",
+      "bytes": 206216
+    },
+    "episodes/banking_knowledge-t0-3cf7c038f0e4f5ae/status.json": {
+      "sha256": "f0aec3afeab4bf5bf79690db8b4ec6e7818179e43767cc90a742eb367ef4c84b",
+      "bytes": 183
+    },
+    "episodes/banking_knowledge-t0-3cf7c038f0e4f5ae/result.json": {
+      "sha256": "478956b06087a0025bae4db883e640708c8f504970d267e59ca5fa5727c1ca32",
+      "bytes": 409748
+    },
+    "episodes/banking_knowledge-t0-3cf7c038f0e4f5ae/official-trajectory.jsonl": {
+      "sha256": "f7c9c84a395f6b8b68e6e31f6cf374d88c8fc86c41bcb4a54af73b657586ed7e",
+      "bytes": 326986
+    },
+    "episodes/banking_knowledge-t0-2bcd6880ec2611d8/status.json": {
+      "sha256": "44180453adb3cc3b65b4c176f44f4481dfb56e2b7e1f80d2c9ac4d20fe333d8b",
+      "bytes": 182
+    },
+    "episodes/banking_knowledge-t0-2bcd6880ec2611d8/result.json": {
+      "sha256": "1d5a9bbe390dd9fa1b4fff6cdf14501e1900f413b777b2311edd6156592ef207",
+      "bytes": 120600
+    },
+    "episodes/banking_knowledge-t0-2bcd6880ec2611d8/official-trajectory.jsonl": {
+      "sha256": "5f34dc7dd6c1067c1827e15cdaa8181407df758e9073c3af4b0d10ea010b3e62",
+      "bytes": 72531
+    },
+    "episodes/banking_knowledge-t0-f47ce0d7fda8c78a/status.json": {
+      "sha256": "812609b1c8090e2b55547f6d9637dae31981d22aa62783823f3c9a1eb20ed677",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-f47ce0d7fda8c78a/result.json": {
+      "sha256": "18229c771c8a4bde73464ac6b058418b98d31ec498662142041992b6ab6a1ea8",
+      "bytes": 225891
+    },
+    "episodes/banking_knowledge-t0-f47ce0d7fda8c78a/official-trajectory.jsonl": {
+      "sha256": "e11d78c04051021d835d27248ee84dbf7e1ddb7b1d88ec9e83abca63d6463685",
+      "bytes": 184175
+    },
+    "episodes/banking_knowledge-t0-52089b230fe7cff8/status.json": {
+      "sha256": "df8c98ed02452726952cdb5f77c5a80413c73897ba3827b655af3d0a7446b9b7",
+      "bytes": 183
+    },
+    "episodes/banking_knowledge-t0-52089b230fe7cff8/result.json": {
+      "sha256": "d25a6d987106c3a329d0a1cd674b2eeca75ff42f2d9882fb5bcd101200446f51",
+      "bytes": 127398
+    },
+    "episodes/banking_knowledge-t0-52089b230fe7cff8/official-trajectory.jsonl": {
+      "sha256": "3734f5b449a2446b896165d87493e7649102ec97413efa02e24162f590ca8594",
+      "bytes": 88971
+    },
+    "episodes/banking_knowledge-t0-9b10e5bb66f7fb72/status.json": {
+      "sha256": "dcf664e7c58c68cf6064f5df35489ad6f276135c3ccb4271c3314e559d602a98",
+      "bytes": 183
+    },
+    "episodes/banking_knowledge-t0-9b10e5bb66f7fb72/result.json": {
+      "sha256": "2186b78ea14753238feabfa9143956c5b33bc240cf0c7c436fd064184c6d8288",
+      "bytes": 356338
+    },
+    "episodes/banking_knowledge-t0-9b10e5bb66f7fb72/official-trajectory.jsonl": {
+      "sha256": "d330375f6268e7f298a23e39b05705f1ff531fb99ca37a739aea0a73bd0a1883",
+      "bytes": 270713
+    },
+    "episodes/banking_knowledge-t0-fe470e1ab9093f12/status.json": {
+      "sha256": "13c3e2ddacaf2973d3a6256be633095c177b3a6358115ea1f084d0a5f0214182",
+      "bytes": 183
+    },
+    "episodes/banking_knowledge-t0-fe470e1ab9093f12/result.json": {
+      "sha256": "ca0d29d303afda891eb0b3c08a6629c5b14421b7bac6eac445752820dfaebefe",
+      "bytes": 127116
+    },
+    "episodes/banking_knowledge-t0-fe470e1ab9093f12/official-trajectory.jsonl": {
+      "sha256": "cda712dd16ff26adc5e876d83dfb163ce1a07159b341ee40595b4a0991ba6025",
+      "bytes": 91041
+    },
+    "episodes/banking_knowledge-t0-0a3ce53efc59171b/status.json": {
+      "sha256": "f60dfe8b1d10b190d87449ce5fccf5ec7c5e382ac4806be48675a2cc0b6fb908",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-0a3ce53efc59171b/result.json": {
+      "sha256": "e7082c65701b5023e7078cbb31e09be0afb913529bb6e22730591008f397fce9",
+      "bytes": 310322
+    },
+    "episodes/banking_knowledge-t0-0a3ce53efc59171b/official-trajectory.jsonl": {
+      "sha256": "2da1d61479a7c830bdc9bc67f25336adf3c57d55210abc8b59dec245765b7c49",
+      "bytes": 210494
+    },
+    "episodes/banking_knowledge-t0-481bbc1de196428d/status.json": {
+      "sha256": "412ec18e877e3f092b1a58ac50d04dee56e2310a8a475f1ea609cd13c15b2dcf",
+      "bytes": 183
+    },
+    "episodes/banking_knowledge-t0-481bbc1de196428d/result.json": {
+      "sha256": "965779ae52582df40d66dc73a31211bec0bdc453756b6d96c0a8c35dd4ce9c5f",
+      "bytes": 431992
+    },
+    "episodes/banking_knowledge-t0-481bbc1de196428d/official-trajectory.jsonl": {
+      "sha256": "34e7852387842e1876a5528f9e4366f9b514880c1802ac990c07d3bbf6456e7a",
+      "bytes": 349303
+    },
+    "episodes/banking_knowledge-t0-9e41c675cb4df039/status.json": {
+      "sha256": "09c4279df95120d88ccf5b3e9a9bfc565f65e9a8ea675848256514f41de9833e",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-9e41c675cb4df039/result.json": {
+      "sha256": "301779987fa14e36b267626bddbeedd5eb679080cbb8f00c7d2f054256eb1b37",
+      "bytes": 198696
+    },
+    "episodes/banking_knowledge-t0-9e41c675cb4df039/official-trajectory.jsonl": {
+      "sha256": "223d6c9e67d53faac417c5dcc7aa52168a84e01129d212147cbe878ad1d9cb1d",
+      "bytes": 134990
+    },
+    "episodes/banking_knowledge-t0-d266369c6a4699fa/status.json": {
+      "sha256": "003c0b4c8ee69450f62cb4e63208f9811550157eda5a43f7954beaede52759e1",
+      "bytes": 168
+    },
+    "episodes/banking_knowledge-t0-d266369c6a4699fa/exception.txt": {
+      "sha256": "fbccf075ebfe1a1a5beb7f955fba37ea8eb3db656abae2f44fb1be4b2c40a7d5",
+      "bytes": 1392
+    },
+    "episodes/banking_knowledge-t0-d266369c6a4699fa/official-trajectory.jsonl": {
+      "sha256": "a917076b9cead5b35ff13632df6db3cdb45c69253ec73be342e745c753a4ba45",
+      "bytes": 159773
+    },
+    "episodes/banking_knowledge-t0-71ad90d194fca666/status.json": {
+      "sha256": "cc79251136ce6ae360e4044e694608da9769cbddad7af73bade00652dda82f7f",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-71ad90d194fca666/result.json": {
+      "sha256": "696d439e33b7062802f2a86aea7e29e0a0a25efc77290a0f5aab8cf394975946",
+      "bytes": 314426
+    },
+    "episodes/banking_knowledge-t0-71ad90d194fca666/official-trajectory.jsonl": {
+      "sha256": "6e3ec69fd2548b057a2e0ee9cd310718c73a90e16f6bfb57ea74da3379184c92",
+      "bytes": 263066
+    },
+    "episodes/banking_knowledge-t0-4dd0e5c8baf2ec4a/status.json": {
+      "sha256": "9a2841aaec9d1115d59a5bc61a1c56780d9ab4b39bab6abfb99be79b2abf41fd",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-4dd0e5c8baf2ec4a/result.json": {
+      "sha256": "3529d04d0849914367c475eb9c6b39bac975e426741f36fa8827f416b4a6388e",
+      "bytes": 285081
+    },
+    "episodes/banking_knowledge-t0-4dd0e5c8baf2ec4a/official-trajectory.jsonl": {
+      "sha256": "95013a3ee02f9ea9963fd5e7587e952e2a0793f99c37f95971113aab81868fbb",
+      "bytes": 209286
+    },
+    "episodes/banking_knowledge-t0-a480b84aae7d1b8a/status.json": {
+      "sha256": "1d70ff506d3a13231831f214c37da9056f09e913ff8e1402fe65a6d34d2b7928",
+      "bytes": 184
+    },
+    "episodes/banking_knowledge-t0-a480b84aae7d1b8a/result.json": {
+      "sha256": "79b8c009343cc262847aa65bd86fbc46312e95b0a8978b8f8217de4a217e5d5d",
+      "bytes": 450342
+    },
+    "episodes/banking_knowledge-t0-a480b84aae7d1b8a/official-trajectory.jsonl": {
+      "sha256": "b69350af836d1ba1a7ce27b9f13429e1d84d6806fe4245deef5ebf63aa579a87",
+      "bytes": 367666
+    },
+    "episodes/banking_knowledge-t0-f3e8254f10130092/status.json": {
+      "sha256": "ec300beaced93d3e6d6479da5fed296ec3b2f65994cae7541cc6ac9744bce25a",
+      "bytes": 183
+    },
+    "episodes/banking_knowledge-t0-f3e8254f10130092/result.json": {
+      "sha256": "34c956d4526d18e966821c220266cb2ff33171b24c3edb45e34d86240f06461c",
+      "bytes": 449641
+    },
+    "episodes/banking_knowledge-t0-f3e8254f10130092/official-trajectory.jsonl": {
+      "sha256": "d36c52bc9588eb72ac2d338b02b089dbcaa0778156b0fd105037ead459348f7f",
+      "bytes": 400591
+    }
+  }
+}

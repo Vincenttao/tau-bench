@@ -1,0 +1,58 @@
+# Local environments, downloaded dependencies, and tool state
+/.venv*/
+/.deps/
+/.agents/
+/.codex/
+/.aws/
+
+# Python caches and test outputs
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Java build products and machine-specific dependency paths
+target/
+*.class
+*.jar
+classpath.txt
+
+# Raw execution data and intermediate outputs (keep locally)
+runs
+logs/
+*.log
+*.pid
+*.tmp
+*.tmp.*
+*.bak
+# Keep final reports and their curated evidence; exclude transient snapshots
+/experiments/*/reports/round-*/checkpoints/
+/experiments/*/reports/round-*/postprocess*.json
+/experiments/*/reports/round-*/report-phase-status.json
+/experiments/*/reports/round-*/report-summary-output.json
+/experiments/*/reports/round-*/wave-*-checkpoint.json
+# Large detailed metric dumps are indexed by hash in evidence/
+/experiments/*/reports/round-*/81卡明细.json
+
+# Generated catalog outputs; retain its build script
+/reports/banking-cases-zh/catalog-audit.json
+/reports/banking-cases-zh/case-notes.tsv
+
+# Secrets and local configuration (config/volcano.env.sh is non-secret)
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+
+# Editor and OS files
+.idea/
+.vscode/
+*~
+.DS_Store
+Thumbs.db

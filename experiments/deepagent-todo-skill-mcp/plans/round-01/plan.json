@@ -1,0 +1,428 @@
+{
+  "status": "design_only_not_executed",
+  "created_on": "2026-11-15",
+  "scope": "11 business categories, two cases per category, one trial per case, one execution attempt; no extra model smoke or repetition",
+  "model": "deepseek-v4-flash",
+  "implementation": "deepagent-todo-skill-mcp",
+  "retrieval_config": "bm25",
+  "seed": 300,
+  "temperature": 0,
+  "concurrency": 1,
+  "num_trials": 1,
+  "num_attempts": 1,
+  "conditions": {
+    "sandbox": "outside",
+    "token_budget": null,
+    "record_tokens": true,
+    "max_steps": 200,
+    "max_errors": 10,
+    "core_completion_timeout_seconds": 1200,
+    "bridge_event_timeout_seconds": 1500,
+    "episode_timeout_seconds": 2400,
+    "batch_wall_time_seconds": 14400
+  },
+  "category_count": 11,
+  "task_count": 22,
+  "historical_serial_simulation_seconds": 6923.77764913699,
+  "historical_reward_counts": {
+    "one": 9,
+    "zero": 13
+  },
+  "execution_order_note": "Wave 1 covers all 11 categories, wave 2 adds each second case; one round total. Requires a serial controller following this explicit order; full_run sorts task IDs, so a single full_run command does not implement the proposed order.",
+  "cases": [
+    {
+      "order": 1,
+      "wave": 1,
+      "category": "产品咨询、推荐奖励与服务升级",
+      "task_id": "task_003",
+      "title": "旅行信用卡的多条件筛选",
+      "selection_reason": "多条件产品筛选；推荐奖励差额与客户侧操作",
+      "focus": "候选覆盖、订阅条件、硬约束筛选与多级排序。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 177.74744958500014,
+      "task_sha256": "431591345634499dc8aed39de54e5b3304ca8500a927dff91d6919053a80ac73",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 2,
+      "wave": 1,
+      "category": "返现核算、卡片收益与审批状态",
+      "task_id": "task_017",
+      "title": "单张Silver卡返现异常调查",
+      "selection_reason": "单卡核对；四卡全量审计与双向差错识别",
+      "focus": "逐笔核验返现规则，识别异常并引导客户提交争议。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 343.43661863499983,
+      "task_sha256": "70f7fcc30a9c63147384652596ee2eb639a26819938cdc5dfbf260936e13cba0",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 3,
+      "wave": 1,
+      "category": "消费争议与紧急转接",
+      "task_id": "task_031",
+      "title": "酒店房型不符的消费争议",
+      "selection_reason": "正常争议提交；紧急升级边界",
+      "focus": "核准交易、争议原因、商户联系情况和卡片动作。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 139.5391795459982,
+      "task_sha256": "0702d1e320193224d8632b1682129a9f858a513cb6489c1230a5c5ecb9e346b1",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 4,
+      "wave": 1,
+      "category": "盗刷补卡与多卡争议",
+      "task_id": "task_036",
+      "title": "查看交易后发现盗刷并补卡",
+      "selection_reason": "盗刷补卡；四卡十六笔争议与全局限制",
+      "focus": "完整展示交易、动态发现新意图、核验地址用途及补卡偏好。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 145.3866420239974,
+      "task_sha256": "8fb16abe143533e4a4a907dea9da3cfb02c05440b311182c90d249ac734f67b5",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 5,
+      "wave": 1,
+      "category": "销卡、留客与虚假陈述",
+      "task_id": "task_043",
+      "title": "年费过高销卡与免年费挽留",
+      "selection_reason": "普通挽留；多卡销户与客户虚假陈述",
+      "focus": "销卡前置检查、欠款清偿与符合条件的挽留方案。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 220.19913059900136,
+      "task_sha256": "90bb6c90d99e5d5f472f1576f7c23559e18f501299c37ecb9bc7a6d8396432d3",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 6,
+      "wave": 1,
+      "category": "提额与跨操作依赖",
+      "task_id": "task_051",
+      "title": "提额比例与高使用率整改后重申",
+      "selection_reason": "还款后重新资格判断；争议/补卡/提额排序",
+      "focus": "拒绝原因、规则上限、状态变更后的重新资格判断。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 296.0457498430005,
+      "task_sha256": "8903e0c276a0c5fe57a72d94f7375eb868740bfa93fff0d8f590280808d29335",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 7,
+      "wave": 1,
+      "category": "开户、资金迁移与组合收益优化",
+      "task_id": "task_060",
+      "title": "先关旧支票账户可能破坏储蓄开户资格",
+      "selection_reason": "关闭旧账户的资格影响；个人及企业账户资金重组",
+      "focus": "成熟账户资格保留、顺序规划及向客户解释必要性。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 354.22897613199893,
+      "task_sha256": "bcedd99c906c7b7fcd9e1c27947b581df60db5ca40c830a721057fd5bd725613",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 8,
+      "wave": 1,
+      "category": "ATM费用核查与账户选择",
+      "task_id": "task_076",
+      "title": "海外取现成本与提前到账联合要求",
+      "selection_reason": "账户费用条件推荐；双账户费用核查与退款",
+      "focus": "先满足必要功能，再比较真实使用成本。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 105.82629566300602,
+      "task_sha256": "419a62ec35b756618da8d0fa85a119a795f2b1c554326af406fd3566031b589d",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 9,
+      "wave": 1,
+      "category": "借记卡生命周期、争议与安全处置",
+      "task_id": "task_077",
+      "title": "两张借记卡遗失、隐藏信用卡与激活",
+      "selection_reason": "遗失补卡及激活；相同拒付码的不同原因",
+      "focus": "主动核查影响范围、冻结转注销、补卡等待及用户提供激活资料。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 322.1165138629949,
+      "task_sha256": "d668f1c5833a48a166ed031a0355d2c4e121a6fdc714cbc3506d881ef8474042",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 10,
+      "wave": 1,
+      "category": "储蓄利息核算与差额纠正",
+      "task_id": "task_093",
+      "title": "单储蓄账户利息差额补发及报告",
+      "selection_reason": "单账户补差与报告；四账户全量核算",
+      "focus": "基于真实余额及适用利率核算，补款与报告两步闭环。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 152.2240014840063,
+      "task_sha256": "7e507f9688766cab2ff5f247a549c154f59a5523f2b882056e1ba5666d7bcb80",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 11,
+      "wave": 1,
+      "category": "复杂推荐资格与奖励优化",
+      "task_id": "task_098",
+      "title": "“室友”关系澄清与双方推荐奖励最大化",
+      "selection_reason": "关系澄清；当前资历限制下的可行最优推荐",
+      "focus": "澄清同住限制、开户期限和滚动窗口，不误拒可行推荐。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 200.61915544800286,
+      "task_sha256": "a4703b1cd4c6bbe97d92d8c8e73ed3cfe18026cf3e01c244a25a1d615d6a06cc",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 12,
+      "wave": 2,
+      "category": "产品咨询、推荐奖励与服务升级",
+      "task_id": "task_016",
+      "title": "推荐奖励未到账与剩余消费门槛",
+      "selection_reason": "多条件产品筛选；推荐奖励差额与客户侧操作",
+      "focus": "从推荐与交易事实计算差额，区分总门槛和剩余金额。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 100.82196296099937,
+      "task_sha256": "4dfd79048329d154ff6aa04f2393dc6d314be00e029b20f2f4ea27a2e6144ef4",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 13,
+      "wave": 2,
+      "category": "返现核算、卡片收益与审批状态",
+      "task_id": "task_022",
+      "title": "四卡全量返现审计",
+      "selection_reason": "单卡核对；四卡全量审计与双向差错识别",
+      "focus": "长上下文、跨产品规则、全量覆盖及双向差错识别。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 834.178127084997,
+      "task_sha256": "7b9a27ed8afaba7a434a565613850742a4057addc02c4074abc109b5f1f30a1a",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 14,
+      "wave": 2,
+      "category": "消费争议与紧急转接",
+      "task_id": "task_033",
+      "title": "已扣款还款未入账的紧急升级",
+      "selection_reason": "正常争议提交；紧急升级边界",
+      "focus": "区分已扣款和已入账，处理期限压力及升级。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 53.43294454900024,
+      "task_sha256": "43a20801a9d967dad13e5b4177865f6d095629421f6c6a10399474352518cc3e",
+      "reward_basis": [
+        "ACTION"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 15,
+      "wave": 2,
+      "category": "盗刷补卡与多卡争议",
+      "task_id": "task_041",
+      "title": "四卡十六笔争议与全局限制",
+      "selection_reason": "盗刷补卡；四卡十六笔争议与全局限制",
+      "focus": "十六笔全覆盖、跨卡全局配额、退款范围及历史查询。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 235.02866672399978,
+      "task_sha256": "439c74bfb42b35ede9f5b59fa71e4cf37edd661139ee86ee662a4beb24e7cdff",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": true
+    },
+    {
+      "order": 16,
+      "wave": 2,
+      "category": "销卡、留客与虚假陈述",
+      "task_id": "task_049",
+      "title": "多卡销户中的虚假状态与权益索取",
+      "selection_reason": "普通挽留；多卡销户与客户虚假陈述",
+      "focus": "防止对话伪造状态、虚构工具和权益升级绕过。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 504.89776793200144,
+      "task_sha256": "7410929906ac165ff07c155e0c1ac23a8eb1237316a0632661941b9ed95b100a",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 17,
+      "wave": 2,
+      "category": "提额与跨操作依赖",
+      "task_id": "task_054",
+      "title": "盗刷争议、补卡与提额三任务排序",
+      "selection_reason": "还款后重新资格判断；争议/补卡/提额排序",
+      "focus": "任务排序、用户解释与确认，保护后续操作资格。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 313.1035563159967,
+      "task_sha256": "3edf9f95e151607ba4c5cd3e6d1794917f3df7f30262e498a2c9a69110cd3495",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 18,
+      "wave": 2,
+      "category": "开户、资金迁移与组合收益优化",
+      "task_id": "task_062",
+      "title": "个人账户关闭与新企业账户的资金重组",
+      "selection_reason": "关闭旧账户的资格影响；个人及企业账户资金重组",
+      "focus": "多账户依赖、先开后转再关、余额守恒及分笔资金流。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 461.8881683869986,
+      "task_sha256": "a56aed67f2f6af89eaf6c6e6848dc4626e6cb43c4d0f1866c8ef651ebcbbd481",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 19,
+      "wave": 2,
+      "category": "ATM费用核查与账户选择",
+      "task_id": "task_072",
+      "title": "两账户ATM费用核查与退款",
+      "selection_reason": "账户费用条件推荐；双账户费用核查与退款",
+      "focus": "按账户层级与年龄等条件核对逐笔收费，计算实际退款。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 702.275524533994,
+      "task_sha256": "e7ee150ff2993e94c49d6c9345802bcc232fc174f33e6c9e897e689995a0c335",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 20,
+      "wave": 2,
+      "category": "借记卡生命周期、争议与安全处置",
+      "task_id": "task_087",
+      "title": "相同拒付代码背后的三种原因",
+      "selection_reason": "遗失补卡及激活；相同拒付码的不同原因",
+      "focus": "不能解决一个阻断就宣布可用；区分解除本人冻结与风险卡处置。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 295.57316229699063,
+      "task_sha256": "a0bcc70259e17de90a6b4e2d8edc01ce9f8ca9b00a972640c81dc3b6ca12f134",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 21,
+      "wave": 2,
+      "category": "储蓄利息核算与差额纠正",
+      "task_id": "task_097",
+      "title": "四储蓄账户与不准确余额的全量核算",
+      "selection_reason": "单账户补差与报告；四账户全量核算",
+      "focus": "真实余额校验、产品组合规则、四账户独立补款与报告。",
+      "historical_status": "scored",
+      "historical_reward": 0.0,
+      "historical_duration_seconds": 564.2094367370009,
+      "task_sha256": "1b313370494a51d3e2c3184de3c4dda4db212ee64790d7152168f628d8adad8e",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    },
+    {
+      "order": 22,
+      "wave": 2,
+      "category": "复杂推荐资格与奖励优化",
+      "task_id": "task_100",
+      "title": "已持有高阶账户但资历不足的推荐",
+      "selection_reason": "关系澄清；当前资历限制下的可行最优推荐",
+      "focus": "持有账户不等于符合推荐资历，比较当前可行备选。",
+      "historical_status": "scored",
+      "historical_reward": 1.0,
+      "historical_duration_seconds": 400.9986187930044,
+      "task_sha256": "ea63d6247c40fd7afad04eef09e8b4a4a822b5c251213863bf958ee9b32d53c6",
+      "reward_basis": [
+        "DB"
+      ],
+      "development_exposed": false
+    }
+  ],
+  "frozen_before_execution_required": [
+    "code and compiled artifacts",
+    "both Skill documents and shared loader",
+    "official dataset and scorer",
+    "timeouts and model route",
+    "selection, order and score denominators"
+  ],
+  "stop_rules": [
+    "pause on a confirmed systemic auth/gateway/MCP/runner fault; do not retry the failed case automatically",
+    "continue after business reward=0",
+    "hard-stop batch at 4 hours; preserve in-flight interruption and unstarted cases separately",
+    "no automatic replacement cases or extra trials"
+  ],
+  "limitations": [
+    "purposive stratified sample, not representative random accuracy estimate",
+    "no trajectory repeatability claim with one trial",
+    "task_041 previously used in development; other cases may have historical baseline exposure",
+    "subtypes inside a business category are not exhaustively covered",
+    "historical NativeSkill timings are planning references, not Todo causal evidence"
+  ]
+}

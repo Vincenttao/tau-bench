@@ -1,0 +1,19 @@
+{
+  "study_version": "v1",
+  "scope": "benchmark repeated execution; enterprise acceptance remains unknown without safety evidence",
+  "P06": {"cases": ["task_001", "task_041"], "independent_runs_per_case": 3, "seed": 300},
+  "P08": {"independent_runs_per_case": 5, "seed": 300, "case_set": "all 97 official task files"},
+  "P09": {"cases": ["task_001", "task_041"], "seeds": [300, 301, 302]},
+  "concurrency": 1,
+  "quality_scale": {"official_reward": "preserve official value; no score fabricated for missing evaluation", "execution_error": "null and separate missingness count"},
+  "comparison_rules": {
+    "business_operation_sequence": "actor + exact operation name + canonical JSON arguments; preserve business IDs, order and amounts; ignore generated tool call IDs",
+    "full_sequence_exact": "diagnostic only; not K04 operation-slot equivalence",
+    "semantic_result_equivalence": "requires independently reviewed final-state equivalence; unavailable until review",
+    "operation_slots": "requires policy-derived expected slots; unavailable until established",
+    "safety_acceptance": "unknown until independent safety evidence; official reward does not substitute"
+  },
+  "statistics": {"sample_standard_deviation": "N-1 denominator; N<2 null", "percentiles": "linear interpolation; report N and insufficient tail sample warning", "unknown_outputs": "retain in planned denominator and report separately"},
+  "selection_note": "task_041 selected before P05 results; do not replace with an easier passing case",
+  "reviewer": null
+}

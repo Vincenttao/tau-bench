@@ -1,0 +1,22 @@
+{
+  "controller_tests": 5,
+  "status": "passed",
+  "model_calls": 0,
+  "cases": [
+    "22 exact ordered launches; zero rewards continue",
+    "resume never retries existing attempts",
+    "systemic fault stops pending work",
+    "batch deadline terminates in-flight process",
+    "deadline remains across resumes",
+    "changed frozen file rejected"
+  ],
+  "preflight": {
+    "task_order_matches_plan": true,
+    "trials": 1,
+    "concurrency": 1,
+    "token_budget": null,
+    "timeouts_match_plan": true,
+    "selected_tasks_require_no_nl_judge": true,
+    "formal_inputs_hash_count": 1432
+  }
+}
