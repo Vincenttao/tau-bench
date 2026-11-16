@@ -60,7 +60,7 @@ def catalog(root=ROOT):
 def episode_folder(folder, episode):
     key = episode.get('key', '')
     path = folder / 'episodes' / key
-    if not key or not inside(path, folder / 'episodes'):
+    if not key or not inside(path, folder / 'episodes') or not inside(path, folder):
         raise ValueError('invalid episode key')
     return path
 
@@ -162,7 +162,22 @@ def load_episode(folder, episode):
                 category = 'tool'
             elif kind.startswith('mcp_'):
                 category = 'mcp'
-            title = kind + (' · ' + name if name else '')
+            label = {'tool_start': '开始', 'tool_end': '返回', 'skill_result': 'Skill 业务结果',
+                     'model_request': '模型请求', 'model_response': '模型响应',
+                     'assembly': 'Agent 装配', 'mcp_connect': 'MCP 连接'}.get(kind, kind)
+            tool_label = {'skill_tool': '读取 Skill 文档', 'list_skill': '列出 Skill',
+                          'invoke_skill': '执行 Skill 操作'}.get(name, name)
+            title = (tool_label + ' · ' + label) if name else label
+            arguments = data.get('arguments') if isinstance(data, dict) else None
+            if isinstance(arguments, str):
+                try:
+                    arguments = json.loads(arguments)
+                except ValueError:
+                    arguments = None
+            if isinstance(arguments, dict):
+                parts = [arguments.get('skill_name') or arguments.get('skill_id'),
+                         arguments.get('relative_path') or arguments.get('operation')]
+                title += ''.join(' · ' + str(value) for value in parts if value)
             # Keep full model context out of the list; raw source is available on demand.
             body = data
             if kind == 'model_request':
