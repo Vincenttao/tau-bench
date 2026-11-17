@@ -43,6 +43,10 @@ public final class DeepAgentAssembly implements AutoCloseable {
     final Map<String,Map<String,Object>> operations = new LinkedHashMap<>();
     final String session;
     long todoVersion, sequence;
+    final Map<String,String> todoState = new LinkedHashMap<>();
+    boolean todoStateKnown;
+    Map<String,Object> pendingTodoMutation;
+    String pendingTodoTool;
     volatile String question;
     volatile RuntimeException transportFailure;
     public final DeepAgent agent;
@@ -173,9 +177,11 @@ public final class DeepAgentAssembly implements AutoCloseable {
         @Override public void beforeToolCall(AgentCallbackContext ctx) {
             if(ctx.getInputs() instanceof ToolCallInputs input) {
                 if(!ALLOWED.contains(input.getToolName())) throw new IllegalArgumentException("Tool outside Skill/Todo boundary: "+input.getToolName());
-                if("todo_modify".equals(input.getToolName()) && input.getToolArgs() instanceof Map<?,?> raw) {
-                    @SuppressWarnings("unchecked") var args=(Map<String,Object>)raw;
-                    var invalid=validateTodoModify(args,loadTodoState());
+                pendingTodoMutation=null;
+                pendingTodoTool=null;
+                if("todo_modify".equals(input.getToolName())) {
+                    var args=decodeToolArgs(input.getToolArgs());
+                    var invalid=validateTodoModify(args,currentTodoState());
                     if(invalid.isPresent()) {
                         log("todo_modify_rejected",Map.of("reason",invalid.get(),"arguments",args));
                         // A validation error must remain recoverable inside the ReAct loop. Returning the
@@ -183,15 +189,28 @@ public final class DeepAgentAssembly implements AutoCloseable {
                         // Core with a batch that would abort the enclosing A2A request.
                         input.setToolName("todo_list");
                         input.setToolArgs(Map.of());
+                    } else {
+                        pendingTodoMutation=args;
+                        pendingTodoTool="todo_modify";
                     }
+                } else if("todo_create".equals(input.getToolName())) {
+                    pendingTodoMutation=decodeToolArgs(input.getToolArgs());
+                    pendingTodoTool="todo_create";
                 }
                 log("tool_start",Map.of("name",input.getToolName(),"arguments",input.getToolArgs()==null?Map.of():input.getToolArgs()));
             }
         }
         @Override public void afterToolCall(AgentCallbackContext ctx) {
             if(ctx.getInputs() instanceof ToolCallInputs input) {
-                if(Set.of("todo_create","todo_modify").contains(input.getToolName())) todoVersion++;
+                Object result=input.getToolResult();
+                if("todo_list".equals(input.getToolName())) replaceTodoStateFromList(result);
+                if(Set.of("todo_create","todo_modify").contains(input.getToolName()) && todoCallSucceeded(result)) {
+                    applySuccessfulTodoMutation(pendingTodoTool,pendingTodoMutation);
+                    todoVersion++;
+                }
                 log("tool_end",Map.of("name",input.getToolName(),"result",input.getToolResult()==null?"":input.getToolResult(),"todo_version",todoVersion));
+                pendingTodoMutation=null;
+                pendingTodoTool=null;
             }
         }
         @Override public void onToolException(AgentCallbackContext ctx) {
@@ -219,6 +238,90 @@ public final class DeepAgentAssembly implements AutoCloseable {
         }
     }
 
+    synchronized Map<String,String> currentTodoState() {
+        if(!todoStateKnown) {
+            todoState.clear();
+            todoState.putAll(loadTodoState());
+            todoStateKnown=true;
+        }
+        return new LinkedHashMap<>(todoState);
+    }
+
+    static Map<String,Object> decodeToolArgs(Object raw) {
+        if(raw instanceof Map<?,?> map) {
+            var decoded=new LinkedHashMap<String,Object>();
+            map.forEach((key,value)->decoded.put(String.valueOf(key),value));
+            return decoded;
+        }
+        if(raw instanceof String text && !text.isBlank()) {
+            try {
+                @SuppressWarnings("unchecked") Map<String,Object> decoded=Json.MAPPER.readValue(text,LinkedHashMap.class);
+                return decoded;
+            } catch(Exception ex) {
+                throw new IllegalArgumentException("Tool arguments are not a JSON object",ex);
+            }
+        }
+        throw new IllegalArgumentException("Tool arguments must be an object");
+    }
+
+    synchronized void replaceTodoStateFromList(Object result) {
+        Map<String,Object> object=decodeResultObject(result);
+        if(!(object.get("tasks") instanceof List<?> tasks)) return;
+        var replacement=new LinkedHashMap<String,String>();
+        for(Object value:tasks) {
+            if(!(value instanceof Map<?,?> item)) continue;
+            Object rawId=item.get("id");
+            if(rawId!=null && !String.valueOf(rawId).isBlank())
+                replacement.put(String.valueOf(rawId),normalizeStatus(item.get("status")));
+        }
+        todoState.clear();
+        todoState.putAll(replacement);
+        todoStateKnown=true;
+    }
+
+    synchronized void applySuccessfulTodoMutation(String tool,Map<String,Object> args) {
+        if(tool==null || args==null) return;
+        if("todo_create".equals(tool)) {
+            if(!(args.get("tasks") instanceof List<?> tasks)) return;
+            todoState.clear();
+            for(int index=0;index<tasks.size();index++) {
+                Object value=tasks.get(index);
+                if(value instanceof Map<?,?> item && item.get("id")!=null)
+                    todoState.put(String.valueOf(item.get("id")),index==0?"in_progress":"pending");
+            }
+            todoStateKnown=true;
+            return;
+        }
+        if(!"todo_modify".equals(tool) || !(args.get("todos") instanceof List<?> todos)) return;
+        currentTodoState();
+        String action=String.valueOf(args.get("action"));
+        if(Set.of("update","append").contains(action)) {
+            for(Object value:todos) if(value instanceof Map<?,?> item)
+                todoState.put(String.valueOf(item.get("id")),normalizeStatus(item.get("status")));
+        }
+    }
+
+    static boolean todoCallSucceeded(Object result) {
+        Map<String,Object> object=decodeResultObject(result);
+        Object message=object.get("message");
+        return message!=null && String.valueOf(message).startsWith("Successfully");
+    }
+
+    static Map<String,Object> decodeResultObject(Object result) {
+        if(result instanceof Map<?,?> map) {
+            var decoded=new LinkedHashMap<String,Object>();
+            map.forEach((key,value)->decoded.put(String.valueOf(key),value));
+            return decoded;
+        }
+        if(result instanceof String text && !text.isBlank()) {
+            try {
+                @SuppressWarnings("unchecked") Map<String,Object> decoded=Json.MAPPER.readValue(text,LinkedHashMap.class);
+                return decoded;
+            } catch(Exception ignored) { return Map.of(); }
+        }
+        return Map.of();
+    }
+
     static Optional<String> validateTodoModify(Map<String,Object> args,Map<String,String> existingState) {
         String action=String.valueOf(args.getOrDefault("action",""));
         if(!Set.of("update","append").contains(action)) return Optional.empty();
@@ -239,6 +342,13 @@ public final class DeepAgentAssembly implements AutoCloseable {
             if(status.isEmpty()) return Optional.of("every todo_modify "+action+" item must contain an explicit status");
             if(!Set.of("pending","in_progress","completed","cancelled").contains(status))
                 return Optional.of("todo_modify "+action+" contains unsupported status '"+status+"' for id '"+id+"'");
+            if("append".equals(action)) {
+                for(String field:List.of("content","activeForm","description")) {
+                    Object required=item.get(field);
+                    if(required==null || String.valueOf(required).isBlank())
+                        return Optional.of("every todo_modify append item must contain a non-empty "+field);
+                }
+            }
             resultingState.put(id,status);
         }
         long active=resultingState.values().stream().filter("in_progress"::equals).count();

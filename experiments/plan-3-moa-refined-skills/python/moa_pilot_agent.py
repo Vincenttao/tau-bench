@@ -5,6 +5,7 @@ from pathlib import Path
 import queue
 import subprocess
 import threading
+import time
 import uuid
 from urllib.request import Request, urlopen
 
@@ -116,6 +117,7 @@ class MoaPilotAgent(JavaMoaAgent):
 
     def _invoke(self, content):
         try:
+            deadline = time.monotonic() + float(os.environ['JAVA_AGENT_EVENT_TIMEOUT'])
             message = {'role': 'ROLE_USER', 'messageId': uuid.uuid4().hex, 'contextId': self.session_id,
                        'parts': [{'text': content}]}
             if self.waiting_task:
@@ -130,7 +132,25 @@ class MoaPilotAgent(JavaMoaAgent):
             if raw.get('error'):
                 raise RuntimeError('A2A request failed: ' + str(raw['error']))
             result = raw['result']
-            reply = customer_reply(result.get('task', result))
+            task = result.get('task', result)
+            while task['status']['state'] in {'TASK_STATE_SUBMITTED', 'TASK_STATE_WORKING'}:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError('A2A task remained working until the bridge call deadline')
+                time.sleep(min(1.0, remaining))
+                poll = {'jsonrpc': '2.0', 'id': uuid.uuid4().hex, 'method': 'GetTask',
+                        'params': {'id': task['id']}}
+                self._record('a2a_poll_request', poll)
+                poll_http = Request(self.main_url + '/a2a/', data=json.dumps(poll).encode(),
+                                    headers={'Content-Type': 'application/json'}, method='POST')
+                with urlopen(poll_http, timeout=min(60.0, remaining)) as response:
+                    raw = json.load(response)
+                self._record('a2a_poll_response', raw)
+                if raw.get('error'):
+                    raise RuntimeError('A2A GetTask failed: ' + str(raw['error']))
+                result = raw['result']
+                task = result.get('task', result)
+            reply = customer_reply(task)
             self.waiting_task = reply['runtime_task_id'] if reply['waiting'] else None
             self.events.put(reply)
         except Exception as error:

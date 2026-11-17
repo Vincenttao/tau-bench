@@ -22,7 +22,7 @@ from process_tree import terminate_tree
 class RuntimeHostsTest(unittest.TestCase):
     def test_main_prompt_requires_skill_evidence_before_cross_domain_writes(self):
         prompt = (ARM / 'java/src/eval/BankingPrompts.java').read_text()
-        self.assertIn('moa-banking-v6-linked-outcome-plan', prompt)
+        self.assertIn('moa-banking-v7-feasibility-preserving-plan', prompt)
         self.assertIn('domain Skill evidence, whole-request planning, then execution', prompt)
         self.assertIn('current stage_plan must contain read-only assessment tasks only', prompt)
         self.assertIn('use its own loaded Skill and authoritative policy sources', prompt)
@@ -39,6 +39,10 @@ class RuntimeHostsTest(unittest.TestCase):
         self.assertIn('reconcile returned business parameters as well as receipts', prompt)
         self.assertIn('without performing the downstream task or duplicating its write', prompt)
         self.assertIn("Never describe a value as the customer's instruction", prompt)
+        self.assertIn('distinguish stated urgency or narrative priority', prompt)
+        self.assertIn('Preserve the feasibility of every requested outcome', prompt)
+        self.assertIn('performing an already-eligible B before A', prompt)
+        self.assertIn('is not informed acceptance of blocking B', prompt)
         self.assertNotIn('cancel_and_reissue', prompt)
         self.assertNotIn('task_054', prompt)
 
@@ -46,6 +50,9 @@ class RuntimeHostsTest(unittest.TestCase):
         pilot = (ARM / 'python/moa_pilot_agent.py').read_text()
         host = (ARM / 'java/src/eval/BankingRuntimeHost.java').read_text()
         self.assertIn("['java', '-Xmx256m'", pilot)
+        self.assertIn("'method': 'GetTask'", pilot)
+        self.assertIn("{'TASK_STATE_SUBMITTED', 'TASK_STATE_WORKING'}", pilot)
+        self.assertIn('A2A task remained working until the bridge call deadline', pilot)
         self.assertIn('if (role.equals("main")) {', host)
         self.assertLess(host.index('if (role.equals("main")) {', host.index('int index = 0') - 80),
                         host.index('int index = 0'))

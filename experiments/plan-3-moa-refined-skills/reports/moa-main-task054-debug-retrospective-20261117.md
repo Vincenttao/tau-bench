@@ -499,3 +499,11 @@ PermissionError: [Errno 1] Operation not permitted
 - `runs/live-e2e-moa-task054-deepseek-v5-20261117-03/`
 - `java/src/eval/BankingPrompts.java`
 - `tests/test_runtime_hosts.py`
+
+## 14. v6/v7 后续真实 E2E 更新
+
+后续五次运行及两项 Runtime 修订记录在 `reports/task054-v6-v7-live-e2e-20261117.md`。
+
+最新结果改变了本文此前“尚未执行 v6 E2E”的状态：v6/v7 已执行真实 task-054。共享 outcome 修订使实际争议参数从 `keep_active` 变为 `cancel_and_reissue`，并保持一个 replacement order；该问题已在两个 scored run 中未复现。
+
+但整题仍未通过。MAIN 在证据明确表明 dispute/replacement 会阻止 CLI、且客户随后明确要求 CLI-first 的情况下，仍冻结 dispute → replacement → CLI 计划。CLI 没有提交或批准，官方 reward 仍为 0。v7 的通用 feasibility-preserving prompt 同样被 `deepseek-flash` 忽略。因此不能继续把增加同类 prompt 文本称为可靠修复；下一步需要决定是否在现有 MOA 能力范围内增加确定性的 plan consistency gate。
