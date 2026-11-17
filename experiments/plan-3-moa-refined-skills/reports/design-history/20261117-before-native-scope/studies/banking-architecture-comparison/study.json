@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "id": "banking-architecture-comparison",
+  "document_type": "test-design-not-runtime-manifest",
+  "status": "design-reviewed-implementation-pending",
+  "executable": false,
+  "execution_authorized": false,
+  "language": "en",
+  "benchmark_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "cohort": "cohort.json",
+  "cohort_sha256": "be671adfbd3c2dd07c5865f61ae3fc64aecc454d2290d1fc8fd75bcbe88fff59",
+  "arms": [
+    "experiments/plan-1-deepagent-original-skills",
+    "experiments/plan-2-deepagent-refined-skills",
+    "experiments/plan-3-moa-refined-skills",
+    "experiments/plan-4-agent-hub-refined-skills"
+  ],
+  "tasks_per_arm": 22,
+  "trials_per_task": 1,
+  "total_formal_episodes": 88,
+  "seed": 300,
+  "global_concurrency": 1,
+  "automatic_episode_retries": 0,
+  "automatic_business_write_retries": 0,
+  "system_prompt_for_deepagent_pair": "evidence-todo-v1",
+  "agent_hub_mode": "enforce",
+  "episode_timeout_seconds": 2400,
+  "batch_timeout_seconds": 230400,
+  "max_steps": 200,
+  "max_errors": 10,
+  "cumulative_token_limit": null,
+  "cohort_exposure": "diagnostic-regression-not-holdout",
+  "legacy_hub_148_episode_plan_included": false,
+  "legacy_moa_chinese_profile_included": false,
+  "required_gates": [
+    "offline-contracts",
+    "real-component-wiring",
+    "immutable-input-freeze",
+    "episode-isolation",
+    "all-four-arms-ready"
+  ],
+  "blocking_gaps": [
+    "shared study controller not implemented",
+    "DeepAgent prompt/profile binding must be explicitly frozen",
+    "MOA English adapter and full remote continuation not implemented",
+    "Agent Hub real Go control chain not implemented"
+  ],
+  "limits": {
+    "episode_timeout_seconds": 2400,
+    "batch_timeout_seconds": 230400,
+    "max_steps": 200,
+    "max_errors": 10,
+    "cumulative_token_limit": null,
+    "global_concurrency": 1,
+    "automatic_episode_retries": 0,
+    "automatic_business_write_retries": 0,
+    "model_request_timeout_seconds": 120,
+    "model_sdk_retries": 0,
+    "gateway_retries": 0,
+    "core_call_timeout_seconds": 1200,
+    "bridge_call_timeout_seconds": 1500,
+    "remote_call_timeout_seconds": 120,
+    "hub_rpc_timeout_seconds": 30,
+    "max_internal_model_calls": 512,
+    "max_todos": 32,
+    "max_resumes_per_task": 8,
+    "max_dependency_depth": 4,
+    "max_correction_rounds": 3
+  },
+  "model_profile": {
+    "request_model": "deepseek-v4-flash",
+    "temperature": 0,
+    "retrieval": "bm25",
+    "record_actual_model": true
+  },
+  "arm_bindings": {
+    "plan-1-deepagent-original-skills": {
+      "display_number": 1,
+      "skill_release": "1.0.0",
+      "skill_manifest": "shared/skills/releases/1.0.0/release.json",
+      "skill_manifest_sha256": "193fbec5dbfd62cc877a2356ce7c1cfbb940f44558c5d290f0ba2b1159488362",
+      "implementation": "shared/java + shared/python",
+      "mode": "single-agent",
+      "system_prompt_version": "evidence-todo-v1"
+    },
+    "plan-2-deepagent-refined-skills": {
+      "display_number": 2,
+      "skill_release": "banking-evidence-guides",
+      "skill_manifest": "shared/skills/releases/banking-evidence-guides/release.json",
+      "skill_manifest_sha256": "949ea01d2b231fb986a0ee936b5cf8e57e0e9f978233e04ef749c29daf2d064c",
+      "implementation": "shared/java + shared/python",
+      "mode": "single-agent",
+      "system_prompt_version": "evidence-todo-v1"
+    },
+    "plan-3-moa-refined-skills": {
+      "display_number": 3,
+      "skill_release": "banking-evidence-guides",
+      "skill_manifest": "shared/skills/releases/banking-evidence-guides/release.json",
+      "skill_manifest_sha256": "949ea01d2b231fb986a0ee936b5cf8e57e0e9f978233e04ef749c29daf2d064c",
+      "implementation": null,
+      "mode": "slow-only",
+      "system_prompt_version": "moa-business-evidence"
+    },
+    "plan-4-agent-hub-refined-skills": {
+      "display_number": 4,
+      "skill_release": "banking-evidence-guides",
+      "skill_manifest": "shared/skills/releases/banking-evidence-guides/release.json",
+      "skill_manifest_sha256": "949ea01d2b231fb986a0ee936b5cf8e57e0e9f978233e04ef749c29daf2d064c",
+      "implementation": null,
+      "mode": "enforce",
+      "system_prompt_version": "evidence-todo-v1"
+    }
+  },
+  "stop_policy": {
+    "ordinary_business_failure": "episode",
+    "isolated_framework_violation": "arm",
+    "shared_environment_corruption": "study",
+    "freeze_drift": "study",
+    "user_stop": "study",
+    "episode_deadline": "episode",
+    "study_active_deadline": "study",
+    "unknown_fault_scope": "study"
+  },
+  "analysis_policy": {
+    "primary_metric": "planned_success_completion_rate",
+    "comparisons": [
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        2
+      ]
+    ],
+    "secondary_metrics": [
+      "scored_success_rate",
+      "coverage",
+      "severe_effect_violations",
+      "wall_time",
+      "all_layers_tokens"
+    ],
+    "promotion_requires": [
+      "complete_uncensored_22_positions_per_arm",
+      "positive_primary_delta",
+      "no_scoring_coverage_decline",
+      "no_new_severe_effect_violation"
+    ],
+    "equal_primary": "no_quality_uplift_claim; show costs separately",
+    "censoring": "report_incomplete_no_ranking",
+    "confidence_claim": "descriptive_single_round_only"
+  },
+  "runtime_rules": {
+    "deadline_clock": "monotonic wall clock per episode; never reset by resume",
+    "active_study_clock": "sum elapsed monotonic execution windows, including dispatch/cleanup; excludes only confirmed global suspension/downtime",
+    "inflight_on_pause": "no new dispatch; drain or mark outcome_unknown; suspend only after checkpoint",
+    "model_attempt_budget": "all layers and attempts count, includes user simulator; reused replies do not consume new calls",
+    "internal_call_limit_basis": "proposed guardrail, not a measured optimum; freeze before execution",
+    "limits_apply_to": "all four arms; optional architecture-specific counters are not applicable when absent",
+    "runtime_enforcement_status": "not-implemented",
+    "offline_gate_classifier": "contracts/acceptance-matrix.json"
+  },
+  "profile": "single-round-four-arm",
+  "contracts": {
+    "contracts/acceptance-matrix.json": "03b44200d14d7bdc34412194263e29ddd928466f3cd9541ffdec4f4e8fe7c94a",
+    "contracts/business-ownership.json": "b93b9fe20d26c24edf6e72468e0a6143a27181b8724beda2ec509e2a6e4ed024",
+    "contracts/cohort-coverage.json": "8c5fee17d9e673771de3e5af8a85d5cfb1a0a286d02d99658d6af0bfa85ec8c9",
+    "contracts/oracle-fixtures.json": "b6f81e8490a19a018dbecbcb1d3cb8ed2e11a71f38e353be76fa3d2ed8303cd5",
+    "execution-contract.md": "02f37216157b75542779964e7a10deb6306e268b097e27f122bd0ab72bd2948f"
+  }
+}

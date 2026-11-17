@@ -1,0 +1,766 @@
+{
+  "schema_version": 2,
+  "updated_at": "2026-11-17",
+  "status": "specified-not-runtime-accepted",
+  "scope": "English main comparison; synthetic contracts are separate from 22 official slots",
+  "contract_source": "test-design.md",
+  "cases": [
+    {
+      "id": "P3-01a",
+      "parent_id": "P3-01",
+      "title": "新请求慢路径与非法交接",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "七能力受信目录；无活动任务",
+      "trigger": "逐一发送普通、显式intent、TARGET、SELECT、COMPOSE、领域内/跨域切换；另发越界/矛盾目标",
+      "positive_assertions": [
+        "所有合法新请求进入stage_plan；FAST/FAST_SELECT=0"
+      ],
+      "negative_assertions": [
+        "非法交接BLOCKED且业务调用=0；无匹配澄清且不默认取第一项"
+      ],
+      "evidence_required": [
+        "路由决策",
+        "调用计数",
+        "stage事件"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": "java/src/eval/SlowOnlyRoutingTest.java",
+      "component_test_scope": "仅局部覆盖；不代表本用例通过"
+    },
+    {
+      "id": "P3-01b",
+      "parent_id": "P3-01",
+      "title": "独立慢意图模型契约",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "识别模型与规划模型可分别计量；三张合成能力卡",
+      "trigger": "识别模型返回合法子集、空集合、目录外ID、错误格式；注入超时",
+      "positive_assertions": [
+        "真实识别调用有输入/输出与用量；候选子集再进入规划；不调用快仲裁"
+      ],
+      "negative_assertions": [
+        "空/非法/超时候选不放行业务；输入无task ID/隐藏答案"
+      ],
+      "evidence_required": [
+        "识别请求摘要",
+        "候选快照",
+        "独立模型计数"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-01c",
+      "parent_id": "P3-01",
+      "title": "已有任务续接不重新路由",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "A处于INPUT_REQUIRED；另一个A处于WAITING_DEPENDENCY",
+      "trigger": "分别提交关联客户答案、已授权resume",
+      "positive_assertions": [
+        "续接原todo/businessTask；保留原问题；不重新做新请求识别"
+      ],
+      "negative_assertions": [
+        "无关联输入不复用其他等待任务；恢复确认不是业务授权"
+      ],
+      "evidence_required": [
+        "识别计数",
+        "原问题",
+        "任务身份链"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-02a",
+      "parent_id": "P3-02",
+      "title": "七领域实际装配与最小权限",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "七领域服务及冻结职责/Skill映射",
+      "trigger": "逐领域运行一个合法操作和一个他域操作；含包装器内层写入",
+      "positive_assertions": [
+        "七Agent身份/端点/状态命名空间独立；合法操作到达同题官方环境；部署指南与清单一致"
+      ],
+      "negative_assertions": [
+        "MOA不能写银行；越权与动态发现扩权被拒绝；包装器不能绕过"
+      ],
+      "evidence_required": [
+        "Agent Card",
+        "PID/端点",
+        "Skill哈希",
+        "边界拒绝",
+        "官方调用"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": "tests/test_runtime_hosts.py; tests/test_domain_boundary.py",
+      "component_test_scope": "仅局部覆盖；不代表本用例通过"
+    },
+    {
+      "id": "P3-02b",
+      "parent_id": "P3-02",
+      "title": "会话与证据隔离",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "同一Agent有两个episode/customer会话",
+      "trigger": "交换会话、凭证、检查点和doc_ref；正常同scope读取作对照",
+      "positive_assertions": [
+        "同scope读取/恢复成功；各自状态独立"
+      ],
+      "negative_assertions": [
+        "跨tenant/episode/session/agent访问拒绝且DB不变"
+      ],
+      "evidence_required": [
+        "认证上下文",
+        "拒绝原因",
+        "状态前后差异"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-03a",
+      "parent_id": "P3-03",
+      "title": "阶段约束与执行授权",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "两目标计划；一个HIGH候选；无既有授权",
+      "trigger": "依次规划绑定确认执行；另在每阶段强行调用远端/文件工具",
+      "positive_assertions": [
+        "所有绑定完成且明确确认后才执行；串行推进"
+      ],
+      "negative_assertions": [
+        "确认前业务调用=0；绕过stage、冻结后改绑/参数被拒绝；拒绝终止计划"
+      ],
+      "evidence_required": [
+        "工具调用顺序",
+        "正式计划快照",
+        "下游接收计数"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-03b",
+      "parent_id": "P3-03",
+      "title": "目标完整与候选替代",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "目标X有两候选；目标Y无候选",
+      "trigger": "提交X/Y组合，再提交只有X的合法请求",
+      "positive_assertions": [
+        "X两候选澄清后只选一个；合法X可执行"
+      ],
+      "negative_assertions": [
+        "X/Y整体不能静默丢Y执行X；不把备选当两个必执行目标"
+      ],
+      "evidence_required": [
+        "目标到todo映射",
+        "候选选择",
+        "实际派发"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-03c",
+      "parent_id": "P3-03",
+      "title": "单一调度者与投影失败",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "新账本已启用；StagePlan为投影；已授权任务A",
+      "trigger": "同时启动两个调度者；提交账本后注入投影失败；重启后发送旧epoch命令",
+      "positive_assertions": [
+        "一个有效派发；从权威账本重建投影"
+      ],
+      "negative_assertions": [
+        "旧Rail不得回退执行；旧epoch在L2和银行桥均拒绝；最多一个写入在途"
+      ],
+      "evidence_required": [
+        "lease/epoch",
+        "账本/outbox",
+        "投影revision",
+        "派发与效果计数"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-03d",
+      "parent_id": "P3-03",
+      "title": "语言、确认文案与风险建模",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "英文会话；分别为只读咨询和写入目标",
+      "trigger": "走完整规划/确认/领域返回/最终答复；模型生成中文子任务作反例",
+      "positive_assertions": [
+        "所有客户可见文本为英文且无内部ID；只读能力风险有受审依据；写入确认有效"
+      ],
+      "negative_assertions": [
+        "只改固定模板不能通过语言检查；不得将整个含写能力的Agent直接降为LOW来免确认"
+      ],
+      "evidence_required": [
+        "端到端可见对话",
+        "能力风险配置",
+        "授权事件"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": "java/src/eval/EnglishConfirmationTest.java",
+      "component_test_scope": "仅局部覆盖；不代表本用例通过"
+    },
+    {
+      "id": "P3-03e",
+      "parent_id": "P3-03",
+      "title": "保持咨询目标与汇总证据",
+      "stage": "model-behavior-diagnostic",
+      "blocking": false,
+      "initial_state": "合成产品X上限100000、Y上限112500；客户至少100000；两者年费0，X相关类别返现更高",
+      "trigger": "同一产品咨询分两轮披露要求；分派两个领域后汇总；互换产品标签及额度作对照",
+      "positive_assertions": [
+        "保留原硬约束/偏好；100000满足>=100000；最终比较可追到证据；正确比较后由客户选择"
+      ],
+      "negative_assertions": [
+        "不得从Y上限更高推出X不满足；不得以局部子问答完成代替整体择优；不硬编码Silver/Gold或task_003"
+      ],
+      "evidence_required": [
+        "客户事实表",
+        "原始KB",
+        "领域答复",
+        "最终推荐",
+        "证据ID"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-04a",
+      "parent_id": "P3-04",
+      "title": "A部分执行后B完成再恢复A",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "合成A完成步骤A1并保存局部变量x=17；剩A2等待B；B获授权",
+      "trigger": "保存检查点→释放传输段→B写入→恢复A执行A2",
+      "positive_assertions": [
+        "businessTask/todo/delegation稳定；新transportTask关联；x=17从检查点恢复；A1/B/A2各一次"
+      ],
+      "negative_assertions": [
+        "不得重发原query重做A；等待不得标SUCCEEDED；远端不支持契约时启动拒绝"
+      ],
+      "evidence_required": [
+        "检查点节点/变量摘要",
+        "resume载荷",
+        "任务关联",
+        "官方写入/DB"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-04b",
+      "parent_id": "P3-04",
+      "title": "传输终态与业务等待分离",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "远端A安全保存WAITING_DEPENDENCY",
+      "trigger": "远端返回COMPLETED+suspend；随后输入普通用户答案作反例",
+      "positive_assertions": [
+        "传输段可结束，A业务仍等待；有效B证据才能resume"
+      ],
+      "negative_assertions": [
+        "INPUT_REQUIRED与依赖等待不混用；证据不得伪装客户确认"
+      ],
+      "evidence_required": [
+        "A2A DataPart",
+        "业务状态迁移",
+        "官方用户消息"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-05a",
+      "parent_id": "P3-05",
+      "title": "多层依赖与就绪选择",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "依赖图A依赖B、B依赖C；另有独立且已授权D",
+      "trigger": "A等待→B等待→C完成→B恢复完成→A恢复；单独注入真实环",
+      "positive_assertions": [
+        "时间顺序A/B/C/B/A；D按已确认策略推进；无READY时等待不忙循环"
+      ],
+      "negative_assertions": [
+        "真实环拒绝；失败依赖不放行A；不得将恢复边加入依赖图"
+      ],
+      "evidence_required": [
+        "依赖图",
+        "选择理由",
+        "事件顺序",
+        "最终状态"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-05b",
+      "parent_id": "P3-05",
+      "title": "边界和deadline",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "Todo上限32、深度4、恢复8、内部模型512；共享episode deadline",
+      "trigger": "分别测试上限和上限+1；耗尽deadline后恢复/重启",
+      "positive_assertions": [
+        "边界内合法操作通过；全层计量完整；恢复保留剩余预算"
+      ],
+      "negative_assertions": [
+        "超限禁止新派发；重启不重置deadline；在途效果仍对账"
+      ],
+      "evidence_required": [
+        "计数器",
+        "boot ID/耗时",
+        "拒绝原因",
+        "dispatch时间"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-06a",
+      "parent_id": "P3-06",
+      "title": "动态修订的差异授权",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "A已授权；依赖发现新增写B",
+      "trigger": "客户同意B、拒绝B、改变B金额分别测试",
+      "positive_assertions": [
+        "只有当前修订明确同意的对象/金额可执行"
+      ],
+      "negative_assertions": [
+        "A授权不覆盖B；旧Yes不批准新金额；恢复确认不替代银行授权"
+      ],
+      "evidence_required": [
+        "客户原文",
+        "授权revision/对象/金额",
+        "写入参数"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-07a",
+      "parent_id": "P3-07",
+      "title": "有效旧委派回执",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "计划v1派发B，v2新增C但未取消B",
+      "trigger": "提交带已登记delegation_revision=v1的B完成回执两次",
+      "positive_assertions": [
+        "B合法回执接收一次并可解除依赖"
+      ],
+      "negative_assertions": [
+        "不能因当前plan=v2拒绝仍有效B；重复不再写入"
+      ],
+      "evidence_required": [
+        "委派登记",
+        "inbox",
+        "依赖状态"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-07b",
+      "parent_id": "P3-07",
+      "title": "取消、伪造及版本冲突",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "B已取消；A检查点r2已消费",
+      "trigger": "提交取消B的迟到回执、未知委派、r2恢复、同message ID不同payload",
+      "positive_assertions": [
+        "正确当前检查点可恢复；同消息同载荷可返回保存回执"
+      ],
+      "negative_assertions": [
+        "取消/未知回执仅审计；旧检查点不可再次消费；同ID异载荷拒绝"
+      ],
+      "evidence_required": [
+        "CAS结果",
+        "payload hash",
+        "审计",
+        "业务效果"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-08a",
+      "parent_id": "P3-08",
+      "title": "暂停受理与停稳",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "A等待、B写入在途",
+      "trigger": "发pause；分别正常回收、远端失联、UNKNOWN写结果",
+      "positive_assertions": [
+        "先PAUSE_REQUESTED；安全边界及检查点确认后才PAUSED"
+      ],
+      "negative_assertions": [
+        "受理COMPLETED不等于业务PAUSED；暂停后不新派发start/resume；UNKNOWN不假停稳"
+      ],
+      "evidence_required": [
+        "暂停回执",
+        "参与者状态",
+        "检查点",
+        "派发时序"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-08b",
+      "parent_id": "P3-08",
+      "title": "取消与迟到结果",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "B有已提交操作，A尚未恢复",
+      "trigger": "取消后到达B回执，再发A恢复",
+      "positive_assertions": [
+        "取消记录保留已发生结果；未执行目标取消"
+      ],
+      "negative_assertions": [
+        "不自动回滚已完成业务；迟到成功不复活取消目标；取消后不再恢复"
+      ],
+      "evidence_required": [
+        "取消revision",
+        "回执",
+        "写入账本",
+        "任务状态"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-09a",
+      "parent_id": "P3-09",
+      "title": "检查点提交前崩溃",
+      "stage": "restart-and-fault-contract",
+      "blocking": true,
+      "initial_state": "独立持久化MOA/L2/银行桥；合成唯一operation；A1已完成",
+      "trigger": "L2保存checkpoint事务提交前终止进程",
+      "positive_assertions": [
+        "无恢复命令/依赖完成事件；原操作按已知状态保留",
+        "持久化恢复保持原业务身份和已完成步骤"
+      ],
+      "negative_assertions": [
+        "无持久化部署拒绝本验收；不得盲重放未知写入"
+      ],
+      "evidence_required": [
+        "故障点证明",
+        "重启前后PID",
+        "事务/检查点",
+        "outbox/inbox",
+        "官方状态"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-09b",
+      "parent_id": "P3-09",
+      "title": "提交后发送前崩溃",
+      "stage": "restart-and-fault-contract",
+      "blocking": true,
+      "initial_state": "独立持久化MOA/L2/银行桥；合成唯一operation；A1已完成",
+      "trigger": "checkpoint/outbox提交后、投递前终止L2或MOA",
+      "positive_assertions": [
+        "重启从outbox重投同message ID；不生成新业务任务",
+        "持久化恢复保持原业务身份和已完成步骤"
+      ],
+      "negative_assertions": [
+        "无持久化部署拒绝本验收；不得盲重放未知写入"
+      ],
+      "evidence_required": [
+        "故障点证明",
+        "重启前后PID",
+        "事务/检查点",
+        "outbox/inbox",
+        "官方状态"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-09c",
+      "parent_id": "P3-09",
+      "title": "B已完成回执丢失",
+      "stage": "restart-and-fault-contract",
+      "blocking": true,
+      "initial_state": "独立持久化MOA/L2/银行桥；合成唯一operation；A1已完成",
+      "trigger": "B提交后丢弃回执并重启MOA",
+      "positive_assertions": [
+        "通过权威查询/保存回执确认B；不重做B",
+        "持久化恢复保持原业务身份和已完成步骤"
+      ],
+      "negative_assertions": [
+        "无持久化部署拒绝本验收；不得盲重放未知写入"
+      ],
+      "evidence_required": [
+        "故障点证明",
+        "重启前后PID",
+        "事务/检查点",
+        "outbox/inbox",
+        "官方状态"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-09d",
+      "parent_id": "P3-09",
+      "title": "A接受恢复后确认丢失",
+      "stage": "restart-and-fault-contract",
+      "blocking": true,
+      "initial_state": "独立持久化MOA/L2/银行桥；合成唯一operation；A1已完成",
+      "trigger": "L2 CAS消费检查点后丢弃确认并重启L2",
+      "positive_assertions": [
+        "重复resume返回已有结果；A2业务效果一次",
+        "持久化恢复保持原业务身份和已完成步骤"
+      ],
+      "negative_assertions": [
+        "无持久化部署拒绝本验收；不得盲重放未知写入"
+      ],
+      "evidence_required": [
+        "故障点证明",
+        "重启前后PID",
+        "事务/检查点",
+        "outbox/inbox",
+        "官方状态"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-09e",
+      "parent_id": "P3-09",
+      "title": "银行提交与账本记录间崩溃",
+      "stage": "restart-and-fault-contract",
+      "blocking": true,
+      "initial_state": "独立持久化MOA/L2/银行桥；合成唯一operation；A1已完成",
+      "trigger": "银行已写但本地操作结果尚未入账时终止桥",
+      "positive_assertions": [
+        "可查询则对账；不可查则UNKNOWN并停止相关依赖写入",
+        "持久化恢复保持原业务身份和已完成步骤"
+      ],
+      "negative_assertions": [
+        "无持久化部署拒绝本验收；不得盲重放未知写入"
+      ],
+      "evidence_required": [
+        "故障点证明",
+        "重启前后PID",
+        "事务/检查点",
+        "outbox/inbox",
+        "官方状态"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-10a",
+      "parent_id": "P3-10",
+      "title": "业务完成的独立证据",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "A依赖B；B需改变账户Q余额；评估端有独立初态",
+      "trigger": "注入成功文本但DB未变、其他账户回执、过期证据；合法结果作正例",
+      "positive_assertions": [
+        "合法当前对象回执及读回满足条件后A可恢复"
+      ],
+      "negative_assertions": [
+        "仅A2A COMPLETED或OperationCompletion不足以成功；错误/陈旧证据拒绝"
+      ],
+      "evidence_required": [
+        "权威工具回执",
+        "对象/时间",
+        "实际DB差异",
+        "A派发"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-10b",
+      "parent_id": "P3-10",
+      "title": "B成功但A仍不满足",
+      "stage": "scripted-moa-contract",
+      "blocking": true,
+      "initial_state": "B真实还款，但A还有另一公开资格条件不满足",
+      "trigger": "完成B后恢复A并重查资格",
+      "positive_assertions": [
+        "记录B成功；A明确未完成/拒绝/等待并说明缺失事实"
+      ],
+      "negative_assertions": [
+        "不得把B成功等同A获批；不因幂等冲突自动批准"
+      ],
+      "evidence_required": [
+        "B回执",
+        "恢复后读取",
+        "A资格判定",
+        "最终答复"
+      ],
+      "owner": "MOA SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-11a",
+      "parent_id": "P3-11",
+      "title": "同题官方环境及客户主体",
+      "stage": "bank-bridge-contract",
+      "blocking": true,
+      "initial_state": "两个L2共享一个episode；用户侧申请工具仅属于模拟客户",
+      "trigger": "L2执行合法查询/操作；客户调用申请；另注入重复call ID",
+      "positive_assertions": [
+        "所有工具按原顺序进入官方轨迹；调用/返回一一对应；同题状态可相互读取"
+      ],
+      "negative_assertions": [
+        "子Agent不得代做客户动作；不同题不共享DB；调用不能被隐藏/重名覆盖"
+      ],
+      "evidence_required": [
+        "MCP→official call ID映射",
+        "角色",
+        "严格DB重放"
+      ],
+      "owner": "Benchmark SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    },
+    {
+      "id": "P3-11b",
+      "parent_id": "P3-11",
+      "title": "评分与成功层次分离",
+      "stage": "bank-bridge-contract",
+      "blocking": true,
+      "initial_state": "合成参考要求申请X；实际客户分别申请X、Y或不申请",
+      "trigger": "离线严格重放三种轨迹；模拟器中断/评分异常另测",
+      "positive_assertions": [
+        "X匹配；Y/无申请保留DB失败；基础设施异常保留null"
+      ],
+      "negative_assertions": [
+        "进程退出0、Todo完成、客户满意不覆盖官方reward；不得用参考答案指导Agent"
+      ],
+      "evidence_required": [
+        "原始reward_basis",
+        "参考/实际差异",
+        "终止标记",
+        "原始结果hash"
+      ],
+      "owner": "Benchmark SE",
+      "reviewer": "评测审计负责人",
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "component_test_reference": null,
+      "component_test_scope": null
+    }
+  ]
+}

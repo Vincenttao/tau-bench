@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proposed banking task continuation envelope — not an existing MOA API",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "enum": [
+        "suspend",
+        "resume",
+        "completed",
+        "failed"
+      ]
+    },
+    "episode_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "plan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "todo_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_id": {
+      "enum": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ]
+    },
+    "business_task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "delegation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checkpoint_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checkpoint_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "dependency_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "reason": {
+      "type": "string"
+    },
+    "transport_task_id": {
+      "type": "string"
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "message_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "plan_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "producer_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "kind": {
+      "enum": [
+        "command",
+        "event"
+      ]
+    },
+    "dependency_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "capability",
+          "acceptance"
+        ],
+        "properties": {
+          "capability": {
+            "type": "string",
+            "minLength": 1
+          },
+          "acceptance": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "error_code": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "action",
+    "episode_id",
+    "session_id",
+    "plan_id",
+    "todo_id",
+    "agent_id",
+    "business_task_id",
+    "delegation_id",
+    "deadline",
+    "tenant_id",
+    "producer_id",
+    "message_id",
+    "causation_id",
+    "plan_revision",
+    "kind"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "resume"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "kind": {
+            "const": "command"
+          }
+        },
+        "required": [
+          "checkpoint_ref",
+          "checkpoint_revision",
+          "dependency_ids",
+          "evidence_refs"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "enum": [
+              "suspend",
+              "completed",
+              "failed"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "kind": {
+            "const": "event"
+          }
+        },
+        "required": [
+          "producer_sequence"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "suspend"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "checkpoint_ref",
+          "checkpoint_revision",
+          "dependency_requirements",
+          "reason"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "completed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "evidence_refs"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "failed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "error_code",
+          "reason"
+        ]
+      }
+    }
+  ],
+  "description": "Design-only envelope; authentication, scope, CAS, dependency graph and evidence verification require runtime validation.",
+  "$comment": "OUT OF SCOPE as of 2026-11-17: historical proposed extension, not an existing MOA API; not required or enabled by this experiment."
+}

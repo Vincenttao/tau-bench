@@ -1,0 +1,183 @@
+{
+  "scope": "offline strict replay using saved task and current local official environment; no new episode",
+  "model_calls": 0,
+  "network_disabled": true,
+  "official_results_modified": false,
+  "sources_sha256": {
+    "experiments/plan-3-moa-refined-skills/runs/tdd-seven-runtime-product-pilot/episodes/task_003/result.json": "1af0887ee1e6509d440b5337a22e2ed3171c3dc9872647a80d8433e019d7b56b",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-seven-runtime-product-pilot/manifest.json": "00b69139d45329f622db42e75dee8893ec9aa92776e0057ef1e0c9cfdc788add",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-seven-runtime-product-pilot/episodes/task_003/moa/runtime-events.jsonl": "3ddd5f157d359314cdc83f7c2859e81e16ca671026ad4f344c80521a502bd008",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-seven-runtime-product-pilot/episodes/task_003/moa/main/main-prompt.md": "d0a49bd4da64fae999eab83f6587b017ba1324c1766688e714acf0c8a4fdf032",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-seven-runtime-product-pilot/episodes/task_003/moa/banking-moa.stderr.log": "05094ed2a2ea783dc6a7f166904c32f6c13665025c7aa419ff843aec67d34b40",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/result.json": "a84ce2d63b4307ab233255f5cca97dd8e709a37368b8cfd92310105468f4e4af",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/manifest.json": "e2a74448278edce5374d95563abe739f3ee416933d9210cb86414d7fbf51595f",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/moa/runtime-events.jsonl": "af5aa813293fc52d2a1a8e51675a769730482271533d6126af9d10c8653f8aae",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/moa/main/main-prompt.md": "d0a49bd4da64fae999eab83f6587b017ba1324c1766688e714acf0c8a4fdf032",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/moa/banking-moa.stderr.log": "6c1224a8950b835b99ae466446bad58c0c7319aaa84db689bae9a370679f0331",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/moa/card-application-agent/workspace/deepagent-events.jsonl": "fc3e8f390d2f70baf7a42b219266455473840ef9f7b81e9a8abe0ce6d7d5107b",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/moa/credit-limit-agent/workspace/deepagent-events.jsonl": "dff882f56dccdc641e8dd76734612a6376e50861691d6298d15614e1ceccd5aa",
+    ".deps/tau2-bench/data/tau2/domains/banking_knowledge/db.json": "e692feb797c659f0e21ff7380aa87beb4e95a0694d7bb7945f073102f0293d28",
+    ".deps/tau2-bench/src/tau2/evaluator/evaluator_env.py": "b53ebfe6b0b06d7a2071b5f9dd03ee6ca8ac6000b0ef44f3bd345b346c30d8ac",
+    ".deps/tau2-bench/src/tau2/domains/banking_knowledge/tools.py": "e7287dc76ab74f7c172a9b632b6ebdb067a85bbc0cb7c769f7bdf08ec18aa1c0",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/freeze-sources/experiments/plan-3-moa-refined-skills/java/src/eval/BankingRuntimeHost.java": "9850fb5c254553b7d3d5cce8b5a123cbe52d477459ddb40652a039b75d504879",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/moa/card-application-agent/workspace/skills/banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+    "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/freeze-sources/shared/java/src/main/java/eval/DeepAgentAssembly.java": "fd4c09e0403db1b0214c1c19f636ee4e3423543b9ac303c62cce2bbacf6066c5",
+    "experiments/plan-2-deepagent-refined-skills/runs/tdd-product-consultation-attempt-01/episodes/task_003/result.json": "272e943d2df6d22773774ebbe64deca149810804cfbf94d930f347bc41c69a71"
+  },
+  "runs": [
+    {
+      "run": "tdd-seven-runtime-product-pilot",
+      "source_result": "experiments/plan-3-moa-refined-skills/runs/tdd-seven-runtime-product-pilot/episodes/task_003/result.json",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "termination_reason": "user_stop",
+      "strict_replay": true,
+      "agent_db_match": false,
+      "user_db_match": false,
+      "actual_db_hash": "af324a7d72aced5889daf6cc044e573ad94ffa3bfe7cf65114fd3cfed5daaa48",
+      "reference_db_hash": "034038803774081398175c1af3e323c6c63ea53a5ef7fca80e7f9749cd5a069f",
+      "differences": [
+        {
+          "path": "/credit_card_applications/data/8e6ee33376353152",
+          "actual": null,
+          "expected": {
+            "application_id": "8e6ee33376353152",
+            "card_type": "Silver Rewards Card",
+            "customer_name": "Catherine Wells",
+            "annual_income": 180000.0,
+            "rho_bank_subscription": true,
+            "status": "PENDING",
+            "date": "11/14/2025"
+          }
+        }
+      ],
+      "actual_user_calls": [],
+      "reference_actions": [
+        {
+          "action_id": "003_0",
+          "requestor": "user",
+          "name": "apply_for_credit_card",
+          "arguments": {
+            "card_type": "Silver Rewards Card",
+            "customer_name": "Catherine Wells",
+            "annual_income": 180000,
+            "rho_bank_subscription": true
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ]
+    },
+    {
+      "run": "tdd-english-confirmation-product-pilot",
+      "source_result": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/result.json",
+      "official_reward": 0.0,
+      "reward_basis": [
+        "DB"
+      ],
+      "termination_reason": "user_stop",
+      "strict_replay": true,
+      "agent_db_match": false,
+      "user_db_match": false,
+      "actual_db_hash": "b92f0d2051ad75a597b7ec2eb0f8d4a5e4db13b8cfb4467fb8e55f0eef76ec9f",
+      "reference_db_hash": "034038803774081398175c1af3e323c6c63ea53a5ef7fca80e7f9749cd5a069f",
+      "differences": [
+        {
+          "path": "/credit_card_applications/data/6862a246b452f873",
+          "actual": {
+            "application_id": "6862a246b452f873",
+            "card_type": "Gold Rewards Card",
+            "customer_name": "Catherine Wells",
+            "annual_income": 180000.0,
+            "rho_bank_subscription": true,
+            "status": "PENDING",
+            "date": "11/14/2025"
+          },
+          "expected": null
+        },
+        {
+          "path": "/credit_card_applications/data/8e6ee33376353152",
+          "actual": null,
+          "expected": {
+            "application_id": "8e6ee33376353152",
+            "card_type": "Silver Rewards Card",
+            "customer_name": "Catherine Wells",
+            "annual_income": 180000.0,
+            "rho_bank_subscription": true,
+            "status": "PENDING",
+            "date": "11/14/2025"
+          }
+        }
+      ],
+      "actual_user_calls": [
+        {
+          "id": "call_guynzxmuwlvu3hqkpcpmg0tq",
+          "name": "apply_for_credit_card",
+          "arguments": {
+            "card_type": "Gold Rewards Card",
+            "customer_name": "Catherine Wells",
+            "annual_income": 180000,
+            "rho_bank_subscription": true
+          },
+          "requestor": "user"
+        }
+      ],
+      "reference_actions": [
+        {
+          "action_id": "003_0",
+          "requestor": "user",
+          "name": "apply_for_credit_card",
+          "arguments": {
+            "card_type": "Silver Rewards Card",
+            "customer_name": "Catherine Wells",
+            "annual_income": 180000,
+            "rho_bank_subscription": true
+          },
+          "info": null,
+          "compare_args": null
+        }
+      ]
+    }
+  ],
+  "plan2_context_only": {
+    "source": "experiments/plan-2-deepagent-refined-skills/runs/tdd-product-consultation-attempt-01/episodes/task_003/result.json",
+    "reward": 1.0,
+    "user_calls": [
+      {
+        "message": 41,
+        "calls": [
+          {
+            "id": "call_00_qtyxpb4513d5l7e0x7g97qa8",
+            "name": "apply_for_credit_card",
+            "arguments": {
+              "card_type": "Silver Rewards",
+              "customer_name": "Catherine Wells",
+              "annual_income": 180000,
+              "rho_bank_subscription": true
+            },
+            "requestor": "user"
+          }
+        ]
+      },
+      {
+        "message": 43,
+        "calls": [
+          {
+            "id": "call_uxsat7of7gn2ulgw3s2wftk5",
+            "name": "apply_for_credit_card",
+            "arguments": {
+              "annual_income": 180000,
+              "card_type": "Silver Rewards Card",
+              "customer_name": "Catherine Wells",
+              "rho_bank_subscription": true
+            },
+            "requestor": "user"
+          }
+        ]
+      }
+    ],
+    "not_a_causal_control": true
+  }
+}

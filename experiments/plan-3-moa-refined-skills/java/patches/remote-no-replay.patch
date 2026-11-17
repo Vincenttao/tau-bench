@@ -1,0 +1,15 @@
+--- A2ARemoteAgentClient.java
++++ A2ARemoteAgentClient.java
+@@ -713,6 +713,12 @@
+                     return;
+                 }
+                 failure = candidateFailure.orElseThrow();
++                // A non-streaming POST may have been accepted before transport failure.
++                // Do not rotate instances or replay an uncertain domain invocation.
++                if (!isStreaming) {
++                    ctx.result().completeExceptionally(failure);
++                    return;
++                }
+             }
+             if (round > MAX_RETRY_ATTEMPTS || !awaitRetryBackoff(
+                     new RetryContext(ctx.call(), isStreaming, ctx.setup().contextId(), ctx.result()), round, failure)) {

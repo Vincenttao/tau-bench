@@ -1,0 +1,5 @@
+{
+  "source": "common/agents/moa-agent/src/main/java/com/moaagent/agent/routing/IntentRouter.java",
+  "sha256": "c85d93b81c26680f577d518677eb35cb0e6e75bb3842a8f879f499f5d6d7d805",
+  "scope": "experimental arm only; upstream repository unchanged"
+}

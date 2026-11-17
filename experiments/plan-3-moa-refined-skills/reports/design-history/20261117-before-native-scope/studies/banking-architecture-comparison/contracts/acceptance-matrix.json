@@ -1,0 +1,1316 @@
+{
+  "schema_version": 1,
+  "status": "definitions-and-offline-oracles; real-component-drivers-pending",
+  "cases": [
+    {
+      "id": "P1-01",
+      "arm": 1,
+      "title": "发布隔离",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "部署1.0.0；修改一字或添加新版文件",
+      "expected": "原版可加载；篡改/额外资产拒绝",
+      "evidence_fields": "清单hash、部署文件列表、异常",
+      "fixture_definition": {
+        "valid_input": "部署1.0.0；修改一字或添加新版文件；使用满足公开规则的独立合成输入",
+        "invalid_input": "部署1.0.0；修改一字或添加新版文件；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "原版可加载；篡改/额外资产拒绝",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P1-02",
+      "arm": 1,
+      "title": "调用目录",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "给真实Schema；请求不存在operation",
+      "expected": "有效operation到达对应MCP；未知名称不产生银行效果",
+      "evidence_fields": "skill_tool与MCP关联ID",
+      "fixture_definition": {
+        "valid_input": "给真实Schema；请求不存在operation；使用满足公开规则的独立合成输入",
+        "invalid_input": "给真实Schema；请求不存在operation；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "有效operation到达对应MCP；未知名称不产生银行效果",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P1-03",
+      "arm": 1,
+      "title": "用户确认",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "合成任务缺少关键选择",
+      "expected": "ask_user后恢复同一会话；不能替客户同意",
+      "evidence_fields": "前后session和对话",
+      "fixture_definition": {
+        "valid_input": "合成任务缺少关键选择；使用满足公开规则的独立合成输入",
+        "invalid_input": "合成任务缺少关键选择；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "ask_user后恢复同一会话；不能替客户同意",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P1-04",
+      "arm": 1,
+      "title": "Todo",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "多步合成业务及无效状态转换",
+      "expected": "正常推进；无效转换不得变成客户答案或完成声明",
+      "evidence_fields": "Todo事件、对客消息",
+      "fixture_definition": {
+        "valid_input": "多步合成业务及无效状态转换；使用满足公开规则的独立合成输入",
+        "invalid_input": "多步合成业务及无效状态转换；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "正常推进；无效转换不得变成客户答案或完成声明",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P1-05",
+      "arm": 1,
+      "title": "未知写入",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "写入已受理但回包丢失",
+      "expected": "查询对账；不自动再次写入",
+      "evidence_fields": "同operation、状态查询、写入次数",
+      "fixture_definition": {
+        "valid_input": "写入已受理但回包丢失；使用满足公开规则的独立合成输入",
+        "invalid_input": "写入已受理但回包丢失；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "查询对账；不自动再次写入",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P1-06",
+      "arm": 1,
+      "title": "完成核验",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "一个回执失败/仅申请受理",
+      "expected": "不宣称批准或全目标完成；全部证据齐备可结束",
+      "evidence_fields": "回执与最终说明",
+      "fixture_definition": {
+        "valid_input": "一个回执失败/仅申请受理；使用满足公开规则的独立合成输入",
+        "invalid_input": "一个回执失败/仅申请受理；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "不宣称批准或全目标完成；全部证据齐备可结束",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "completed-forged-a2a-completed",
+        "completed-positive",
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P1-07",
+      "arm": 1,
+      "title": "条件等价",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "与方案2比较实际装配",
+      "expected": "Java、提示词、模型和工具相同，仅Skill资产变化",
+      "evidence_fields": "差异清单及展开prompt hash",
+      "fixture_definition": {
+        "valid_input": "与方案2比较实际装配；使用满足公开规则的独立合成输入",
+        "invalid_input": "与方案2比较实际装配；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "Java、提示词、模型和工具相同，仅Skill资产变化",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P2-01",
+      "arm": 2,
+      "title": "精确加载",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "选定发布，尝试替换指南",
+      "expected": "原资产逐字节部署；漂移拒绝",
+      "evidence_fields": "发布与部署hash",
+      "fixture_definition": {
+        "valid_input": "选定发布，尝试替换指南；使用满足公开规则的独立合成输入",
+        "invalid_input": "选定发布，尝试替换指南；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "原资产逐字节部署；漂移拒绝",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P2-02",
+      "arm": 2,
+      "title": "按需指南",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "单一业务请求/组合请求",
+      "expected": "加载对应指南，组合请求覆盖相关领域；不要求每题加载全部七份",
+      "evidence_fields": "skill_tool路径、入模文档",
+      "fixture_definition": {
+        "valid_input": "单一业务请求/组合请求；使用满足公开规则的独立合成输入",
+        "invalid_input": "单一业务请求/组合请求；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "加载对应指南，组合请求覆盖相关领域；不要求每题加载全部七份",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P2-03",
+      "arm": 2,
+      "title": "政策到Todo",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "KB返回前置条件或新的限制",
+      "expected": "Todo记录未满足条件及核验步骤；不得凭读过文档即标完成",
+      "evidence_fields": "KB事件→Todo revision",
+      "fixture_definition": {
+        "valid_input": "KB返回前置条件或新的限制；使用满足公开规则的独立合成输入",
+        "invalid_input": "KB返回前置条件或新的限制；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "Todo记录未满足条件及核验步骤；不得凭读过文档即标完成",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P2-04",
+      "arm": 2,
+      "title": "组合依赖",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "合成提额与争议/补卡互相影响",
+      "expected": "写入前识别影响并澄清顺序；不固定所有场景“提额优先”",
+      "evidence_fields": "政策、客户选择、首笔写入",
+      "fixture_definition": {
+        "valid_input": "合成提额与争议/补卡互相影响；使用满足公开规则的独立合成输入",
+        "invalid_input": "合成提额与争议/补卡互相影响；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "写入前识别影响并澄清顺序；不固定所有场景“提额优先”",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P2-05",
+      "arm": 2,
+      "title": "状态变化",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "旧查询满足资格，随后状态改变",
+      "expected": "关键写入前依据当前事实重判；过期证据不能直接复用",
+      "evidence_fields": "证据时间、相关操作",
+      "fixture_definition": {
+        "valid_input": "旧查询满足资格，随后状态改变；使用满足公开规则的独立合成输入",
+        "invalid_input": "旧查询满足资格，随后状态改变；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "关键写入前依据当前事实重判；过期证据不能直接复用",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P2-06",
+      "arm": 2,
+      "title": "收尾核验",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "两个目标完成，一个未完成",
+      "expected": "准确区分已完成/失败/等待；不因Todo全部勾选假成功",
+      "evidence_fields": "各目标回执和最终答复",
+      "fixture_definition": {
+        "valid_input": "两个目标完成，一个未完成；使用满足公开规则的独立合成输入",
+        "invalid_input": "两个目标完成，一个未完成；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "准确区分已完成/失败/等待；不因Todo全部勾选假成功",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "completed-forged-a2a-completed",
+        "completed-positive",
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P2-07",
+      "arm": 2,
+      "title": "客户偏好",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "客户选择与固定参考存在差异",
+      "expected": "遵守公开政策与客户选择，人工解释与官方原分数并列",
+      "evidence_fields": "对话索引、参数、DB差异",
+      "fixture_definition": {
+        "valid_input": "客户选择与固定参考存在差异；使用满足公开规则的独立合成输入",
+        "invalid_input": "客户选择与固定参考存在差异；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "遵守公开政策与客户选择，人工解释与官方原分数并列",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P2-08",
+      "arm": 2,
+      "title": "回退与成本",
+      "stage": "behavior-observation",
+      "blocking": false,
+      "trigger": "搜索重复不增加信息/简单咨询",
+      "expected": "有界澄清或升级，不循环检索；统计额外指南Token",
+      "evidence_fields": "请求数、用量、终态",
+      "fixture_definition": {
+        "valid_input": "搜索重复不增加信息/简单咨询；使用满足公开规则的独立合成输入",
+        "invalid_input": "搜索重复不增加信息/简单咨询；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "有界澄清或升级，不循环检索；统计额外指南Token",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "observe and score ordinary model business failure",
+      "offline_oracle_examples": [
+        "legitimate-positive",
+        "legitimate-reject-all"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P3-01",
+      "arm": 3,
+      "title": "慢意图",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "普通请求、显式intent、TARGET handoff",
+      "expected": "合法新请求无快路径；独立慢意图识别及规划分别有证据；恢复不重路由；非法交接阻断",
+      "evidence_fields": "路由Span、候选、最终Agent",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-01a",
+        "P3-01b",
+        "P3-01c"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-02",
+      "arm": 3,
+      "title": "独立Agent",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "两领域请求及越权工具",
+      "expected": "可观察不同Runtime/Agent身份；越权拒绝",
+      "evidence_fields": "Agent Card、进程/端点、allowlist",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-02a",
+        "P3-02b"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-03",
+      "arm": 3,
+      "title": "全局Todo",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "多目标及无候选目标",
+      "expected": "阶段授权、目标完整、唯一调度权威及全链语言通过；汇总事实准确性另列模型观察",
+      "evidence_fields": "planRevision及Todo快照",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-03a",
+        "P3-03b",
+        "P3-03c",
+        "P3-03d",
+        "P3-03e"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-04",
+      "arm": 3,
+      "title": "A→B→A",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "A已有成功步骤再遇依赖",
+      "expected": "业务任务身份不变；B完成一次；A成功步骤不重复",
+      "evidence_fields": "checkpoint链、官方调用/DB",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-04a",
+        "P3-04b"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-05",
+      "arm": 3,
+      "title": "多层依赖",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "A→B→C→A及循环依赖",
+      "expected": "有界恢复；环被拒绝且不伪成功",
+      "evidence_fields": "调度顺序、终态",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-05a",
+        "P3-05b"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-06",
+      "arm": 3,
+      "title": "用户等待",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "B需授权，用户拒绝/改变目标",
+      "expected": "等待真实客户；拒绝后不写入；旧授权不误用",
+      "evidence_fields": "对话、授权revision",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-06a"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-07",
+      "arm": 3,
+      "title": "重复/迟到",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "重发完成/恢复回调",
+      "expected": "有效旧委派回执接收一次；取消/未知委派不推进；旧检查点及同消息异载荷拒绝",
+      "evidence_fields": "operationId、回执、写入计数",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "resume-duplicate-write",
+        "resume-positive",
+        "resume-resend-as-new"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-07a",
+        "P3-07b"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-08",
+      "arm": 3,
+      "title": "暂停/取消",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "A等待且B在途时暂停",
+      "expected": "暂停受理/停稳分离；取消不复活、不自动补偿已完成效果",
+      "evidence_fields": "进程状态、事件时序",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-08a",
+        "P3-08b"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-09",
+      "arm": 3,
+      "title": "重启恢复",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "保存检查点后重启L1或L2",
+      "expected": "五类崩溃窗口真实注入；保持业务身份；未知写入对账或UNKNOWN，不盲重放",
+      "evidence_fields": "重启前后ID、持久化记录",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "resume-duplicate-write",
+        "resume-positive",
+        "resume-resend-as-new"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-09a",
+        "P3-09b",
+        "P3-09c",
+        "P3-09d",
+        "P3-09e"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-10",
+      "arm": 3,
+      "title": "伪造状态",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "错session检查点、虚假完成",
+      "expected": "拒绝污染；正确绑定可恢复",
+      "evidence_fields": "拒绝原因及业务DB未变",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "completed-positive",
+        "completed-forged-a2a-completed"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-10a",
+        "P3-10b"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P3-11",
+      "arm": 3,
+      "title": "官方桥",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "子Agent与客户侧操作",
+      "expected": "官方日志主体正确，全子Agent动作可评分",
+      "evidence_fields": "内部事件→官方工具对应",
+      "fixture_definition": {
+        "specification": "Use each linked subcase initial_state, trigger and positive/negative assertions; do not substitute generic descriptions.",
+        "positive_oracle": "All positive assertions on independent boundary evidence",
+        "negative_oracle": "All negative assertions; no reject-all implementation"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true,
+      "detailed_case_file": "experiments/plan-3-moa-refined-skills/plans/scenarios.json",
+      "detailed_case_ids": [
+        "P3-11a",
+        "P3-11b"
+      ],
+      "release_rule": "All blocking detailed cases need real driver evidence; nonblocking model diagnostics remain observations; parent pending until evidence is bound.",
+      "detailed_case_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+    },
+    {
+      "id": "P4-01",
+      "arm": 4,
+      "title": "证据完整",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "缺政策/跨账户/伪造证据",
+      "expected": "有效同scope通过；缺失或跨域拒绝",
+      "evidence_fields": "CT01–03；证据索引和决策",
+      "fixture_definition": {
+        "valid_input": "缺政策/跨账户/伪造证据；使用满足公开规则的独立合成输入",
+        "invalid_input": "缺政策/跨账户/伪造证据；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "有效同scope通过；缺失或跨域拒绝",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-02",
+      "arm": 4,
+      "title": "当前授权",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "旧decision、撤销grant、未采纳高revision",
+      "expected": "仅当前已采纳授权可执行",
+      "evidence_fields": "CT04、13；revision链",
+      "fixture_definition": {
+        "valid_input": "旧decision、撤销grant、未采纳高revision；使用满足公开规则的独立合成输入",
+        "invalid_input": "旧decision、撤销grant、未采纳高revision；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "仅当前已采纳授权可执行",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-03",
+      "arm": 4,
+      "title": "最终边界",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "修改嵌套金额/账号、绕过Go",
+      "expected": "写入前拒绝；合法原payload可执行",
+      "evidence_fields": "CT05、20、21；最终边界日志",
+      "fixture_definition": {
+        "valid_input": "修改嵌套金额/账号、绕过Go；使用满足公开规则的独立合成输入",
+        "invalid_input": "修改嵌套金额/账号、绕过Go；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "写入前拒绝；合法原payload可执行",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-04",
+      "arm": 4,
+      "title": "幂等与并发",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "重复请求、同key改内容、双账本写者",
+      "expected": "同意图不重复效果；独立意图不误拒",
+      "evidence_fields": "CT06–07；operation与DB",
+      "fixture_definition": {
+        "valid_input": "重复请求、同key改内容、双账本写者；使用满足公开规则的独立合成输入",
+        "invalid_input": "重复请求、同key改内容、双账本写者；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "同意图不重复效果；独立意图不误拒",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive",
+        "resume-duplicate-write",
+        "resume-positive",
+        "resume-resend-as-new"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-05",
+      "arm": 4,
+      "title": "审计失败",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "账本/必需证据持久化失败",
+      "expected": "不产生新效果，不伪造成功",
+      "evidence_fields": "CT08；故障注入与调用数",
+      "fixture_definition": {
+        "valid_input": "账本/必需证据持久化失败；使用满足公开规则的独立合成输入",
+        "invalid_input": "账本/必需证据持久化失败；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "不产生新效果，不伪造成功",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-06",
+      "arm": 4,
+      "title": "结果未知",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "丢失、重复、迟到回执",
+      "expected": "保留原operation并对账；不盲重试",
+      "evidence_fields": "CT09；账本状态及工具轨迹",
+      "fixture_definition": {
+        "valid_input": "丢失、重复、迟到回执；使用满足公开规则的独立合成输入",
+        "invalid_input": "丢失、重复、迟到回执；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "保留原operation并对账；不盲重试",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "completed-forged-a2a-completed",
+        "completed-positive",
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-07",
+      "arm": 4,
+      "title": "重启",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "Java重启/Go重启，其他进程存活",
+      "expected": "正确恢复原状态，不重做完成效果",
+      "evidence_fields": "CT10、22；重启前后ID",
+      "fixture_definition": {
+        "valid_input": "Java重启/Go重启，其他进程存活；使用满足公开规则的独立合成输入",
+        "invalid_input": "Java重启/Go重启，其他进程存活；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "正确恢复原状态，不重做完成效果",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive",
+        "resume-duplicate-write",
+        "resume-positive",
+        "resume-resend-as-new"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-08",
+      "arm": 4,
+      "title": "业务依赖",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "有证据但顺序会破坏后续资格",
+      "expected": "写入前澄清并重排；合法顺序可继续",
+      "evidence_fields": "CT18–19；Todo和客户确认",
+      "fixture_definition": {
+        "valid_input": "有证据但顺序会破坏后续资格；使用满足公开规则的独立合成输入",
+        "invalid_input": "有证据但顺序会破坏后续资格；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "写入前澄清并重排；合法顺序可继续",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-09",
+      "arm": 4,
+      "title": "完成与主体",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "仅受理、少目标、客户侧操作",
+      "expected": "不过度宣称，不代做用户动作",
+      "evidence_fields": "CT15–16；官方日志和答复",
+      "fixture_definition": {
+        "valid_input": "仅受理、少目标、客户侧操作；使用满足公开规则的独立合成输入",
+        "invalid_input": "仅受理、少目标、客户侧操作；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "不过度宣称，不代做用户动作",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "completed-forged-a2a-completed",
+        "completed-positive",
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-10",
+      "arm": 4,
+      "title": "实际Go参与",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "停Go、错误二进制、删除检查/固定allow",
+      "expected": "无新业务写入；独立断言必须检测接线变异",
+      "evidence_fields": "CT20–21；制品hash与效果链",
+      "fixture_definition": {
+        "valid_input": "停Go、错误二进制、删除检查/固定allow；使用满足公开规则的独立合成输入",
+        "invalid_input": "停Go、错误二进制、删除检查/固定allow；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "无新业务写入；独立断言必须检测接线变异",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-11",
+      "arm": 4,
+      "title": "重放隔离",
+      "stage": "component-contract",
+      "blocking": true,
+      "trigger": "改输入或缺证据后离线重放",
+      "expected": "检出不一致，外部模型/业务调用0",
+      "evidence_fields": "CT11–12、17；重放差异",
+      "fixture_definition": {
+        "valid_input": "改输入或缺证据后离线重放；使用满足公开规则的独立合成输入",
+        "invalid_input": "改输入或缺证据后离线重放；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "检出不一致，外部模型/业务调用0",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [
+        "hub-denial-allow-all",
+        "hub-denial-positive",
+        "hub-fixed-allow",
+        "hub-positive"
+      ],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    },
+    {
+      "id": "P4-12",
+      "arm": 4,
+      "title": "受控改进",
+      "stage": "disabled-feature-proof",
+      "blocking": true,
+      "trigger": "候选知识发布及旧任务复用",
+      "expected": "跨实例知识复用、候选激活和自发布不可用；同意图幂等仍按CT06/09验证",
+      "evidence_fields": "CT14、23；采纳/激活记录",
+      "fixture_definition": {
+        "valid_input": "候选知识发布及旧任务复用；使用满足公开规则的独立合成输入",
+        "invalid_input": "候选知识发布及旧任务复用；逐项改变必要字段/状态/授权，不混入隐藏答案",
+        "positive_oracle": "本轮不自发布/跨题学习，旧任务版本固定",
+        "negative_oracle": "检测相应违规，不能伪成功；合法输入不得全部拒绝"
+      },
+      "baseline_failure_rule": "block release on protocol/identity/integrity failure",
+      "offline_oracle_examples": [],
+      "runtime_driver": null,
+      "runtime_status": "pending-real-component-fixture",
+      "independent_evidence_required": true
+    }
+  ],
+  "hub_contract_scope": [
+    {
+      "id": "CT01",
+      "name": "Missing required evidence",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "No effect with missing or failed evidence; a valid evidence-complete request can proceed.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Missing required evidence相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT02",
+      "name": "Evidence object and scope binding",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Reject cross-account, cross-episode and forged evidence.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Evidence object and scope binding相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT03",
+      "name": "Semantic boundaries and arithmetic",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Distinguish units, signs, time windows and counting scopes; reject missing required configuration.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Semantic boundaries and arithmetic相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT04",
+      "name": "Authoritative current decision",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Block superseded decisions and revoked grants; an unadopted high revision is not current.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Authoritative current decision相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT05",
+      "name": "Final payload and outbound bypass",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Block changed nested payloads, amounts, accounts and direct MCP bypass.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Final payload and outbound bypass相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT06",
+      "name": "Intent and idempotency",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Reuse same intent and payload; reject changed content under one key; allow independent legitimate intent.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Intent and idempotency相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT07",
+      "name": "Single owner and concurrency",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Reject a second ledger writer and prevent duplicate effects.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Single owner and concurrency相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT08",
+      "name": "Required audit failure",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Prevent effects if intent or required audit cannot be persisted; preserve real refusals.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Required audit failure相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT09",
+      "name": "Unknown provider outcome",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Keep one operation identity through lost, duplicate and late receipts; no blind redispatch.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Unknown provider outcome相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT10",
+      "name": "Java restart",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Restore waits and identities while Python and Go survive; no repeated completed effect.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Java restart相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT11",
+      "name": "Isolation and corruption",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Reject swapped sessions or receipts and damaged stored state.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Isolation and corruption相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT12",
+      "name": "Isolated replay",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Separate fidelity from conformance; detect altered input and missing evidence; zero live model or business calls.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Isolated replay相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT13",
+      "name": "Release and activation",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Pin active task versions; reject silent migration or tampering; honor current revocation.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Release and activation相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT14",
+      "name": "R K and first execution",
+      "scope": "disabled-feature-proof",
+      "blocking": true,
+      "expected": "Reuse confirmed same-instance results; give new knowledge consumers their own identities, evidence and results.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变R K and first execution相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": "No cross-episode knowledge reuse, candidate activation, self-publication or improvement loop; prove endpoints off. Re-enable only after full original contract passes."
+    },
+    {
+      "id": "CT15",
+      "name": "Completion reconciliation",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Do not overstate receipts, close missing goals or equate requested transfer with completed handoff.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Completion reconciliation相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT16",
+      "name": "Infrastructure and evaluator failures",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Preserve unscored simulator, model, judge and bridge errors without fabricating customer messages.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Infrastructure and evaluator failures相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT17",
+      "name": "Hidden-answer and evidence access boundaries",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Reject hidden-answer leakage and cross-scope evidence reads; prove legitimate HTTP evidence reads work.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Hidden-answer and evidence access boundaries相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT18",
+      "name": "Todo and structured error propagation",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Reject invalid Todo transitions without leaking internal errors as customer answers or bypassing effect authorization.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Todo and structured error propagation相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT19",
+      "name": "Cross-goal dependency conflict",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Use visible policy and evidence to clarify and replan before a conflicting effect; retain useful valid paths.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Cross-goal dependency conflict相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT20",
+      "name": "Mandatory live Go dependency",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Missing or stopped Go, wrong binary or protocol must prevent new bank writes; no baseline fallback.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Mandatory live Go dependency相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT21",
+      "name": "Control wiring mutation",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Removing real Go checks or substituting fixed allow must fail independent wiring assertions.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Control wiring mutation相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT22",
+      "name": "Go restart",
+      "scope": "core-gate",
+      "blocking": true,
+      "expected": "Recover the original ledger with Java and Python alive; preserve unknown outcomes and no blind resend.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Go restart相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": null
+    },
+    {
+      "id": "CT23",
+      "name": "Governed improvement lifecycle",
+      "scope": "disabled-feature-proof",
+      "blocking": true,
+      "expected": "Run case to candidate to evaluation to explicitly approved activation; preserve old replay and forbid self-publication.",
+      "fixture_definition": {
+        "positive": "合法同scope请求按正式规则处理",
+        "negative": "单项改变Governed improvement lifecycle相关事实，应由独立边界日志检测"
+      },
+      "runtime_driver": null,
+      "runtime_status": "pending",
+      "disabled_feature_requirement": "No cross-episode knowledge reuse, candidate activation, self-publication or improvement loop; prove endpoints off. Re-enable only after full original contract passes."
+    }
+  ],
+  "oracle_program": "shared/python/study_policy.py:evaluate_fixture",
+  "oracle_input_trust": "signed/hashed fixture and boundary collector; never accept component-reported pass; synthetic examples are not real evidence",
+  "release_rule": "All blocking entries require real driver evidence; pending is not pass; behavior failures are observations unless severe stop policy applies"
+}

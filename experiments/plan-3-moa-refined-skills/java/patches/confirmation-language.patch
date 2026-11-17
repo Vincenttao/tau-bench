@@ -1,0 +1,10 @@
+--- ConfirmationResponses.java
++++ ConfirmationResponses.java
+@@ -34,6 +34,6 @@
+      * @return 简短的确认或拒绝提示
+      */
+     public static String hint() {
+-        return "请回复“确认”或“拒绝”。";
++        return "Please reply with exactly Yes or No.";
+     }
+ }

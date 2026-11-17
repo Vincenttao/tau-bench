@@ -1,0 +1,13 @@
+{
+  "repository": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent",
+  "revision": "0298dcd28a1f3613b47f2af9def52512bab7dbd6",
+  "evidence_level": "source-reviewed-not-runtime-validated",
+  "files": {
+    "agent/routing/IntentRouter.java": "c85d93b81c26680f577d518677eb35cb0e6e75bb3842a8f879f499f5d6d7d805",
+    "agent/routing/IntentRoutingRail.java": "7cc9aab2d290f07010116a1fe90994121f4f561f8bbd4e98787c57a1d201c7e1",
+    "agent/planning/StagePlanningRail.java": "af0d2d28cacc2873289a4f6dd017b19846e9f3ea5e66cc4dffa7fb7a04fa5a01",
+    "agent/planning/StagePlan.java": "6fc0136e3be59b339d880dbdba288ed687e06b7c0197d808ee3f270eaf1f9480",
+    "agent/continuation/SuspendedTasks.java": "981a8b262f4da0d6965aaad464bb65b3f916e7210499e69c5934628267ce90fe",
+    "agent/execution/ExecutionEngine.java": "f51c93d7e14cf2b8330be57f43d0ec7d8074731a0900b0316d932a7a04cee07d"
+  }
+}

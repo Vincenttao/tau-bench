@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-17",
+  "scope": "test specification integrity, not runtime acceptance",
+  "detailed_cases": 28,
+  "blocking_cases": 27,
+  "model_observation_cases": 1,
+  "parent_cases": 11,
+  "runtime_cases_passed": 0,
+  "local_links_checked": 42,
+  "unique_ids": true,
+  "parent_mapping_complete": true,
+  "required_fields_present": true,
+  "formal_execution_enabled": false,
+  "contract_pin_refresh": {
+    "reason": "User-requested test specification revision; no formal run started; historical run manifests preserved",
+    "old_acceptance_matrix_sha256": "b452bde6a8dd53eb424e87ea200fae3b02614990a30f2a3268d0446edc40643b",
+    "new_acceptance_matrix_sha256": "03b44200d14d7bdc34412194263e29ddd928466f3cd9541ffdec4f4e8fe7c94a",
+    "detailed_cases_sha256": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9"
+  },
+  "experiment_contract_tests": {
+    "passed": 9,
+    "failed": 0
+  },
+  "layout_checks": {
+    "passed": 121,
+    "failed": 0
+  },
+  "shared_contract_inventory": "passed",
+  "strict_offline_replays": 2,
+  "source_hashes_unchanged": true,
+  "source_hash_count": 19,
+  "external_model_calls": 0
+}

@@ -1,0 +1,66 @@
+--- StagePlanningRail.java
++++ StagePlanningRail.java
+@@ -822,8 +822,8 @@
+                     + "outcome=WAITING_SELECTION candidates={}"),
+                     LogFields.session(session), plan.getRevision(), LogFields.text(todo.getId()),
+                     todo.getCandidates().size(), LogFields.candidates(todo.getCandidates()));
+-            return Optional.of(question("candidate_binding", "为任务「" + todo.getQuery()
+-                    + "」选择业务（回复编号或完整名称；同名时请回复编号）：",
++            return Optional.of(question("candidate_binding", "For your request: " + todo.getQuery()
++                    + "\nChoose a service by number or full name:",
+                     CandidateSelection.options(todo.getCandidates()), plan));
+         }
+         CandidateCard binding = selection.orElseThrow();
+@@ -878,27 +878,31 @@
+         boolean highRisk = plan.getTodos().stream().anyMatch(todo -> todo.getRisk() == CandidateCard.Risk.HIGH);
+         if (highRisk) {
+             String response = CandidateSelection.answer(answer);
+-            if ("拒绝".equals(response)) {
++            if ("拒绝".equals(response) || "no".equalsIgnoreCase(response)) {
+                 plan.setPhase(Phase.REJECTED);
+                 return Optional.empty();
+             }
+             if (!ConfirmationResponses.approved(response)) {
+                 plan.setPhase(Phase.CONFIRMING);
+-                StringBuilder summary = new StringBuilder("最终任务规划 v" + plan.getRevision()
+-                        + " 含高风险事项。确认后按以下顺序执行，清单与策略不可修改：\n");
++                StringBuilder summary = new StringBuilder("Before I proceed, please confirm these requested services:\n");
+                 for (Todo todo : plan.getTodos()) {
+-                    summary.append(todo.getId()).append(" (").append(todo.getKey()).append(") | ").append(todo
+-                            .getQuery()).append(" | ")
+-                            .append(todo.getRisk()).append(" | ")
+-                            .append(todo.getBinding() == null ? "无候选，跳过"
+-                                    : todo.getBinding().name() + " / " + todo.getBinding().adapter() + " / " + todo
+-                                            .getBinding().intent())
+-                            .append(TaskConditions.describe(todo)).append('\n');
++                    summary.append("- ").append(todo.getQuery());
++                    if (todo.getBinding() == null) summary.append(" (No available service; will be skipped)");
++                    if (!todo.getDependsOn().isEmpty()) {
++                        summary.append("; after successful completion of: ").append(plan.getTodos().stream()
++                                .filter(previous -> todo.getDependsOn().contains(previous.getKey()))
++                                .map(Todo::getQuery).collect(java.util.stream.Collectors.joining("; ")));
++                    }
++                    if (!todo.getWhen().isEmpty()) {
++                        summary.append("; only if: ").append(todo.getWhen().get("condition"))
++                                .append(". If false, skip; if uncertain, stop further execution.");
++                    }
++                    summary.append('\n');
+                 }
+                 summary.append(ConfirmationResponses.hint()).append('\n');
+                 return Optional.of(question("plan_confirmation", summary.toString(), List.of(
+-                        Map.of("label", "确认执行", "description", "批准整份最终规划并开始串行执行"),
+-                        Map.of("label", "拒绝", "description", "不执行任何任务")), plan));
++                        Map.of("label", "Yes", "description", "Proceed with the listed services"),
++                        Map.of("label", "No", "description", "Do not proceed")), plan));
+             }
+         }
+         plan.setFormal(true);
+@@ -1362,7 +1366,7 @@
+         AskUserRequest request = new AskUserRequest();
+         boolean candidateBinding = "candidate_binding".equals(kind);
+         String optionSeparator = candidateBinding ? "\n\n" : "\n";
+-        String descriptionPrefix = candidateBinding ? "\n   说明：" : ": ";
++        String descriptionPrefix = candidateBinding ? "\n   Description: " : ": ";
+         request.setMessage(text + optionSeparator + options.stream().map(option -> option.get("label")
+                 + descriptionPrefix + option.get("description"))
+                 .collect(java.util.stream.Collectors.joining(optionSeparator)));

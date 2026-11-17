@@ -1,0 +1,26 @@
+{
+  "reason": "User requested existing MOA capability boundary; previous extension requirements superseded",
+  "files": {
+    "experiments/plan-3-moa-refined-skills/README.md": "8f45b8cfcb7c456c822e036dccd60fa5335765a01e2ebba7aaf472e2460e5f0e",
+    "experiments/plan-3-moa-refined-skills/architecture.md": "e929284748d6c8444b0b5d669377e86c00dd44952fe6557f57534b98444839a1",
+    "experiments/plan-3-moa-refined-skills/technical-design.md": "8c638f3625ffd3de94eccb2e73789009433b2c44ffef0d031aa9fface3ee0c14",
+    "experiments/plan-3-moa-refined-skills/scenario-design.md": "7b0b08d820893c919167855f6f53a84ca8e556dfc16cc68f8be8a63679019482",
+    "experiments/plan-3-moa-refined-skills/test-design.md": "e129c63d7927af7e8d1de8ac84ad20216abea032d33873ccda62b18bda0772ee",
+    "experiments/plan-3-moa-refined-skills/test-plan.md": "2225bb8f6f304e3549cac264b079125d4170c41acc76bd4b1faccc1c20975c22",
+    "experiments/plan-3-moa-refined-skills/implementation-plan.md": "43345ebadd94fb071134cbda3cbae4d5a8e846fc8f3c4e97240d0051fd5c4e7e",
+    "experiments/plan-3-moa-refined-skills/readiness-report.md": "3e6c5ef427aa573af8a8b8e2d5165a742f74971f1b6610100c66aa4c4a046307",
+    "experiments/plan-3-moa-refined-skills/plans/scenarios.json": "63193da527918730852528de8a3d1bbc0930b3b323f0d6d47412c624a3a758d9",
+    "experiments/plan-3-moa-refined-skills/contracts/task-continuation.schema.json": "c25df6ef1adc28b0c7d7c250bd119a377ef47857946ae9f15e3b025922a9a909",
+    "experiments/plan-3-moa-refined-skills/contracts/continuation-examples.json": "b46b03288e46b42b95059b67c56ef3df7fef9ea9b0293326f4f769c3f31e60c7",
+    "experiments/plan-3-moa-refined-skills/plan.json": "17f4fde6f58220e027ccaa383b471a1595550bb609031111d6c7f76b25e9e743",
+    "studies/banking-architecture-comparison/contracts/acceptance-matrix.json": "03b44200d14d7bdc34412194263e29ddd928466f3cd9541ffdec4f4e8fe7c94a",
+    "studies/banking-architecture-comparison/study.json": "51be52b42eb2016bb62a0662e52bb87b4b7b15ce8b5111c29d720cab26baae41",
+    "studies/banking-architecture-comparison/execution-contract.md": "02f37216157b75542779964e7a10deb6306e268b097e27f122bd0ab72bd2948f",
+    "studies/banking-architecture-comparison/test-design.md": "235d5958e6c742e6385cd0f2150e206088b0a801a674740b9ce970fe108d6d8f",
+    "studies/banking-architecture-comparison/readiness-report.md": "541db4b2b64d936ca9ecb98f1a52995ff727cb40a1b8a3524e91daeb31cc3c21",
+    "studies/banking-architecture-comparison/design/capability-assembly.md": "6f3443867f76be1e5f50ba406768942ba5041437b19f551d8138cf6ff4ec2ee7",
+    "studies/banking-architecture-comparison/design/execution-framework.md": "e966c68d8907721c3869902a6d06bba3e533d58261e9e6eafb16fc26ab468f88",
+    "studies/banking-architecture-comparison/design/delivery-and-diagnosis.md": "6bf74d96f640bd23c7b44765c6f181e8a270bf9c87f21e3f5f4b9a86111dd17c",
+    "studies/banking-architecture-comparison/design/README.md": "1fd7be91c7f26b171544d805458a881176e817d554c0d3d058155ed26fe95402"
+  }
+}

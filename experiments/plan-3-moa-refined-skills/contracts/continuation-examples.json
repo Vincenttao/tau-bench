@@ -1,0 +1,243 @@
+{
+  "kind": "synthetic-schema-fixtures",
+  "cases": [
+    {
+      "name": "valid-resume",
+      "valid": true,
+      "payload": {
+        "tenant_id": "fixture-tenant",
+        "episode_id": "synthetic-repayment",
+        "session_id": "fixture-session",
+        "plan_id": "fixture-plan",
+        "plan_revision": 2,
+        "todo_id": "limit-task",
+        "agent_id": "credit-limit-agent",
+        "business_task_id": "limit-business-task",
+        "delegation_id": "limit-delegation",
+        "producer_id": "moa",
+        "message_id": "resume-message",
+        "causation_id": "repayment-completed",
+        "deadline": "2026-11-17T00:00:00Z",
+        "action": "resume",
+        "kind": "command",
+        "checkpoint_ref": "fixture-checkpoint",
+        "checkpoint_revision": 3,
+        "dependency_ids": [
+          "repayment-task"
+        ],
+        "evidence_refs": [
+          "fixture-repayment-receipt"
+        ]
+      }
+    },
+    {
+      "name": "valid-suspend",
+      "valid": true,
+      "payload": {
+        "tenant_id": "fixture-tenant",
+        "episode_id": "synthetic-repayment",
+        "session_id": "fixture-session",
+        "plan_id": "fixture-plan",
+        "plan_revision": 2,
+        "todo_id": "limit-task",
+        "agent_id": "credit-limit-agent",
+        "business_task_id": "limit-business-task",
+        "delegation_id": "limit-delegation",
+        "producer_id": "credit-limit-agent",
+        "message_id": "resume-message",
+        "causation_id": "repayment-completed",
+        "deadline": "2026-11-17T00:00:00Z",
+        "action": "suspend",
+        "kind": "event",
+        "checkpoint_ref": "fixture-checkpoint",
+        "checkpoint_revision": 3,
+        "dependency_ids": [
+          "repayment-task"
+        ],
+        "evidence_refs": [
+          "fixture-repayment-receipt"
+        ],
+        "producer_sequence": 4,
+        "dependency_requirements": [
+          {
+            "capability": "payments-agent",
+            "acceptance": "Customer-authorized repayment is confirmed; recheck balance before resuming."
+          }
+        ],
+        "reason": "Requires customer-authorized repayment"
+      }
+    },
+    {
+      "name": "missing-checkpoint",
+      "valid": false,
+      "payload": {
+        "tenant_id": "fixture-tenant",
+        "episode_id": "synthetic-repayment",
+        "session_id": "fixture-session",
+        "plan_id": "fixture-plan",
+        "plan_revision": 2,
+        "todo_id": "limit-task",
+        "agent_id": "credit-limit-agent",
+        "business_task_id": "limit-business-task",
+        "delegation_id": "limit-delegation",
+        "producer_id": "moa",
+        "message_id": "resume-message",
+        "causation_id": "repayment-completed",
+        "deadline": "2026-11-17T00:00:00Z",
+        "action": "resume",
+        "kind": "command",
+        "checkpoint_revision": 3,
+        "dependency_ids": [
+          "repayment-task"
+        ],
+        "evidence_refs": [
+          "fixture-repayment-receipt"
+        ]
+      }
+    },
+    {
+      "name": "missing-tenant",
+      "valid": false,
+      "payload": {
+        "episode_id": "synthetic-repayment",
+        "session_id": "fixture-session",
+        "plan_id": "fixture-plan",
+        "plan_revision": 2,
+        "todo_id": "limit-task",
+        "agent_id": "credit-limit-agent",
+        "business_task_id": "limit-business-task",
+        "delegation_id": "limit-delegation",
+        "producer_id": "moa",
+        "message_id": "resume-message",
+        "causation_id": "repayment-completed",
+        "deadline": "2026-11-17T00:00:00Z",
+        "action": "resume",
+        "kind": "command",
+        "checkpoint_ref": "fixture-checkpoint",
+        "checkpoint_revision": 3,
+        "dependency_ids": [
+          "repayment-task"
+        ],
+        "evidence_refs": [
+          "fixture-repayment-receipt"
+        ]
+      }
+    },
+    {
+      "name": "empty-evidence",
+      "valid": false,
+      "payload": {
+        "tenant_id": "fixture-tenant",
+        "episode_id": "synthetic-repayment",
+        "session_id": "fixture-session",
+        "plan_id": "fixture-plan",
+        "plan_revision": 2,
+        "todo_id": "limit-task",
+        "agent_id": "credit-limit-agent",
+        "business_task_id": "limit-business-task",
+        "delegation_id": "limit-delegation",
+        "producer_id": "moa",
+        "message_id": "resume-message",
+        "causation_id": "repayment-completed",
+        "deadline": "2026-11-17T00:00:00Z",
+        "action": "resume",
+        "kind": "command",
+        "checkpoint_ref": "fixture-checkpoint",
+        "checkpoint_revision": 3,
+        "dependency_ids": [
+          "repayment-task"
+        ],
+        "evidence_refs": []
+      }
+    },
+    {
+      "name": "resume-is-not-event",
+      "valid": false,
+      "payload": {
+        "tenant_id": "fixture-tenant",
+        "episode_id": "synthetic-repayment",
+        "session_id": "fixture-session",
+        "plan_id": "fixture-plan",
+        "plan_revision": 2,
+        "todo_id": "limit-task",
+        "agent_id": "credit-limit-agent",
+        "business_task_id": "limit-business-task",
+        "delegation_id": "limit-delegation",
+        "producer_id": "moa",
+        "message_id": "resume-message",
+        "causation_id": "repayment-completed",
+        "deadline": "2026-11-17T00:00:00Z",
+        "action": "resume",
+        "kind": "event",
+        "checkpoint_ref": "fixture-checkpoint",
+        "checkpoint_revision": 3,
+        "dependency_ids": [
+          "repayment-task"
+        ],
+        "evidence_refs": [
+          "fixture-repayment-receipt"
+        ]
+      }
+    },
+    {
+      "name": "valid-completed",
+      "valid": true,
+      "payload": {
+        "tenant_id": "fixture-tenant",
+        "episode_id": "synthetic-repayment",
+        "session_id": "fixture-session",
+        "plan_id": "fixture-plan",
+        "plan_revision": 2,
+        "todo_id": "limit-task",
+        "agent_id": "credit-limit-agent",
+        "business_task_id": "limit-business-task",
+        "delegation_id": "limit-delegation",
+        "producer_id": "moa",
+        "message_id": "resume-message",
+        "causation_id": "repayment-completed",
+        "deadline": "2026-11-17T00:00:00Z",
+        "action": "completed",
+        "kind": "event",
+        "checkpoint_ref": "fixture-checkpoint",
+        "checkpoint_revision": 3,
+        "dependency_ids": [
+          "repayment-task"
+        ],
+        "evidence_refs": [
+          "fixture-repayment-receipt"
+        ],
+        "producer_sequence": 6
+      }
+    },
+    {
+      "name": "negative-revision",
+      "valid": false,
+      "payload": {
+        "tenant_id": "fixture-tenant",
+        "episode_id": "synthetic-repayment",
+        "session_id": "fixture-session",
+        "plan_id": "fixture-plan",
+        "plan_revision": 2,
+        "todo_id": "limit-task",
+        "agent_id": "credit-limit-agent",
+        "business_task_id": "limit-business-task",
+        "delegation_id": "limit-delegation",
+        "producer_id": "moa",
+        "message_id": "resume-message",
+        "causation_id": "repayment-completed",
+        "deadline": "2026-11-17T00:00:00Z",
+        "action": "resume",
+        "kind": "command",
+        "checkpoint_ref": "fixture-checkpoint",
+        "checkpoint_revision": -1,
+        "dependency_ids": [
+          "repayment-task"
+        ],
+        "evidence_refs": [
+          "fixture-repayment-receipt"
+        ]
+      }
+    }
+  ],
+  "status": "historical-extension-out-of-scope"
+}

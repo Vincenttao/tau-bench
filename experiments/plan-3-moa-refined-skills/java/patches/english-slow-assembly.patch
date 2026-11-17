@@ -1,0 +1,32 @@
+--- MoaRuntimeAutoConfiguration.java
++++ MoaRuntimeAutoConfiguration.java
+@@ -265,11 +265,9 @@
+         var resolved = MoaModelFactory.resolveLlmConfig(resolver, moa);
+         var model = MoaModelFactory.buildModel(resolved, moa.effectiveLlmHeaders());
+         List<Object> tools = new ArrayList<>(StagePlanningRail.tools());
+-        tools.add(IntentRoutingRail.fastTool());
+         if (extensions.planning().handlesPauseControls()) {
+             tools.add(IntentRoutingRail.resumeTool());
+         }
+-        tools.add(FastCandidateSelection.tool());
+         var rails = MoaAgentRails.assemble(MoaAgentRailProvider.Role.MAIN,
+                 List.of(new ConversationInteractionRail(interactions, agentId),
+                         new ProgressNarrationRail(progress, NarrationStage.MODEL_MAIN,
+@@ -279,14 +277,14 @@
+                         new ThinkingEventRail(progress.enabled()), new InterruptEventRail()),
+                 extensions.railProviders());
+         DeepAgentConfig config = DeepAgentConfig.builder().systemPrompt(moa.prompt("orchestration"))
+-                .maxIterations(properties.maxIterations()).language("zh-CN").workspacePath(properties.workspace())
++                .maxIterations(properties.maxIterations()).language("en").workspacePath(properties.workspace())
+                 .tools(tools).rails(new ArrayList<>(rails))
+                 .model(model).restrictToWorkDir(true).enableTaskPlanning(false).enableTaskLoop(true)
+-                .maxParallelToolCalls(1).addGeneralPurposeAgent(false).build();
++                .maxParallelToolCalls(1).completionTimeout(1200.0).addGeneralPurposeAgent(false).build();
+         AgentCard card = AgentCard.builder().id(agentId)
+                 .name(agentName == null || agentName.isBlank() ? agentId : agentName)
+                 .description("MOA：并发意图分流、逐阶段规划、A2A执行、任务接续、会话服务带出").build();
+-        Workspace workspace = Workspace.builder().rootPath(properties.workspace()).language("zh-CN").build();
++        Workspace workspace = Workspace.builder().rootPath(properties.workspace()).language("en").build();
+         return new JiuwenCoreAgentExtHandler(HarnessFactory.createDeepAgent(card, config, workspace),
+                 middlewareRegistrar.getIfAvailable());
+     }

@@ -1,0 +1,93 @@
+{
+  "name": "moa-banking-orchestration",
+  "status": "design-only-not-runtime-config",
+  "implementation_ready": false,
+  "solution_commit": "0298dcd28a1f3613b47f2af9def52512bab7dbd6",
+  "routing": {
+    "required_mode": "slow-only",
+    "fast_paths_allowed": false,
+    "implementation": "required extension; no existing switch assumed"
+  },
+  "agents": [
+    {
+      "id": "card-application-agent",
+      "proposed_port": 18101,
+      "transport": "A2A",
+      "checkpoint_namespace": "card-application-agent",
+      "tool_allowlist": "must be generated and validated before execution"
+    },
+    {
+      "id": "credit-limit-agent",
+      "proposed_port": 18102,
+      "transport": "A2A",
+      "checkpoint_namespace": "credit-limit-agent",
+      "tool_allowlist": "must be generated and validated before execution"
+    },
+    {
+      "id": "payments-agent",
+      "proposed_port": 18103,
+      "transport": "A2A",
+      "checkpoint_namespace": "payments-agent",
+      "tool_allowlist": "must be generated and validated before execution"
+    },
+    {
+      "id": "account-opening-agent",
+      "proposed_port": 18104,
+      "transport": "A2A",
+      "checkpoint_namespace": "account-opening-agent",
+      "tool_allowlist": "must be generated and validated before execution"
+    },
+    {
+      "id": "account-closure-agent",
+      "proposed_port": 18105,
+      "transport": "A2A",
+      "checkpoint_namespace": "account-closure-agent",
+      "tool_allowlist": "must be generated and validated before execution"
+    },
+    {
+      "id": "transaction-dispute-agent",
+      "proposed_port": 18106,
+      "transport": "A2A",
+      "checkpoint_namespace": "transaction-dispute-agent",
+      "tool_allowlist": "must be generated and validated before execution"
+    },
+    {
+      "id": "card-lifecycle-agent",
+      "proposed_port": 18107,
+      "transport": "A2A",
+      "checkpoint_namespace": "card-lifecycle-agent",
+      "tool_allowlist": "must be generated and validated before execution"
+    }
+  ],
+  "moa_port": 18098,
+  "skill_content_source": "banking-evidence-guides",
+  "benchmark": {
+    "commit": "c06b07dd7c4d4ec61ba6ff9bcdf0b15dd7ef36d4",
+    "language": "zh",
+    "localize_db": true,
+    "trials": 1,
+    "concurrency": 1,
+    "seed": 300,
+    "task_selection": "plans/banking-cohort.json"
+  },
+  "execution": {
+    "enabled": false,
+    "episode_timeout_seconds": 2400,
+    "batch_timeout_seconds": 57600,
+    "remote_call_timeout_seconds": 120,
+    "max_steps": 200,
+    "max_tasks": 32,
+    "max_resumes_per_task": 8,
+    "max_dependency_depth": 4,
+    "token_limit": null,
+    "automatic_write_retry": false
+  },
+  "required_extensions": [
+    "slow-only routing including explicit/handoff bypasses",
+    "per-todo waiting scheduler",
+    "remote checkpoint resume contract",
+    "business result validator",
+    "official environment bridge",
+    "MOA viewer event support"
+  ]
+}

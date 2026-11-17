@@ -1,0 +1,57 @@
+--- IntentRouter.java
++++ IntentRouter.java
+@@ -182,9 +182,9 @@
+                 .filter(card -> card.id().equals(explicitIntent) || card.intent().equals(explicitIntent)).toList();
+         if (explicit.size() == 1) {
+             LOGGER.info(("[MOA-INTENT] session={} source=explicit reason=explicit_single "
+-                    + "candidateCount=1 fastEligible=true matches={}"),
++                    + "candidateCount=1 fastEligible=false matches={}"),
+                     LogFields.session(session), LogFields.candidates(explicit));
+-            return Decision.fast(explicit, "explicit_single");
++            return Decision.slow(explicit, "banking_slow_explicit");
+         }
+         LOGGER.info("[MOA-INTENT] session={} source=analysis explicitProvided={} explicitMatchCount={} timeoutMs={}",
+                 LogFields.session(session), explicitIntent != null && !explicitIntent.isBlank(), explicit.size(),
+@@ -195,30 +195,9 @@
+     }
+
+     private Decision routePolicy(RoutingInput input, HandoffScope scope, List<CandidateCard> recognized) {
+-        try (var analysisServices = new RoutingServices(input.analysisInput(), input.session(), services,
+-                executor, arbitrationExecutor, timeout, arbitrationTimeout, progress, recognized,
+-                scope.handoff() == null ? null : scope.candidates())) {
+-            Decision decision = BusinessInvocation.call(() -> routingPolicy.route(
+-                    new RequestRoutingPolicy.Request(input.query(), input.explicitIntent(), input.session(),
+-                            input.analysisInput().serviceLeadOut()), analysisServices));
+-            if (decision == null || scope.handoff() != null
+-                    && decision.candidates().stream().anyMatch(card -> !scope.candidates().contains(card))) {
+-                return Decision.blocked("analysis_invalid_policy_decision");
+-            }
+-            LOGGER.info("[MOA-ROUTE] session={} action=policy_decision policy={} decision={} reason={}"
+-                            + " candidateCount={} leadOut={}",
+-                    LogFields.session(input.session()), LogFields.text(routingPolicy.getClass().getSimpleName()),
+-                    decision.action(), LogFields.text(decision.reason()), decision.candidates().size(),
+-                    ServiceLeadOutDiagnostics.summary(input.analysisInput().serviceLeadOut()));
+-            return decision;
+-        } catch (BusinessInvocation.Failure exception) {
+-            if (exception.original() instanceof RoutingServices.Failure failure) {
+-                return Decision.blocked(failure.reason());
+-            }
+-            LOGGER.warn("[MOA-ROUTE] session={} policyError={}", LogFields.session(input.session()),
+-                    exception.original().getClass().getSimpleName());
+-            return Decision.blocked("analysis_policy_unavailable");
+-        }
++        // Experimental slow-only arm: send validated scope directly to MOA's model planner.
++        // Do not call fast recognition/cardinality/arbitration even for a single candidate.
++        return Decision.slow(scope.candidates(), "banking_slow_only");
+     }
+
+     private record RoutingInput(String query, String explicitIntent, AgentSessionApi session,
+@@ -234,7 +213,7 @@
+                     && !explicitIntent.equals(targets.get(0).id())) {
+                 return Optional.of(Decision.blocked("analysis_invalid_handoff_target"));
+             }
+-            return Optional.of(Decision.fast(targets, "handoff_target"));
++            return Optional.of(Decision.slow(targets, "banking_slow_target"));
+         }
+         if (explicitIntent != null && !explicitIntent.isBlank()) {
+             return Optional.of(Decision.blocked("analysis_conflicting_handoff"));

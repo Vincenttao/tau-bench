@@ -1,0 +1,10 @@
+--- MoaModelFactory.java
++++ MoaModelFactory.java
+@@ -76,6 +76,7 @@
+         DefaultModelClientFactories.ensureRegistered();
+         ModelClientConfig.Builder clientConfig = ModelClientConfig.builder()
+                 .clientProvider(config.getProvider())
++                .maxRetries(0)
+                 .apiKey(config.getApiKey())
+                 .apiBase(config.getApiBase())
+                 .timeout(config.getTimeout().toMillis() / 1000.0D)
