@@ -1,0 +1,65 @@
+[
+  {
+    "id": "card-application",
+    "domain": "credit-card",
+    "title": "信用卡申请",
+    "accountable_role": "信用卡业务负责人",
+    "document": "guides/credit-card/card-application.md",
+    "execution_skill_id": "banking-mcp",
+    "permission_scope": "deployed operations; guide adds no authorization"
+  },
+  {
+    "id": "limit-adjustment",
+    "domain": "credit-card",
+    "title": "信用卡额度调整",
+    "accountable_role": "信用卡业务负责人",
+    "document": "guides/credit-card/limit-adjustment.md",
+    "execution_skill_id": "banking-mcp",
+    "permission_scope": "deployed operations; guide adds no authorization"
+  },
+  {
+    "id": "transfer",
+    "domain": "payments",
+    "title": "转账办理",
+    "accountable_role": "支付结算业务负责人",
+    "document": "guides/payments/transfer.md",
+    "execution_skill_id": "banking-mcp",
+    "permission_scope": "deployed operations; guide adds no authorization"
+  },
+  {
+    "id": "account-opening",
+    "domain": "accounts",
+    "title": "账户开户",
+    "accountable_role": "账户业务负责人",
+    "document": "guides/accounts/account-opening.md",
+    "execution_skill_id": "banking-mcp",
+    "permission_scope": "deployed operations; guide adds no authorization"
+  },
+  {
+    "id": "account-closure",
+    "domain": "accounts",
+    "title": "账户销户",
+    "accountable_role": "账户业务负责人",
+    "document": "guides/accounts/account-closure.md",
+    "execution_skill_id": "banking-mcp",
+    "permission_scope": "deployed operations; guide adds no authorization"
+  },
+  {
+    "id": "transaction-dispute",
+    "domain": "disputes",
+    "title": "交易争议申诉",
+    "accountable_role": "争议业务负责人",
+    "document": "guides/disputes/transaction-dispute.md",
+    "execution_skill_id": "banking-mcp",
+    "permission_scope": "deployed operations; guide adds no authorization"
+  },
+  {
+    "id": "account-changes",
+    "domain": "accounts",
+    "title": "其他账户与卡变更",
+    "accountable_role": "账户业务负责人",
+    "document": "guides/accounts/account-changes.md",
+    "execution_skill_id": "banking-mcp",
+    "permission_scope": "deployed operations; guide adds no authorization"
+  }
+]

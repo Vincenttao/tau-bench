@@ -1,0 +1,928 @@
+{
+  "summary": {
+    "overall_score": 52,
+    "risk_level": "high",
+    "primary_pattern": "single_agent",
+    "secondary_patterns": [],
+    "conclusion": "现有代码符合早期只读pilot部分设计，尚未实现LLM Evidence Control完整22题链路。52分是相对完整目标的架构审查评分，不是完成百分比或业务分数；通用24/40，有限调用控制20/50，复杂度8/10。"
+  },
+  "scope": {
+    "repository": "/home/vincent/openjiuwen/tau3",
+    "revision": "f5103c4b004e0a3f094ad04911bd7ecb881ee36e + uncommitted workspace; use source hashes",
+    "reviewed_paths": [
+      "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+      "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py",
+      "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+      "experiments/plan-4-agent-hub-refined-skills/python/hub_gate.py",
+      "experiments/plan-4-agent-hub-refined-skills/go/cmd/banking-gate/main.go",
+      "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py",
+      "experiments/plan-4-agent-hub-refined-skills/python/probe_jev.py",
+      "shared/java/src/main/java/eval/DeepAgentBridge.java",
+      "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+      "shared/python/java_agent.py",
+      "shared/python/benchmark_mcp.py",
+      "shared/python/run_episode.py",
+      "shared/python/diagnostic_run.py",
+      "shared/python/study_policy.py",
+      "shared/python/episode_acceptance.py",
+      "experiments/plan-4-agent-hub-refined-skills/go/gate_test.go",
+      "experiments/plan-4-agent-hub-refined-skills/tests/test_effect_boundary.py",
+      "experiments/plan-4-agent-hub-refined-skills/tests/test_go_transport.py",
+      "experiments/plan-4-agent-hub-refined-skills/tests/test_jev_provider.py",
+      "experiments/plan-4-agent-hub-refined-skills/plans/llm-evidence-control/test-spec.json",
+      "experiments/plan-4-agent-hub-refined-skills/plans/llm-evidence-control/test-design.md"
+    ],
+    "excluded_paths": [
+      "archive historical runners",
+      "new live model inference",
+      "official business episodes",
+      "upstream full test suites"
+    ],
+    "languages": [
+      "Python",
+      "Java",
+      "Go"
+    ],
+    "frameworks": [
+      "openJiuwen DeepAgent",
+      "actual Agent Hub adopt/ledger",
+      "native TypeSafe API",
+      "official tau2 banking simulator"
+    ]
+  },
+  "entities": [
+    {
+      "id": "s2",
+      "entity_type": "agent",
+      "symbol": "DeepAgentAssembly.agent",
+      "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+      "line_start": 89,
+      "line_end": 114,
+      "model": "OPENAI_MODEL / deepseek-v4-flash; evidence-todo-v1",
+      "tools": [
+        "invoke_skill",
+        "skill_tool",
+        "ask_user",
+        "native Todo"
+      ],
+      "permissions": [
+        "Skill/Todo allowlist; pilot read-only downstream"
+      ],
+      "state_owner": "InMemoryCheckpointer / DeepAgent",
+      "notes": "Java进程；按官方轮次驱动；不是持久任务协调器。"
+    },
+    {
+      "id": "adapter",
+      "entity_type": "transport",
+      "symbol": "HubPilotAgent",
+      "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+      "line_start": 24,
+      "line_end": 62,
+      "state_owner": "Python episode session and event queues",
+      "notes": "连接Java/MCP/Go；生成只读decision。"
+    },
+    {
+      "id": "mcp",
+      "entity_type": "transport",
+      "symbol": "BenchmarkMcpFacade",
+      "file": "shared/python/benchmark_mcp.py",
+      "line_start": 60,
+      "line_end": 229,
+      "state_owner": "process-local pending/invocations",
+      "notes": "官方工具请求交还调度器；本身不修改银行状态。"
+    },
+    {
+      "id": "boundary",
+      "entity_type": "validator",
+      "symbol": "GatedEventQueue",
+      "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py",
+      "line_start": 9,
+      "line_end": 35,
+      "state_owner": null,
+      "notes": "最终参数快照、Go采纳和派发，缺前置业务决策。"
+    },
+    {
+      "id": "go",
+      "entity_type": "controller",
+      "symbol": "Gate",
+      "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+      "line_start": 13,
+      "line_end": 78,
+      "state_owner": "adopt ledger",
+      "notes": "真实Go组件，确定性服务，不是自主Agent。"
+    },
+    {
+      "id": "jev",
+      "entity_type": "tool",
+      "symbol": "JevClient",
+      "file": "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py",
+      "line_start": 26,
+      "line_end": 63,
+      "model": "probe MODEL / configurable alias",
+      "permissions": [
+        "TypeSafe HTTP only"
+      ],
+      "state_owner": null,
+      "notes": "仅探针接线，无工具执行权。"
+    },
+    {
+      "id": "official",
+      "entity_type": "controller",
+      "symbol": "run_single_task / factory",
+      "file": "shared/python/run_episode.py",
+      "line_start": 40,
+      "line_end": 68,
+      "state_owner": "official banking environment",
+      "notes": "业务效果与评分权威；隐藏任务不传给Agent。"
+    }
+  ],
+  "interaction_edges": [
+    {
+      "id": "E1",
+      "source": "official",
+      "target": "s2",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1.0,
+      "trigger": "官方用户输入",
+      "payload_type": "user content",
+      "response_type": "tool_calls or content",
+      "execution_mode": "event_driven",
+      "control_owner": "official scheduler / DeepAgent",
+      "shared_state": [],
+      "evidence": [
+        {
+          "file": "shared/python/java_agent.py",
+          "symbol": "generate_next_message",
+          "line_start": 74,
+          "line_end": 88,
+          "confidence": "direct",
+          "summary": "执行控制在轮次之间返回官方调度器。"
+        }
+      ],
+      "rationale": "单Agent与服务/工具的调用边，不是两个Agent之间的Calling/Delegation/Coordination。执行控制在轮次之间返回官方调度器。"
+    },
+    {
+      "id": "E2",
+      "source": "s2",
+      "target": "mcp",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1.0,
+      "trigger": "invoke_skill",
+      "payload_type": "session/invocation/arguments",
+      "response_type": "tool result",
+      "execution_mode": "sync",
+      "control_owner": "DeepAgent",
+      "shared_state": [],
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "SkillOperationTool.invokeInternal",
+          "line_start": 127,
+          "line_end": 154,
+          "confidence": "direct",
+          "summary": "有120秒超时，禁止重连重放。"
+        }
+      ],
+      "rationale": "单Agent与服务/工具的调用边，不是两个Agent之间的Calling/Delegation/Coordination。有120秒超时，禁止重连重放。"
+    },
+    {
+      "id": "E3",
+      "source": "mcp",
+      "target": "boundary",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1.0,
+      "trigger": "官方工具请求",
+      "payload_type": "tool_calls event",
+      "response_type": "queued request",
+      "execution_mode": "event_driven",
+      "control_owner": "Python facade",
+      "shared_state": [],
+      "evidence": [
+        {
+          "file": "shared/python/benchmark_mcp.py",
+          "symbol": "invoke",
+          "line_start": 184,
+          "line_end": 200,
+          "confidence": "direct",
+          "summary": "入队前经过GatedEventQueue。"
+        }
+      ],
+      "rationale": "单Agent与服务/工具的调用边，不是两个Agent之间的Calling/Delegation/Coordination。入队前经过GatedEventQueue。"
+    },
+    {
+      "id": "E4",
+      "source": "boundary",
+      "target": "go",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1.0,
+      "trigger": "最终派发",
+      "payload_type": "decision/payload/grants",
+      "response_type": "ok/error",
+      "execution_mode": "sync",
+      "control_owner": "Python boundary",
+      "shared_state": [],
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py",
+          "symbol": "put",
+          "line_start": 17,
+          "line_end": 35,
+          "confidence": "direct",
+          "summary": "保留调用方控制，不自主规划。"
+        }
+      ],
+      "rationale": "单Agent与服务/工具的调用边，不是两个Agent之间的Calling/Delegation/Coordination。保留调用方控制，不自主规划。"
+    },
+    {
+      "id": "E5",
+      "source": "adapter",
+      "target": "go",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1.0,
+      "trigger": "官方工具回执",
+      "payload_type": "operation/success bool",
+      "response_type": "ok/error",
+      "execution_mode": "sync",
+      "control_owner": "Python adapter",
+      "shared_state": [],
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_send",
+          "line_start": 52,
+          "line_end": 57,
+          "confidence": "direct",
+          "summary": "仅布尔终态映射。"
+        }
+      ],
+      "rationale": "单Agent与服务/工具的调用边，不是两个Agent之间的Calling/Delegation/Coordination。仅布尔终态映射。"
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "CALL-01",
+      "severity": "high",
+      "title": "F01 每轮输入路由与Jev没有接入",
+      "conclusion": "Jev仅被probe_jev和测试调用；Java在waitingId存在时直接把本轮query填入InteractiveInput，没有设计中的输入提案和歧义阻断。",
+      "why_it_matters": "取消、新目标或组合输入仍由执行模型处理；不能证明每轮独立解释后才续办。",
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+          "symbol": "run",
+          "line_start": 75,
+          "line_end": 85,
+          "confidence": "direct",
+          "summary": "user直接进入原DeepAgent或waitingId恢复"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/probe_jev.py",
+          "symbol": "main",
+          "line_start": 60,
+          "line_end": 80,
+          "confidence": "direct",
+          "summary": "Jev独立探针调用"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "generate_next_message",
+          "line_start": 59,
+          "line_end": 62,
+          "confidence": "direct",
+          "summary": "原样调用父执行器"
+        }
+      ],
+      "recommendation": "先实现InputEnvelope、逐轮Jev解释、InputRouteProposal和原子提交；输入未决时阻止受影响派发。"
+    },
+    {
+      "rule_id": "DEL-02",
+      "severity": "high",
+      "title": "F02 持久任务与节点控制未接线",
+      "conclusion": "Java显式使用InMemoryCheckpointer；pilot要求新建hub目录，未见目标图、WaitRecord、注册Workflow及目标修订协调器接线。",
+      "why_it_matters": "不能证明进程重启后恢复原任务，或A等待、B完成后按原位置接续A；Todo不是权威完成状态。",
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+          "symbol": "run",
+          "line_start": 67,
+          "line_end": 74,
+          "confidence": "direct",
+          "summary": "检查点为内存且ready明确报告in-memory"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_start",
+          "line_start": 25,
+          "line_end": 37,
+          "confidence": "direct",
+          "summary": "exist_ok=False；启动旧DeepAgent"
+        },
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "constructor",
+          "line_start": 89,
+          "line_end": 100,
+          "confidence": "direct",
+          "summary": "TaskLoop/TaskPlanning启用，但没有新协调器装配"
+        }
+      ],
+      "recommendation": "实现Java确定性任务协调器、持久Goal/WaitRecord和节点注册；限定官方环境存活的恢复范围。"
+    },
+    {
+      "rule_id": "COM-03",
+      "severity": "high",
+      "title": "F03 decision仍是临时只读许可",
+      "conclusion": "队列入口现场生成decision；pilot只检查读目录，以domain_policy的hash作为evidence版本，未传客户证据、goal/node或已采纳业务判断。",
+      "why_it_matters": "所有真实写入仍被拒绝，现有路径不具备完整22题业务执行能力；去掉只读条件也不会补齐业务判断。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_start.decision",
+          "line_start": 39,
+          "line_end": 50,
+          "confidence": "direct",
+          "summary": "静态读策略和grant"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py",
+          "symbol": "put",
+          "line_start": 23,
+          "line_end": 35,
+          "confidence": "direct",
+          "summary": "现场decide再dispatch"
+        }
+      ],
+      "recommendation": "新增前置证据快照、Jev原子观察、规则提案和Hub采纳；边界只消费有效引用并复查。"
+    },
+    {
+      "rule_id": "CALL-06",
+      "severity": "high",
+      "title": "F04 操作身份绑定调用ID",
+      "conclusion": "business_request_id=session_id，operation_id=call.id；相同操作参数换调用ID在合成队列产生两条真实Go派发记录。",
+      "why_it_matters": "只能防同ID重发，无法表达重规划是否仍属同一业务意图；不代表本次发生真实重复银行写入。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_start.decision",
+          "line_start": 42,
+          "line_end": 43,
+          "confidence": "direct",
+          "summary": "身份映射"
+        },
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "SkillOperationTool.invokeInternal",
+          "line_start": 142,
+          "line_end": 148,
+          "confidence": "direct",
+          "summary": "每次调用递增生成skill-ID"
+        },
+        {
+          "file": "shared/python/benchmark_mcp.py",
+          "symbol": "invoke",
+          "line_start": 184,
+          "line_end": 198,
+          "confidence": "direct",
+          "summary": "仅按invocation id去重"
+        }
+      ],
+      "recommendation": "由持久任务层分配business_request/goal/operation，attempt单列；增加同意图换调用ID反例。"
+    },
+    {
+      "rule_id": "CALL-04",
+      "severity": "high",
+      "title": "F05 回执和目标完成未分层",
+      "conclusion": "HubPilotAgent._send只传success=not error；Go Complete只区分completed/failed。合成accepted回执按无错误登记completed。",
+      "why_it_matters": "该映射可代表读取调用完成，但不足以表示受理、等待、业务拒绝或总目标完成；当前只读限制使写入风险尚未开放。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_send",
+          "line_start": 52,
+          "line_end": 57,
+          "confidence": "direct",
+          "summary": "忽略content业务状态"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+          "symbol": "Complete",
+          "line_start": 69,
+          "line_end": 77,
+          "confidence": "direct",
+          "summary": "布尔完成接口"
+        }
+      ],
+      "recommendation": "增加按工具契约解释的OperationReceipt与业务投影，再独立验收Goal。"
+    },
+    {
+      "rule_id": "DEL-07",
+      "severity": "high",
+      "title": "F06 推荐与最终答复没有独立验收",
+      "conclusion": "Java把answer或ask_user文本直接emit；Python将content包装成AssistantMessage，仅做消息结构validate。",
+      "why_it_matters": "Go工具门禁管不到错误产品推荐或无依据总结；不能证明业务要求被完整满足。",
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+          "symbol": "run",
+          "line_start": 100,
+          "line_end": 104,
+          "confidence": "direct",
+          "summary": "直接输出answer/question"
+        },
+        {
+          "file": "shared/python/java_agent.py",
+          "symbol": "generate_next_message",
+          "line_start": 83,
+          "line_end": 88,
+          "confidence": "direct",
+          "summary": "消息合法性校验，不是主张/目标验收"
+        }
+      ],
+      "recommendation": "增加推荐、ask_user选项及最终总结出口；绑定原始要求、证据和父子目标结果。"
+    },
+    {
+      "rule_id": "COM-05",
+      "severity": "high",
+      "title": "F07 恢复仅覆盖Go组件，迟到回执仍可能中断",
+      "conclusion": "Go重开能把dispatched标为unresolved，但没有同官方环境核对与任务续接；MCP超时删除pending，迟到结果报Unknown or expired。",
+      "why_it_matters": "账本可加载不等于Agent可续跑；未完成操作和已到达回执缺乏完整关联处理。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+          "symbol": "OpenGate",
+          "line_start": 19,
+          "line_end": 36,
+          "confidence": "direct",
+          "summary": "只恢复操作账本"
+        },
+        {
+          "file": "shared/python/benchmark_mcp.py",
+          "symbol": "invoke/deliver",
+          "line_start": 199,
+          "line_end": 217,
+          "confidence": "direct",
+          "summary": "超时删除slot，迟到拒绝"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_start",
+          "line_start": 25,
+          "line_end": 27,
+          "confidence": "direct",
+          "summary": "旧目录不能重入"
+        }
+      ],
+      "recommendation": "实现恢复入口、事件去重与持久回执，验证两个派发崩溃窗口；原环境丢失安全停止。"
+    },
+    {
+      "rule_id": "COM-07",
+      "severity": "high",
+      "title": "F08 当前权限与有效目标修订未接线",
+      "conclusion": "live_grants再次运行同一静态decision，未关联已采纳目标修订或受控实时能力状态。",
+      "why_it_matters": "Go支持派发时检查grant，但应用层没有提供设计要求的当前授权事实。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_start",
+          "line_start": 44,
+          "line_end": 50,
+          "confidence": "direct",
+          "summary": "重复静态grant"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+          "symbol": "Dispatch",
+          "line_start": 57,
+          "line_end": 66,
+          "confidence": "direct",
+          "summary": "下游消费调用方提供的当前grants"
+        }
+      ],
+      "recommendation": "实现受控能力状态提供方和当前有效修订登记，测试取消/撤权/修订后的旧许可拒绝。"
+    },
+    {
+      "rule_id": "COM-05",
+      "severity": "high",
+      "title": "F09 累计预算仅有离线辅助函数",
+      "conclusion": "正式调用上限512、Jev64及纠错/恢复次数尚未接入统一计数器；study_policy.dispatch_allowed仅见离线测试使用。",
+      "why_it_matters": "已有单请求超时、maxIterations和监督器期限不能证明跨轮、跨模型累计预算执行。",
+      "evidence": [
+        {
+          "file": "shared/python/study_policy.py",
+          "symbol": "dispatch_allowed",
+          "line_start": 1,
+          "line_end": 12,
+          "confidence": "direct",
+          "summary": "声明为离线辅助，不调度live work"
+        },
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "constructor",
+          "line_start": 96,
+          "line_end": 100,
+          "confidence": "direct",
+          "summary": "单执行器100迭代上限"
+        },
+        {
+          "file": "shared/python/diagnostic_run.py",
+          "symbol": "execute",
+          "line_start": 122,
+          "line_end": 129,
+          "confidence": "direct",
+          "summary": "episode墙钟期限与停止"
+        }
+      ],
+      "recommendation": "在调用入口统一扣减预算并持久化；所有S1/S2调用、恢复与修正共享上限。"
+    },
+    {
+      "rule_id": "CALL-04",
+      "severity": "medium",
+      "title": "F10 Jev版本和问题映射校验不完整",
+      "conclusion": "JevClient.ask只验证answers为dict及model为str，未核对每个请求问题；探针仅在请求MODEL固定名时检查实际模型，别名未校验期待版本。",
+      "why_it_matters": "正式设计默认别名加期待实际版本；直接复用探针无法满足H28/H29。模拟响应的空answers及意外模型被ask接受。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py",
+          "symbol": "JevClient.ask",
+          "line_start": 56,
+          "line_end": 63,
+          "confidence": "direct",
+          "summary": "只做响应外层和usage检查"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/probe_jev.py",
+          "symbol": "main",
+          "line_start": 75,
+          "line_end": 80,
+          "confidence": "direct",
+          "summary": "仅固定请求名触发版本一致性检查"
+        }
+      ],
+      "recommendation": "在业务提供方验证期待实际版本、问题集合、各答案类型和Choice适用性；保留原生响应及输入引用。"
+    },
+    {
+      "rule_id": "COM-06",
+      "severity": "medium",
+      "title": "F11 Go子进程仍继承TypeSafe密钥变量",
+      "conclusion": "HubGate只过滤OPENAI_API_KEY；以合成环境验证TYPESAFE_API_KEY仍进入子进程env。",
+      "why_it_matters": "Go不调用模型，未来从环境注入Jev密钥会扩大凭证可见范围；未发现或宣称密钥已经外传。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_gate.py",
+          "symbol": "HubGate.__init__",
+          "line_start": 19,
+          "line_end": 24,
+          "confidence": "direct",
+          "summary": "只排除一个变量名"
+        }
+      ],
+      "recommendation": "改为Go进程所需环境白名单，加入TYPESAFE_API_KEY不继承的回归；本次不修改代码。"
+    },
+    {
+      "rule_id": "COM-09",
+      "severity": "high",
+      "title": "F12 新版正式driver及验收入口缺失",
+      "conclusion": "run_episode仅支持既有三种driver；诊断器对方案4正式模式抛NotImplementedError，pilot验收明确not-yet-evaluated。",
+      "why_it_matters": "无法通过当前启动参数运行llm-evidence-control；现有8个Python和2个Go测试不是39项完整验收。",
+      "evidence": [
+        {
+          "file": "shared/python/run_episode.py",
+          "symbol": "driver selection",
+          "line_start": 47,
+          "line_end": 61,
+          "confidence": "direct",
+          "summary": "仅hub-read-pilot"
+        },
+        {
+          "file": "shared/python/diagnostic_run.py",
+          "symbol": "build_manifest",
+          "line_start": 35,
+          "line_end": 42,
+          "confidence": "direct",
+          "summary": "正式Hub运行拒绝"
+        },
+        {
+          "file": "shared/python/diagnostic_run.py",
+          "symbol": "execute",
+          "line_start": 139,
+          "line_end": 143,
+          "confidence": "direct",
+          "summary": "完整架构不判通过"
+        }
+      ],
+      "recommendation": "完整链路实现后新增driver、独立验收器与共同调度绑定；继续保持执行开关关闭。"
+    }
+  ],
+  "hard_failures": [
+    {
+      "rule_id": "DEL-02",
+      "severity": "high",
+      "title": "F02 持久任务与节点控制未接线",
+      "conclusion": "Java显式使用InMemoryCheckpointer；pilot要求新建hub目录，未见目标图、WaitRecord、注册Workflow及目标修订协调器接线。",
+      "why_it_matters": "不能证明进程重启后恢复原任务，或A等待、B完成后按原位置接续A；Todo不是权威完成状态。",
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+          "symbol": "run",
+          "line_start": 67,
+          "line_end": 74,
+          "confidence": "direct",
+          "summary": "检查点为内存且ready明确报告in-memory"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_start",
+          "line_start": 25,
+          "line_end": 37,
+          "confidence": "direct",
+          "summary": "exist_ok=False；启动旧DeepAgent"
+        },
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "constructor",
+          "line_start": 89,
+          "line_end": 100,
+          "confidence": "direct",
+          "summary": "TaskLoop/TaskPlanning启用，但没有新协调器装配"
+        }
+      ],
+      "recommendation": "实现Java确定性任务协调器、持久Goal/WaitRecord和节点注册；限定官方环境存活的恢复范围。"
+    },
+    {
+      "rule_id": "DEL-07",
+      "severity": "high",
+      "title": "F06 推荐与最终答复没有独立验收",
+      "conclusion": "Java把answer或ask_user文本直接emit；Python将content包装成AssistantMessage，仅做消息结构validate。",
+      "why_it_matters": "Go工具门禁管不到错误产品推荐或无依据总结；不能证明业务要求被完整满足。",
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+          "symbol": "run",
+          "line_start": 100,
+          "line_end": 104,
+          "confidence": "direct",
+          "summary": "直接输出answer/question"
+        },
+        {
+          "file": "shared/python/java_agent.py",
+          "symbol": "generate_next_message",
+          "line_start": 83,
+          "line_end": 88,
+          "confidence": "direct",
+          "summary": "消息合法性校验，不是主张/目标验收"
+        }
+      ],
+      "recommendation": "增加推荐、ask_user选项及最终总结出口；绑定原始要求、证据和父子目标结果。"
+    },
+    {
+      "rule_id": "COM-05",
+      "severity": "high",
+      "title": "F07 恢复仅覆盖Go组件，迟到回执仍可能中断",
+      "conclusion": "Go重开能把dispatched标为unresolved，但没有同官方环境核对与任务续接；MCP超时删除pending，迟到结果报Unknown or expired。",
+      "why_it_matters": "账本可加载不等于Agent可续跑；未完成操作和已到达回执缺乏完整关联处理。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+          "symbol": "OpenGate",
+          "line_start": 19,
+          "line_end": 36,
+          "confidence": "direct",
+          "summary": "只恢复操作账本"
+        },
+        {
+          "file": "shared/python/benchmark_mcp.py",
+          "symbol": "invoke/deliver",
+          "line_start": 199,
+          "line_end": 217,
+          "confidence": "direct",
+          "summary": "超时删除slot，迟到拒绝"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_start",
+          "line_start": 25,
+          "line_end": 27,
+          "confidence": "direct",
+          "summary": "旧目录不能重入"
+        }
+      ],
+      "recommendation": "实现恢复入口、事件去重与持久回执，验证两个派发崩溃窗口；原环境丢失安全停止。"
+    }
+  ],
+  "design_smells": [
+    {
+      "rule_id": "COM-03",
+      "severity": "high",
+      "title": "F03 decision仍是临时只读许可",
+      "conclusion": "队列入口现场生成decision；pilot只检查读目录，以domain_policy的hash作为evidence版本，未传客户证据、goal/node或已采纳业务判断。",
+      "why_it_matters": "所有真实写入仍被拒绝，现有路径不具备完整22题业务执行能力；去掉只读条件也不会补齐业务判断。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_start.decision",
+          "line_start": 39,
+          "line_end": 50,
+          "confidence": "direct",
+          "summary": "静态读策略和grant"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py",
+          "symbol": "put",
+          "line_start": 23,
+          "line_end": 35,
+          "confidence": "direct",
+          "summary": "现场decide再dispatch"
+        }
+      ],
+      "recommendation": "新增前置证据快照、Jev原子观察、规则提案和Hub采纳；边界只消费有效引用并复查。"
+    },
+    {
+      "rule_id": "CALL-04",
+      "severity": "high",
+      "title": "F05 回执和目标完成未分层",
+      "conclusion": "HubPilotAgent._send只传success=not error；Go Complete只区分completed/failed。合成accepted回执按无错误登记completed。",
+      "why_it_matters": "该映射可代表读取调用完成，但不足以表示受理、等待、业务拒绝或总目标完成；当前只读限制使写入风险尚未开放。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "_send",
+          "line_start": 52,
+          "line_end": 57,
+          "confidence": "direct",
+          "summary": "忽略content业务状态"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+          "symbol": "Complete",
+          "line_start": 69,
+          "line_end": 77,
+          "confidence": "direct",
+          "summary": "布尔完成接口"
+        }
+      ],
+      "recommendation": "增加按工具契约解释的OperationReceipt与业务投影，再独立验收Goal。"
+    },
+    {
+      "rule_id": "COM-05",
+      "severity": "high",
+      "title": "F09 累计预算仅有离线辅助函数",
+      "conclusion": "正式调用上限512、Jev64及纠错/恢复次数尚未接入统一计数器；study_policy.dispatch_allowed仅见离线测试使用。",
+      "why_it_matters": "已有单请求超时、maxIterations和监督器期限不能证明跨轮、跨模型累计预算执行。",
+      "evidence": [
+        {
+          "file": "shared/python/study_policy.py",
+          "symbol": "dispatch_allowed",
+          "line_start": 1,
+          "line_end": 12,
+          "confidence": "direct",
+          "summary": "声明为离线辅助，不调度live work"
+        },
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "constructor",
+          "line_start": 96,
+          "line_end": 100,
+          "confidence": "direct",
+          "summary": "单执行器100迭代上限"
+        },
+        {
+          "file": "shared/python/diagnostic_run.py",
+          "symbol": "execute",
+          "line_start": 122,
+          "line_end": 129,
+          "confidence": "direct",
+          "summary": "episode墙钟期限与停止"
+        }
+      ],
+      "recommendation": "在调用入口统一扣减预算并持久化；所有S1/S2调用、恢复与修正共享上限。"
+    }
+  ],
+  "simplification_opportunities": [
+    {
+      "target": "persistent task coordinator",
+      "current_design": "current DeepAgent Todo and in-memory checkpoint",
+      "recommended_design": "service",
+      "reason": "目标、事件、版本和预算是确定性状态管理；无需另加一个ReAct Agent。",
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+          "symbol": "run",
+          "line_start": 67,
+          "line_end": 85,
+          "confidence": "direct",
+          "summary": "当前内存会话和直接恢复"
+        }
+      ]
+    },
+    {
+      "target": "Go Gate and Jev provider",
+      "current_design": "deterministic controller and bounded question client",
+      "recommended_design": "retain_current",
+      "reason": "角色划分合理，补接线和契约即可，无需将二者改造成Agent或增加七个业务Agent。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+          "symbol": "Gate",
+          "line_start": 13,
+          "line_end": 78,
+          "confidence": "direct",
+          "summary": "控制服务"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py",
+          "symbol": "JevClient",
+          "line_start": 26,
+          "line_end": 63,
+          "confidence": "direct",
+          "summary": "有限HTTP调用"
+        }
+      ]
+    }
+  ],
+  "remediation_plan": [
+    {
+      "priority": "P0",
+      "action": "J0/J1：持久任务和每轮输入路由",
+      "addresses_rules": [
+        "CALL-01",
+        "DEL-02",
+        "COM-03"
+      ],
+      "acceptance_criteria": [
+        "H31-H34：取消/新目标/歧义不被旧waitingId吞并",
+        "目标修订与待处理输入阻断有效"
+      ]
+    },
+    {
+      "priority": "P0",
+      "action": "J2/J3：证据判断、推荐出口、稳定操作与真实Go写入",
+      "addresses_rules": [
+        "CALL-04",
+        "CALL-06",
+        "DEL-07",
+        "COM-07"
+      ],
+      "acceptance_criteria": [
+        "合法官方写入及缺前提拒绝",
+        "同意图换调用ID不产生重复效果",
+        "错误建议不可旁路"
+      ]
+    },
+    {
+      "priority": "P0",
+      "action": "J4：业务回执、等待、部分完成和恢复",
+      "addresses_rules": [
+        "COM-04",
+        "COM-05",
+        "DEL-02"
+      ],
+      "acceptance_criteria": [
+        "受理不等同目标完成",
+        "原环境存活时Java/Go恢复",
+        "迟到回执及未知结果不丢失、不盲重发"
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "J5：统一预算、版本冻结、凭证隔离与正式driver",
+      "addresses_rules": [
+        "COM-05",
+        "COM-06",
+        "COM-08",
+        "COM-09"
+      ],
+      "acceptance_criteria": [
+        "累计调用/修正/恢复预算接线",
+        "Jev别名版本漂移阻断",
+        "Go不继承模型密钥",
+        "37阻塞契约与2观察项分别有证据，四组共同条件齐全"
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "unknown": "新版39项端到端验收",
+      "impact": "不能以旧组件测试推定新版通过",
+      "needed_evidence": "正式driver及39项逐项证据"
+    },
+    {
+      "unknown": "真实Jev语义效果、正式业务完成率和四组收益",
+      "impact": "本次没有模型调用或官方业务执行",
+      "needed_evidence": "授权阶段C与冻结阶段D"
+    },
+    {
+      "unknown": "完整上游所有并发/持久化能力",
+      "impact": "局部源码显示已有旧写者检查；不能说上游完全没有一致性保护",
+      "needed_evidence": "应用任务/节点单写者接线与集成测试"
+    },
+    {
+      "unknown": "Java新构建和断电级持久性",
+      "impact": "本次未构建Java；上游明确只约定进程崩溃级持久性",
+      "needed_evidence": "按本设计执行Java及故障验收"
+    },
+    {
+      "unknown": "当前只读pilot之外的生产风险",
+      "impact": "hard_failures按完整目标评估；当前写入拒绝，不表示本次发生真实银行误操作",
+      "needed_evidence": "开放写入前完成P0验收"
+    }
+  ]
+}

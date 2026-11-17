@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "version": "3.0.0",
+  "origin": "business-domain capability guides",
+  "files": {
+    "banking-mcp/SKILL.md": "c97730795da2022e433ce00a24d839e8c625ce2279ecc501d18e135473ecc17d",
+    "banking-mcp/guides/accounts/account-changes.md": "bac9a9751e203e4f35bbef9e8083a8adaa5835b0f81344d4ac57cda69c13c33f",
+    "banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+    "banking-mcp/guides/accounts/account-opening.md": "968695db702dd291a1229d59793411941fd2f9cec0c0b64765eea97fb0f7af2a",
+    "banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+    "banking-mcp/guides/credit-card/limit-adjustment.md": "725b6ef7701d0237ee7dde018bfed6855cf7fe8d3be0590a4bf4c9dd2d912aec",
+    "banking-mcp/guides/disputes/transaction-dispute.md": "d5f7ab261e3b457e39227663518059093802805fced731d6bae24e12d5e330aa",
+    "banking-mcp/guides/payments/transfer.md": "7bfec2fa63e0f05c02d1c601a14b1134ad318c74793ea953f499e36ed5b6ada2",
+    "catalog.json": "6c137898ba1f26d198e9fb5adce0a671bd6472f7f1e5835aa2ed61ef464858cd"
+  }
+}

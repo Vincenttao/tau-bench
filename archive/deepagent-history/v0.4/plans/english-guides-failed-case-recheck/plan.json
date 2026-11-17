@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "plan_id": "english-guides-failed-case-recheck",
+  "created_on": "2026-11-16",
+  "status": "ready",
+  "kind": "failed_case_recheck",
+  "path_base": "repository_root",
+  "experiment_id": "deepagent-todo-skill-mcp-v0.4",
+  "objective": "使用恢复的英文 banking-evidence-guides 对中文 Skill 下正式评分失败的六题各重跑一次。题目、用户语言及提示词保持原条件。",
+  "source_selection": {
+    "path": "experiments/deepagent-todo-skill-mcp/plans/round-01/plan.json",
+    "sha256": "d72448203a5fa48609edc2e9bb5239ad6b7eb5be3d9f8b67937ab7b2780e1313",
+    "reuse": "canonical IDs, category labels, focus and original order only; no historical scores, task hashes or completed slots inherited",
+    "title_note": "Historical Chinese labels identify canonical scenarios; authoritative current payloads come from the pinned official language binding."
+  },
+  "conditions": {
+    "skill_release": {
+      "version": "banking-evidence-guides",
+      "release_sha256": "949ea01d2b231fb986a0ee936b5cf8e57e0e9f978233e04ef749c29daf2d064c",
+      "files": {
+        "banking-mcp/SKILL.md": "7fc5292f8264abc2e8fbfa6d81671e6ad2bb5fdecf49e3946c4aa0a833109dc9",
+        "banking-mcp/guides/accounts/account-changes.md": "78f01d6dace4c57528092449ecfdb20189a5c085fdde908c49a65a00fd665179",
+        "banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+        "banking-mcp/guides/accounts/account-opening.md": "968695db702dd291a1229d59793411941fd2f9cec0c0b64765eea97fb0f7af2a",
+        "banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+        "banking-mcp/guides/credit-card/limit-adjustment.md": "32183c8fc9822b19fc79669352f5f1242bc7920297cda107c688e1ea2c327a57",
+        "banking-mcp/guides/disputes/transaction-dispute.md": "7183c8b38419d2e7a8a4abf4455d67ed63ef722deeabb805b74054e60ac4bb45",
+        "banking-mcp/guides/payments/transfer.md": "7bfec2fa63e0f05c02d1c601a14b1134ad318c74793ea953f499e36ed5b6ada2",
+        "catalog.json": "6c137898ba1f26d198e9fb5adce0a671bd6472f7f1e5835aa2ed61ef464858cd"
+      }
+    },
+    "system_prompt_version": "evidence-todo-v1",
+    "system_prompt_source": "experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java",
+    "system_prompt_source_sha256": "fd4c09e0403db1b0214c1c19f636ee4e3423543b9ac303c62cce2bbacf6066c5",
+    "reference_code_revision": "f5103c4b004e0a3f094ad04911bd7ecb881ee36e",
+    "reference_run": "zh-skill32-20261116-a00",
+    "benchmark_commit": "c06b07dd7c4d4ec61ba6ff9bcdf0b15dd7ef36d4",
+    "benchmark_version": "2.0.0",
+    "python_environment": ".venv-tau2-v2",
+    "java_command": "bash java/run-deepagent.sh",
+    "language": "zh",
+    "mode": "text",
+    "pack_extension": "banking-dates-v1",
+    "localize_db": true,
+    "model": "deepseek-v4-flash",
+    "api_base": "https://st8tp3ajl0df3n8b8l8qu.apigateway-cn-beijing.volceapi.com/v1",
+    "api_protocol": "chat_completions",
+    "retrieval_config": "bm25",
+    "temperature": 0.0,
+    "seed": 300,
+    "concurrency": 1,
+    "num_trials": 1,
+    "episode_attempts_per_task": 1,
+    "token_budget": null,
+    "core_completion_timeout_seconds": 1200,
+    "bridge_event_timeout_seconds": 1500,
+    "episode_timeout_seconds": 2400,
+    "batch_wall_time_seconds": 57600,
+    "max_steps": 200,
+    "max_errors": 10,
+    "additional_live_smoke_calls": 0,
+    "in_round_prompt_or_skill_changes": false
+  },
+  "run_config_template": {
+    "elicitation": null,
+    "communicate_scoring": {
+      "scorer": "semantic",
+      "judge": {
+        "model": "gpt-5.5",
+        "model_args": {
+          "reasoning_effort": "low"
+        },
+        "prompt_version": "communicate-semantic-v1"
+      }
+    },
+    "llm_user": "openai/deepseek-v4-flash",
+    "llm_args_user": {
+      "temperature": 0.0,
+      "api_base": "https://st8tp3ajl0df3n8b8l8qu.apigateway-cn-beijing.volceapi.com/v1",
+      "timeout": 120,
+      "num_retries": 0
+    },
+    "num_trials": 1,
+    "max_errors": 10,
+    "timeout": null,
+    "max_concurrency": 3,
+    "workers": 0,
+    "provider_limits": null,
+    "seed": 300,
+    "log_level": "ERROR",
+    "verbose_logs": false,
+    "max_retries": 3,
+    "retry_delay": 1.0,
+    "auto_resume": false,
+    "auto_review": false,
+    "review_mode": "full",
+    "review_model": "claude-opus-4-5",
+    "hallucination_retries": 3,
+    "is_remote": false,
+    "retrieval_config": "bm25",
+    "retrieval_config_kwargs": null,
+    "agent": "tau3_java_zh",
+    "llm_agent": "openai/deepseek-v4-flash",
+    "llm_args_agent": {
+      "temperature": 0.0
+    },
+    "user": "user_simulator",
+    "max_steps": 200,
+    "enforce_communication_protocol": false,
+    "text_streaming_config": null,
+    "language": "zh",
+    "pack_extension": "banking-dates-v1",
+    "localize_db": true,
+    "language_artifacts": {
+      "pack_sha256": "8d76ae48ed8a5b3cdc4ffd4d0be645e7652526dbe78c996c7e025af72f02e09b",
+      "tasks_sha256": "6591ea52c64a3a2dfc5b2e161e409fa6d00e9387748cc472c465fdbf795a4fb7",
+      "metadata_sha256": "8e734e1de294bcbc6324454b4b3d43030ed28d77c9a89a15629476bb6e4ec1c4",
+      "scenario_mode": "regional",
+      "scenario_sha256": "689af5b2aee734aae12b7b2c34fa0d26be5ec5545536f24bc20867727fd89906",
+      "localization_map_sha256": "8396266852ba4b1ee4cd41f813c1240de34b7ef4dea0cb678fd290bfad2493e6",
+      "localization_revision": "banking-entities-draft-v1-banking-regional-entities-v5-gender-v1-native-review-v1-criteria-v1-name-orthography-dedup-v1+banking-domestic-debit-shipping-v1+banking-hi-ko-zh-scenario-text-v1",
+      "runtime_rules_version": "regional-tools-v1",
+      "runtime_rules_sha256": "953aa68f3b7db713833d8d078643b12a73a4020be0a23c7e75e4006ffa5d6d08"
+    },
+    "benchmark": null,
+    "domain": "banking_knowledge",
+    "task_set_name": null,
+    "task_split_name": "base",
+    "task_ids": [
+      "task_036_zh",
+      "task_051_zh",
+      "task_060_zh",
+      "task_076_zh",
+      "task_077_zh",
+      "task_098_zh"
+    ],
+    "num_tasks": null,
+    "save_to": null
+  },
+  "language_artifacts": {
+    "pack_sha256": "8d76ae48ed8a5b3cdc4ffd4d0be645e7652526dbe78c996c7e025af72f02e09b",
+    "tasks_sha256": "6591ea52c64a3a2dfc5b2e161e409fa6d00e9387748cc472c465fdbf795a4fb7",
+    "metadata_sha256": "8e734e1de294bcbc6324454b4b3d43030ed28d77c9a89a15629476bb6e4ec1c4",
+    "scenario_mode": "regional",
+    "scenario_sha256": "689af5b2aee734aae12b7b2c34fa0d26be5ec5545536f24bc20867727fd89906",
+    "localization_map_sha256": "8396266852ba4b1ee4cd41f813c1240de34b7ef4dea0cb678fd290bfad2493e6",
+    "localization_revision": "banking-entities-draft-v1-banking-regional-entities-v5-gender-v1-native-review-v1-criteria-v1-name-orthography-dedup-v1+banking-domestic-debit-shipping-v1+banking-hi-ko-zh-scenario-text-v1",
+    "runtime_rules_version": "regional-tools-v1",
+    "runtime_rules_sha256": "953aa68f3b7db713833d8d078643b12a73a4020be0a23c7e75e4006ffa5d6d08"
+  },
+  "category_count": 6,
+  "task_count": 6,
+  "planned_episode_attempts": 6,
+  "cases": [
+    {
+      "order": 4,
+      "wave": 1,
+      "category": "盗刷补卡与多卡争议",
+      "canonical_task_id": "task_036",
+      "task_id": "task_036_zh",
+      "title": "查看交易后发现盗刷并补卡",
+      "focus": "完整展示交易、动态发现新意图、核验地址用途及补卡偏好。",
+      "trial": 0,
+      "attempt": 0,
+      "seed": 300,
+      "task_sha256": "2a21367079ca201332441e8efcdd680f3b3c27dede45eac5231ee0e1c31c5a14",
+      "reward_basis": [
+        "DB"
+      ],
+      "has_nl_assertions": false,
+      "has_env_assertions": false,
+      "historical_exposure": "previously selected and examined; diagnostic regression, not holdout",
+      "recent_zh_diagnostic_exposure": false,
+      "status": "planned",
+      "reward": null
+    },
+    {
+      "order": 6,
+      "wave": 1,
+      "category": "提额与跨操作依赖",
+      "canonical_task_id": "task_051",
+      "task_id": "task_051_zh",
+      "title": "提额比例与高使用率整改后重申",
+      "focus": "拒绝原因、规则上限、状态变更后的重新资格判断。",
+      "trial": 0,
+      "attempt": 0,
+      "seed": 300,
+      "task_sha256": "23a8e9660b08f2ee957a17f4ed3d7726d37d0c4c533feece0cffba00a0190777",
+      "reward_basis": [
+        "DB"
+      ],
+      "has_nl_assertions": false,
+      "has_env_assertions": false,
+      "historical_exposure": "previously selected and examined; diagnostic regression, not holdout",
+      "recent_zh_diagnostic_exposure": false,
+      "status": "planned",
+      "reward": null
+    },
+    {
+      "order": 7,
+      "wave": 1,
+      "category": "开户、资金迁移与组合收益优化",
+      "canonical_task_id": "task_060",
+      "task_id": "task_060_zh",
+      "title": "先关旧支票账户可能破坏储蓄开户资格",
+      "focus": "成熟账户资格保留、顺序规划及向客户解释必要性。",
+      "trial": 0,
+      "attempt": 0,
+      "seed": 300,
+      "task_sha256": "15e10a7d61d6390f3b709f281862a2045c9146a29dde66585435393e1f2cab4e",
+      "reward_basis": [
+        "DB"
+      ],
+      "has_nl_assertions": false,
+      "has_env_assertions": false,
+      "historical_exposure": "previously selected and examined; diagnostic regression, not holdout",
+      "recent_zh_diagnostic_exposure": false,
+      "status": "planned",
+      "reward": null
+    },
+    {
+      "order": 8,
+      "wave": 1,
+      "category": "ATM费用核查与账户选择",
+      "canonical_task_id": "task_076",
+      "task_id": "task_076_zh",
+      "title": "海外取现成本与提前到账联合要求",
+      "focus": "先满足必要功能，再比较真实使用成本。",
+      "trial": 0,
+      "attempt": 0,
+      "seed": 300,
+      "task_sha256": "b766a682276088911d6ba0aa9b05645200da165e46ebbe9eae1b1ec2155ff83f",
+      "reward_basis": [
+        "DB"
+      ],
+      "has_nl_assertions": false,
+      "has_env_assertions": false,
+      "historical_exposure": "previously selected and examined; diagnostic regression, not holdout",
+      "recent_zh_diagnostic_exposure": false,
+      "status": "planned",
+      "reward": null
+    },
+    {
+      "order": 9,
+      "wave": 1,
+      "category": "借记卡生命周期、争议与安全处置",
+      "canonical_task_id": "task_077",
+      "task_id": "task_077_zh",
+      "title": "两张借记卡遗失、隐藏信用卡与激活",
+      "focus": "主动核查影响范围、冻结转注销、补卡等待及用户提供激活资料。",
+      "trial": 0,
+      "attempt": 0,
+      "seed": 300,
+      "task_sha256": "56ef4404a8dcbebef896309c8eaf64404d3650ff542b8770a5d154320816952a",
+      "reward_basis": [
+        "DB"
+      ],
+      "has_nl_assertions": false,
+      "has_env_assertions": false,
+      "historical_exposure": "previously selected and examined; diagnostic regression, not holdout",
+      "recent_zh_diagnostic_exposure": false,
+      "status": "planned",
+      "reward": null
+    },
+    {
+      "order": 11,
+      "wave": 1,
+      "category": "复杂推荐资格与奖励优化",
+      "canonical_task_id": "task_098",
+      "task_id": "task_098_zh",
+      "title": "“室友”关系澄清与双方推荐奖励最大化",
+      "focus": "澄清同住限制、开户期限和滚动窗口，不误拒可行推荐。",
+      "trial": 0,
+      "attempt": 0,
+      "seed": 300,
+      "task_sha256": "6ca6fa95610f03be59716023f9022fe16540854a3e56bcf394e54d31e6d35a80",
+      "reward_basis": [
+        "DB"
+      ],
+      "has_nl_assertions": false,
+      "has_env_assertions": false,
+      "historical_exposure": "previously selected and examined; diagnostic regression, not holdout",
+      "recent_zh_diagnostic_exposure": false,
+      "status": "planned",
+      "reward": null
+    }
+  ],
+  "execution_policy": {
+    "order": "original cases order: wave 1 orders 1-11, wave 2 orders 12-22; waves are scheduling groups, not repeats",
+    "fresh_initial_state_per_case": true,
+    "replace_with_historical_result": false,
+    "reuse_previously_scored_task_as_new_result": false,
+    "automatic_episode_retry": false,
+    "official_scored_failure": "persist result and continue to next unstarted case",
+    "isolated_unscored_case": "persist null reward and diagnostics; continue only after confirmed process cleanup and healthy shared dependencies",
+    "global_stop_reasons": [
+      "credential/model route/quota failure",
+      "input or release hash drift",
+      "corrupt/missing evidence",
+      "unable to prove old child processes terminated",
+      "batch deadline"
+    ],
+    "restart_policy": "resume only never-started cases after ledger and process audit; never relaunch a started case, even if it has no result; do not reset original deadline",
+    "existing_sdk_retry_policy": "retain pinned SDK settings and record observable retries; do not add controller-level retries or uncertain business write replay"
+  },
+  "assessment": {
+    "official_evaluation_type": "ALL",
+    "pass": "official reward == 1.0",
+    "fail": "scored official reward < 1.0",
+    "unscored": "reward null; keep reason separate from zero",
+    "metrics": [
+      "planned=6",
+      "scored",
+      "passed",
+      "failed",
+      "unscored",
+      "paired case outcomes",
+      "duration",
+      "tokens"
+    ],
+    "process_review_values": [
+      "pass",
+      "fail",
+      "unknown",
+      "not_applicable"
+    ],
+    "process_review_changes_official_reward": false,
+    "all_official_pass": "all six scored with reward 1",
+    "execution_complete": "six terminal records",
+    "report_scope": "失败题选择后的单次对照；不能估计总体通过率或证明语言因果。"
+  },
+  "readiness": {
+    "offline_mapping_verified": true,
+    "unique_cases_verified": true,
+    "language_asset_pins_verified": true,
+    "skill_release_verified": true,
+    "reference_java_inputs_verified": 21,
+    "only_run_config_change": "task_ids",
+    "network_disabled_during_plan_validation": true,
+    "model_calls": 0,
+    "execution_supported_by_current_runner": true,
+    "runtime_freeze_prepared": false,
+    "required_controller_changes": [],
+    "pre_execution_gate": "完成控制器离线回归后生成新的运行 manifest 与输入冻结；本计划不继承任何历史成绩。"
+  },
+  "outputs": {
+    "raw_runs": "experiments/deepagent-todo-skill-mcp/v0.4/runs/english-guides-failed-case-recheck-20261116",
+    "final_reports": "experiments/deepagent-todo-skill-mcp/v0.4/reports/english-guides-failed-case-recheck-20261116",
+    "raw_runs_git_tracked": false,
+    "publish_raw_model_logs": false,
+    "retain_curated_reports_and_evidence": true,
+    "viewer": "Register local run through the existing experiment/runs compatibility entry"
+  },
+  "limits": [
+    "仅选择前次失败题，存在选择偏差；一次重跑不能证明稳定改善。",
+    "历史失败成绩保留，不覆盖原结果。"
+  ],
+  "prior_results": {
+    "task_036_zh": {
+      "path": "experiments/deepagent-todo-skill-mcp/v0.4/runs/skill33-zh-recovery20-20261116-a00/episodes/task_036_zh/result.json",
+      "sha256": "ed08fd80cf198be0ddedb1ea1231df4bd04135098b2f3e977f1210c8c88345f4"
+    },
+    "task_051_zh": {
+      "path": "experiments/deepagent-todo-skill-mcp/v0.4/runs/skill33-zh-recovery20-20261116-a00/episodes/task_051_zh/result.json",
+      "sha256": "51b77326a8cedfc05662771bbe3b303befb4250003576a1a2c581263415e1575"
+    },
+    "task_060_zh": {
+      "path": "experiments/deepagent-todo-skill-mcp/v0.4/runs/skill33-zh-recovery20-20261116-a00/episodes/task_060_zh/result.json",
+      "sha256": "6c746e3ccde5fb510915870fde1121d067ce5a913c4ecd52fa31426a09b29a59"
+    },
+    "task_076_zh": {
+      "path": "experiments/deepagent-todo-skill-mcp/v0.4/runs/skill33-zh-recovery20-20261116-a00/episodes/task_076_zh/result.json",
+      "sha256": "a5b3ad71246f36fe612ccec391b19005c49c14eb2dc9a902cf03e68ff577f4d8"
+    },
+    "task_077_zh": {
+      "path": "experiments/deepagent-todo-skill-mcp/v0.4/runs/skill33-zh-recovery20-20261116-a00/episodes/task_077_zh/result.json",
+      "sha256": "b7a55230e54d1dafcc26277ec41e247c89596d29d84d749ad15d1b61376461fc"
+    },
+    "task_098_zh": {
+      "path": "experiments/deepagent-todo-skill-mcp/v0.4/runs/skill33-zh-recovery20-20261116-a00/episodes/task_098_zh/result.json",
+      "sha256": "4f84e99bf8c91fe08b9f724d25ca2eb14e4ef63bee933d7e6ee6773591c6a5fd"
+    }
+  }
+}

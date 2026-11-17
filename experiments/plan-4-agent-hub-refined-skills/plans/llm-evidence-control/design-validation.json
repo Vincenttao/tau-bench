@@ -1,0 +1,128 @@
+{
+  "checked_at": "2026-11-17T05:06:12.347441+00:00",
+  "kind": "static-document-consistency-only",
+  "passed": true,
+  "checks": [
+    {
+      "name": "contract_ids_and_order",
+      "passed": true,
+      "count": 39
+    },
+    {
+      "name": "contract_text_and_blocking_match",
+      "passed": true
+    },
+    {
+      "name": "contracts_unrun",
+      "passed": true
+    },
+    {
+      "name": "contract_categories",
+      "passed": true,
+      "blocking": 37,
+      "observations": 2
+    },
+    {
+      "name": "all_22_cases_match_order",
+      "passed": true
+    },
+    {
+      "name": "coverage_focus_matches_frozen_cohort",
+      "passed": true
+    },
+    {
+      "name": "cohort_hash_matches",
+      "passed": true
+    },
+    {
+      "name": "baseline_study_hash_matches",
+      "passed": true
+    },
+    {
+      "name": "skill_hash_matches",
+      "passed": true
+    },
+    {
+      "name": "official_case_hashes_match",
+      "passed": true,
+      "count": 22
+    },
+    {
+      "name": "shared_limits_match",
+      "passed": true
+    },
+    {
+      "name": "formal_design_unchanged",
+      "passed": true
+    },
+    {
+      "name": "execution_stays_disabled",
+      "passed": true
+    },
+    {
+      "name": "observations_separate_from_formal",
+      "passed": true
+    },
+    {
+      "name": "no_automatic_provider_fallback",
+      "passed": true
+    },
+    {
+      "name": "templates_match_design",
+      "passed": true,
+      "count": 5
+    },
+    {
+      "name": "local_file_links_resolve",
+      "passed": true,
+      "count": 35,
+      "failures": []
+    },
+    {
+      "name": "mermaid_blocks_present",
+      "passed": true,
+      "count": 2
+    },
+    {
+      "name": "markdown_fences_balanced",
+      "passed": true
+    },
+    {
+      "name": "sequence_blocks_balanced",
+      "passed": true
+    },
+    {
+      "name": "flow_node_references_defined",
+      "passed": true,
+      "node_count": 24,
+      "edge_count": 36
+    },
+    {
+      "name": "no_known_stale_scope_claims",
+      "passed": true
+    }
+  ],
+  "fingerprints": {
+    "experiments/plan-4-agent-hub-refined-skills/plans/llm-evidence-control/test-design.md": "e6fee07984e92bc3cc1a18dd43847bb8573df65ccfebdd890923a09e0a82159f",
+    "experiments/plan-4-agent-hub-refined-skills/plans/llm-evidence-control/test-spec.json": "19eaedf51171c7e9d94cb6307ab4c3b39036dd88e2671575bc35f64824b2c12c",
+    "experiments/plan-4-agent-hub-refined-skills/plans/llm-evidence-control/design-review.md": "56fd1cebdd0932ca93dd4a218797c7dceb55ab12adecd7aeaa011146c9b91bab",
+    "experiments/plan-4-agent-hub-refined-skills/README.md": "c2d7894f05764a447779323beeecfffd660869b3f42ffeb76d6dc1096ba7f3f6",
+    "studies/banking-architecture-comparison/cohort.json": "be671adfbd3c2dd07c5865f61ae3fc64aecc454d2290d1fc8fd75bcbe88fff59",
+    "studies/banking-architecture-comparison/study.json": "10b0cc02eaf89e749b6878939ec91deac74365b8a75d09326ccec284447759fe",
+    "shared/skills/releases/banking-evidence-guides/release.json": "949ea01d2b231fb986a0ee936b5cf8e57e0e9f978233e04ef749c29daf2d064c",
+    "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py": "ad1a817b25a159a854e725ec6a9046b5035f6c8f8144c0beabdad3ae4f5d2eba",
+    "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py": "f97b014da8c98aba182721753cda0ecd1e228b0fc7348a646893238c6f71fb34",
+    "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py": "cbb9706ecd4a8059c06a545fb5ae42ad338c3a4084c0235ce38adf42b200d907",
+    "experiments/plan-4-agent-hub-refined-skills/go/gate.go": "d147076d3d59b0960583cf670303371a860d57affefe62e8df814f014e0048c1",
+    "shared/python/run_episode.py": "19ed0f04793197349ed669ce8da72d1cd6dfa46493464c2e2212991d18a5258f"
+  },
+  "limitations": {
+    "mermaid_rendering": "not-run; structure checks only",
+    "link_anchors": "not checked; local target existence only",
+    "component_tests": "not-run",
+    "builds": "not-run",
+    "model_requests": 0,
+    "official_episodes": 0,
+    "contract_acceptance": "all 39 remain not-run-for-this-revision"
+  }
+}

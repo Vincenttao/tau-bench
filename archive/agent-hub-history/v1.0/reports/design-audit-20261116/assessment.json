@@ -1,0 +1,544 @@
+{
+  "summary": {
+    "overall_score": 44,
+    "risk_level": "high",
+    "primary_pattern": "single_agent",
+    "secondary_patterns": [],
+    "conclusion": "Review rejected: the delivered test executes the existing baseline and does not integrate agent-hub-alpha code. Score applies only to this integration delivery, not the Go or Java products."
+  },
+  "scope": {
+    "repository": "/home/vincent/openjiuwen/tau3",
+    "revision": null,
+    "reviewed_paths": [
+      "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/测试方案与架构评审.md",
+      "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/tests/run_english_e2e.py",
+      "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/tests/verify_english_e2e.py",
+      "/home/vincent/openjiuwen/agent-hub-alpha/achitecture design/07-nga-architecture-proposal.md",
+      "/home/vincent/openjiuwen/agent-hub-alpha/achitecture design/08-r1-r6-acceptance-and-open-items.md",
+      "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java",
+      "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentBridge.java",
+      "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/benchmark_mcp.py",
+      "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/deepagent_java_agent.py",
+      "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/adopt/adopt.go",
+      "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/e2e/t2host_test.go"
+    ],
+    "excluded_paths": [
+      "Production infrastructure",
+      "Live Go integration, which is not implemented in the reviewed path"
+    ],
+    "languages": [
+      "Java",
+      "Go",
+      "Python"
+    ],
+    "frameworks": [
+      "openJiuwen Java",
+      "tau3 banking"
+    ]
+  },
+  "entities": [
+    {
+      "id": "java",
+      "entity_type": "agent",
+      "symbol": "DeepAgentAssembly.agent",
+      "file": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java",
+      "model": "deepseek-v4-flash",
+      "state_owner": "Java Core execution and Todo",
+      "tools": [
+        "skill_tool",
+        "invoke_skill",
+        "ask_user",
+        "native Todo"
+      ]
+    },
+    {
+      "id": "supervisor",
+      "entity_type": "controller",
+      "symbol": "full_run.py",
+      "file": "/home/vincent/openjiuwen/tau3/python/full_run.py",
+      "state_owner": "Episode lifecycle"
+    },
+    {
+      "id": "mcp",
+      "entity_type": "transport",
+      "symbol": "BenchmarkMcpFacade",
+      "file": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/benchmark_mcp.py",
+      "state_owner": "In-memory pending calls and observed receipts"
+    },
+    {
+      "id": "official",
+      "entity_type": "controller",
+      "symbol": "run_single_task",
+      "file": "/home/vincent/openjiuwen/tau3/python/episode.py",
+      "state_owner": "Official bank state and scheduler"
+    },
+    {
+      "id": "go",
+      "entity_type": "controller",
+      "symbol": "adopt.Machine",
+      "file": "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/adopt/adopt.go",
+      "state_owner": "Only in proposed integration: authoritative operation state",
+      "notes": "Existing component, not called by the reviewed baseline."
+    }
+  ],
+  "interaction_edges": [
+    {
+      "id": "java-mcp",
+      "source": "java",
+      "target": "mcp",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1,
+      "trigger": "invoke_skill",
+      "payload_type": "Official operation schema plus session/invocation identifiers",
+      "response_type": "Correlated tool receipt",
+      "execution_mode": "sync",
+      "control_owner": "Java Core; official scheduler owns effects",
+      "shared_state": [],
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "SkillOperationTool.invokeInternal",
+          "line_start": 127,
+          "line_end": 154,
+          "confidence": "direct",
+          "summary": "Bounded 120-second MCP tool call; not agent delegation."
+        }
+      ],
+      "rationale": "Agent-to-tool call; no independent target agent."
+    },
+    {
+      "id": "mcp-official",
+      "source": "mcp",
+      "target": "official",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1,
+      "trigger": "Validated MCP request",
+      "payload_type": "tool_calls queue event",
+      "response_type": "Official tool result",
+      "execution_mode": "event_driven",
+      "control_owner": "Official scheduler",
+      "shared_state": [
+        "Episode bank state"
+      ],
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/benchmark_mcp.py",
+          "symbol": "BenchmarkMcpFacade.invoke",
+          "line_start": 188,
+          "line_end": 208,
+          "confidence": "direct",
+          "summary": "Queues official calls; no Hub permit check."
+        }
+      ],
+      "rationale": "Transport adapter to scheduler, not a new agent."
+    },
+    {
+      "id": "proposed-go",
+      "source": "mcp",
+      "target": "go",
+      "classification": "calling",
+      "classification_confidence": 1,
+      "trigger": "Proposed final-dispatch authorization",
+      "payload_type": "Scoped operation, decision revision and final payload digest",
+      "response_type": "Typed allow/deny/unresolved plus durable identifiers",
+      "execution_mode": "sync",
+      "control_owner": "Go owns authorization; official scheduler owns effect",
+      "shared_state": [
+        "Authoritative episode control ledger"
+      ],
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/adopt/adopt.go",
+          "symbol": "Machine.Adopt and Dispatch",
+          "line_start": 268,
+          "line_end": 408,
+          "confidence": "direct",
+          "summary": "Reusable control functions exist but are not wired into this run."
+        }
+      ],
+      "rationale": "Proposed bounded control-service Calling semantics, not an implemented multi-agent edge."
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "F01/COM-10",
+      "severity": "critical",
+      "title": "未经授权排除实际Go代码复用",
+      "conclusion": "原方案将Go限为参考资产，并以拟建Java控制层替代本次运行接线。",
+      "why_it_matters": "改变了用户要求的被测对象。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/测试方案与架构评审.md",
+          "symbol": "Sections 4 and 10",
+          "line_start": 190,
+          "line_end": 203,
+          "confidence": "direct",
+          "summary": "W2 and line 203 specify Java control and exclude Go from the online production chain."
+        }
+      ],
+      "recommendation": "本次研究demo用薄宿主直接复用Go组件，保留Java执行基座及长期SDK边界。"
+    },
+    {
+      "rule_id": "F02/COM-09",
+      "severity": "critical",
+      "title": "执行入口主动选择未增强基线",
+      "conclusion": "入口固定existing-baseline和agent_hub_enforcement=false，没有整合启动条件。",
+      "why_it_matters": "运行可以完成，但不能回答增强系统是否有效。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/tests/run_english_e2e.py",
+          "symbol": "main",
+          "line_start": 39,
+          "line_end": 77,
+          "confidence": "direct",
+          "summary": "Baseline-only metadata and original run_deepagent.py invocation."
+        }
+      ],
+      "recommendation": "原入口归为B-pre；另建缺少Go/控制协议即拒绝启动的整合入口。"
+    },
+    {
+      "rule_id": "F03/COM-08",
+      "severity": "high",
+      "title": "验收缺少代码复用及控制生效证据",
+      "conclusion": "核验器不检查Go制品、启动或采纳派发账本；仅生成JSON报告，不提供失败退出门禁。",
+      "why_it_matters": "不能发现增强组件完全未参与，CI也不能仅凭退出码验收。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/tests/verify_english_e2e.py",
+          "symbol": "main",
+          "line_start": 40,
+          "line_end": 101,
+          "confidence": "direct",
+          "summary": "Checks cover baseline evidence; no Hub runtime checks or exit on failed acceptance."
+        }
+      ],
+      "recommendation": "增加构建来源、真实事件关联和杀死Go的依赖探针，独立验收命令对硬失败返回非零。"
+    },
+    {
+      "rule_id": "F04/COM-03",
+      "severity": "high",
+      "title": "接口设计缺少既有代码复用映射",
+      "conclusion": "六个拟建接口没有具体Go函数接线；相关宿主仍位于测试文件，schema检查不等于语义验证。",
+      "why_it_matters": "容易重新实现同名空壳或仅跑夹具后声称集成。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/e2e/t2host_test.go",
+          "symbol": "t2Host.nodeEntryExec",
+          "line_start": 691,
+          "line_end": 720,
+          "confidence": "direct",
+          "summary": "Runtime-like host logic is defined in a _test.go file."
+        }
+      ],
+      "recommendation": "直接复用adopt/ledger/evidlog/replay，抽取测试宿主并保留原测试，补银行语义和权威修订提供方。"
+    },
+    {
+      "rule_id": "F05/COM-10",
+      "severity": "high",
+      "title": "主架构验收追溯错误且覆盖不完整",
+      "conclusion": "CT15引用M15，但M15要求CASE1到激活的改进闭环。",
+      "why_it_matters": "完成表述检查不足以证明演进发布闭环，SDK集成范围会被高估。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/测试方案与架构评审.md",
+          "symbol": "CT15",
+          "line_start": 114,
+          "line_end": 114,
+          "confidence": "direct",
+          "summary": "Completion wording is mapped to M15."
+        },
+        {
+          "file": "/home/vincent/openjiuwen/agent-hub-alpha/achitecture design/07-nga-architecture-proposal.md",
+          "symbol": "M15",
+          "line_start": 288,
+          "line_end": 290,
+          "confidence": "direct",
+          "summary": "M15 requires CASE1 -> candidate -> evaluation -> activation."
+        }
+      ],
+      "recommendation": "逐条登记M01–M15完整/部分/未覆盖；CT15与M15分离，增加独立改进评估激活测试。"
+    },
+    {
+      "rule_id": "F06/COM-04",
+      "severity": "high",
+      "title": "内部错误会穿透客户输出且缺少对应契约用例",
+      "conclusion": "桥只识别error字段，不识别嵌套result_type=error，错误正文作为content发送。",
+      "why_it_matters": "本次两次Todo异常进入客户轨迹，业务效果和控制异常未隔离。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentBridge.java",
+          "symbol": "finalError and run",
+          "line_start": 41,
+          "line_end": 99,
+          "confidence": "direct",
+          "summary": "Nested result_type=error is not checked before content emission."
+        }
+      ],
+      "recommendation": "新增CT18覆盖多in_progress、嵌套错误、客户输出与同轮后续业务效果；保留原失败证据。"
+    },
+    {
+      "rule_id": "F07/CALL-04",
+      "severity": "high",
+      "title": "缺少证据齐全但整体决策错误的派发反例",
+      "conclusion": "现有真实出口做schema检查后直接调用MCP，未绑定跨目标判断。",
+      "why_it_matters": "规则已被检索仍可能先写入争议/补卡并阻断提额。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "SkillOperationTool.invokeInternal",
+          "line_start": 127,
+          "line_end": 150,
+          "confidence": "direct",
+          "summary": "Schema validation leads to mcp.callTool without a Hub decision permit."
+        }
+      ],
+      "recommendation": "新增CT19并把最终许可检查放在Python官方派发出口，覆盖合法改序与紧急保护边界。"
+    },
+    {
+      "rule_id": "F08/COM-09",
+      "severity": "high",
+      "title": "缺少先整合后扩大样本的可执行放行门槛",
+      "conclusion": "148次实验仍停留于文档，实际单题入口没有整合放行条件，054没有用户侧工具。",
+      "why_it_matters": "大量运行旧基线或单题通过仍不能证明增强与双主体完整链路。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/tests/run_english_e2e.py",
+          "symbol": "main",
+          "line_start": 65,
+          "line_end": 83,
+          "confidence": "direct",
+          "summary": "Only a fixed task_054 baseline attempt is executed."
+        }
+      ],
+      "recommendation": "先G0–G5，后英文增强054和用户侧工具用例，再做B0/B1小样本及后续回归。"
+    }
+  ],
+  "hard_failures": [
+    {
+      "rule_id": "F01/COM-10",
+      "severity": "critical",
+      "title": "未经授权排除实际Go代码复用",
+      "conclusion": "原方案将Go限为参考资产，并以拟建Java控制层替代本次运行接线。",
+      "why_it_matters": "改变了用户要求的被测对象。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/测试方案与架构评审.md",
+          "symbol": "Sections 4 and 10",
+          "line_start": 190,
+          "line_end": 203,
+          "confidence": "direct",
+          "summary": "W2 and line 203 specify Java control and exclude Go from the online production chain."
+        }
+      ],
+      "recommendation": "本次研究demo用薄宿主直接复用Go组件，保留Java执行基座及长期SDK边界。"
+    },
+    {
+      "rule_id": "F02/COM-09",
+      "severity": "critical",
+      "title": "执行入口主动选择未增强基线",
+      "conclusion": "入口固定existing-baseline和agent_hub_enforcement=false，没有整合启动条件。",
+      "why_it_matters": "运行可以完成，但不能回答增强系统是否有效。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/tests/run_english_e2e.py",
+          "symbol": "main",
+          "line_start": 39,
+          "line_end": 77,
+          "confidence": "direct",
+          "summary": "Baseline-only metadata and original run_deepagent.py invocation."
+        }
+      ],
+      "recommendation": "原入口归为B-pre；另建缺少Go/控制协议即拒绝启动的整合入口。"
+    },
+    {
+      "rule_id": "F07/CALL-04",
+      "severity": "high",
+      "title": "缺少证据齐全但整体决策错误的派发反例",
+      "conclusion": "现有真实出口做schema检查后直接调用MCP，未绑定跨目标判断。",
+      "why_it_matters": "规则已被检索仍可能先写入争议/补卡并阻断提额。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "SkillOperationTool.invokeInternal",
+          "line_start": 127,
+          "line_end": 150,
+          "confidence": "direct",
+          "summary": "Schema validation leads to mcp.callTool without a Hub decision permit."
+        }
+      ],
+      "recommendation": "新增CT19并把最终许可检查放在Python官方派发出口，覆盖合法改序与紧急保护边界。"
+    }
+  ],
+  "design_smells": [
+    {
+      "rule_id": "F04/COM-03",
+      "severity": "high",
+      "title": "接口设计缺少既有代码复用映射",
+      "conclusion": "六个拟建接口没有具体Go函数接线；相关宿主仍位于测试文件，schema检查不等于语义验证。",
+      "why_it_matters": "容易重新实现同名空壳或仅跑夹具后声称集成。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/e2e/t2host_test.go",
+          "symbol": "t2Host.nodeEntryExec",
+          "line_start": 691,
+          "line_end": 720,
+          "confidence": "direct",
+          "summary": "Runtime-like host logic is defined in a _test.go file."
+        }
+      ],
+      "recommendation": "直接复用adopt/ledger/evidlog/replay，抽取测试宿主并保留原测试，补银行语义和权威修订提供方。"
+    },
+    {
+      "rule_id": "F05/COM-10",
+      "severity": "high",
+      "title": "主架构验收追溯错误且覆盖不完整",
+      "conclusion": "CT15引用M15，但M15要求CASE1到激活的改进闭环。",
+      "why_it_matters": "完成表述检查不足以证明演进发布闭环，SDK集成范围会被高估。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/测试方案与架构评审.md",
+          "symbol": "CT15",
+          "line_start": 114,
+          "line_end": 114,
+          "confidence": "direct",
+          "summary": "Completion wording is mapped to M15."
+        },
+        {
+          "file": "/home/vincent/openjiuwen/agent-hub-alpha/achitecture design/07-nga-architecture-proposal.md",
+          "symbol": "M15",
+          "line_start": 288,
+          "line_end": 290,
+          "confidence": "direct",
+          "summary": "M15 requires CASE1 -> candidate -> evaluation -> activation."
+        }
+      ],
+      "recommendation": "逐条登记M01–M15完整/部分/未覆盖；CT15与M15分离，增加独立改进评估激活测试。"
+    }
+  ],
+  "simplification_opportunities": [
+    {
+      "target": "Proposed Hub integration",
+      "current_design": "New Java control layer with Go excluded from the execution path",
+      "recommended_design": "service",
+      "reason": "Use a thin Go host over existing components and keep Java Core as the sole agent scheduler.",
+      "expected_benefit": "Real source reuse and observable controls without a second autonomous agent or graph engine.",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/测试方案与架构评审.md",
+          "symbol": "Section 10",
+          "line_start": 197,
+          "line_end": 203,
+          "confidence": "direct",
+          "summary": "Original work packages assume new Java control implementation."
+        }
+      ]
+    }
+  ],
+  "remediation_plan": [
+    {
+      "priority": "P0",
+      "action": "本次研究demo用薄宿主直接复用Go组件，保留Java执行基座及长期SDK边界。",
+      "addresses_rules": [
+        "F01/COM-10"
+      ],
+      "acceptance_criteria": [
+        "Preserve original evidence and clearly identify unimplemented changes.",
+        "Bind acceptance to actual runtime artifacts and observable behavior, not configuration claims."
+      ]
+    },
+    {
+      "priority": "P0",
+      "action": "原入口归为B-pre；另建缺少Go/控制协议即拒绝启动的整合入口。",
+      "addresses_rules": [
+        "F02/COM-09"
+      ],
+      "acceptance_criteria": [
+        "Preserve original evidence and clearly identify unimplemented changes.",
+        "Bind acceptance to actual runtime artifacts and observable behavior, not configuration claims."
+      ]
+    },
+    {
+      "priority": "P0",
+      "action": "增加构建来源、真实事件关联和杀死Go的依赖探针，独立验收命令对硬失败返回非零。",
+      "addresses_rules": [
+        "F03/COM-08"
+      ],
+      "acceptance_criteria": [
+        "Preserve original evidence and clearly identify unimplemented changes.",
+        "Bind acceptance to actual runtime artifacts and observable behavior, not configuration claims."
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "直接复用adopt/ledger/evidlog/replay，抽取测试宿主并保留原测试，补银行语义和权威修订提供方。",
+      "addresses_rules": [
+        "F04/COM-03"
+      ],
+      "acceptance_criteria": [
+        "Preserve original evidence and clearly identify unimplemented changes.",
+        "Bind acceptance to actual runtime artifacts and observable behavior, not configuration claims."
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "逐条登记M01–M15完整/部分/未覆盖；CT15与M15分离，增加独立改进评估激活测试。",
+      "addresses_rules": [
+        "F05/COM-10"
+      ],
+      "acceptance_criteria": [
+        "Preserve original evidence and clearly identify unimplemented changes.",
+        "Bind acceptance to actual runtime artifacts and observable behavior, not configuration claims."
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "新增CT18覆盖多in_progress、嵌套错误、客户输出与同轮后续业务效果；保留原失败证据。",
+      "addresses_rules": [
+        "F06/COM-04"
+      ],
+      "acceptance_criteria": [
+        "Preserve original evidence and clearly identify unimplemented changes.",
+        "Bind acceptance to actual runtime artifacts and observable behavior, not configuration claims."
+      ]
+    },
+    {
+      "priority": "P0",
+      "action": "新增CT19并把最终许可检查放在Python官方派发出口，覆盖合法改序与紧急保护边界。",
+      "addresses_rules": [
+        "F07/CALL-04"
+      ],
+      "acceptance_criteria": [
+        "Preserve original evidence and clearly identify unimplemented changes.",
+        "Bind acceptance to actual runtime artifacts and observable behavior, not configuration claims."
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "先G0–G5，后英文增强054和用户侧工具用例，再做B0/B1小样本及后续回归。",
+      "addresses_rules": [
+        "F08/COM-09"
+      ],
+      "acceptance_criteria": [
+        "Preserve original evidence and clearly identify unimplemented changes.",
+        "Bind acceptance to actual runtime artifacts and observable behavior, not configuration claims."
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "unknown": "No new Go suite or failure probe was executed during this review.",
+      "impact": "Existing Go limitations are source-grounded; no new runtime qualification is claimed.",
+      "needed_evidence": "Fresh component suites, preserved independent probes and actual integrated failure tests."
+    },
+    {
+      "unknown": "The proposed Go host, semantic provider and final dispatch permit protocol are not implemented.",
+      "impact": "The proposed correction cannot yet be reported as completed E2E integration.",
+      "needed_evidence": "G0-G7 gates in the review report."
+    },
+    {
+      "unknown": "Full Java SDK/Boot hosting, R/K runtime integration and M15 lifecycle coverage remain unqualified.",
+      "impact": "An integrated banking slice cannot be called full architecture acceptance.",
+      "needed_evidence": "Explicit M01-M15 coverage with qualified evidence."
+    }
+  ]
+}

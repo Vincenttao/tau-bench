@@ -1,0 +1,196 @@
+{
+  "scope": "partial component chain; full benchmark acceptance blocked",
+  "full_design_acceptance": "not-passed",
+  "formal_execution_enabled": false,
+  "official_simulator_episodes": 0,
+  "official_reward": null,
+  "go_source_pin_check": "passed",
+  "go_build_and_tests": {
+    "fresh_build": true,
+    "tests_passed": 2
+  },
+  "java_assertions_passed": 43,
+  "python_tests_passed": 37,
+  "live_runs": [
+    {
+      "run": "controlled-chain-20261117-a00",
+      "summary_sha256": "82c30dbe761841a0d7801ebfa46f0e6ec5d823021949d05a5623f7e05684bfcd",
+      "scope": "real Java/Jev/Go plus official tool implementation and synthetic DB",
+      "official_simulator_episodes": 0,
+      "official_reward": null,
+      "full_design_acceptance": "not-evaluated",
+      "observations": [
+        {
+          "message": "m1",
+          "expected": "new",
+          "proposal_status": "ready",
+          "passed": true,
+          "reason": "observations_resolved"
+        },
+        {
+          "message": "m2",
+          "expected": "pause-and-new",
+          "proposal_status": "clarify",
+          "passed": false,
+          "reason": "uncertain_observation"
+        }
+      ],
+      "status": "component-chain-failed",
+      "error_type": "RuntimeError",
+      "error": "Input semantic diagnostic did not meet expected route; retained without tuning",
+      "usage": {
+        "requests": 2,
+        "input_tokens": 1930,
+        "output_tokens": 289
+      }
+    },
+    {
+      "run": "controlled-chain-20261117-a01",
+      "summary_sha256": "4ea45a5d344f04717627046a6d1dc7a7fc52a4b47fa2be5f58469a1b50c6c2aa",
+      "scope": "real Java/Jev/Go plus official tool implementation and synthetic DB",
+      "official_simulator_episodes": 0,
+      "official_reward": null,
+      "full_design_acceptance": "not-evaluated",
+      "observations": [
+        {
+          "message": "m1",
+          "expected": "new",
+          "proposal_status": "ready",
+          "passed": true,
+          "reason": "observations_resolved"
+        },
+        {
+          "message": "m2",
+          "expected": "pause-and-new",
+          "proposal_status": "ready",
+          "passed": true,
+          "reason": "observations_resolved"
+        },
+        {
+          "message": "m3",
+          "expected": "resume",
+          "proposal_status": "clarify",
+          "passed": false,
+          "reason": "uncertain_observation"
+        }
+      ],
+      "status": "component-chain-failed",
+      "error_type": "RuntimeError",
+      "error": "Input semantic diagnostic did not meet expected route; retained without tuning",
+      "usage": {
+        "requests": 3,
+        "input_tokens": 3912,
+        "output_tokens": 522
+      }
+    },
+    {
+      "run": "submission-chain-20261117-a00",
+      "summary_sha256": "3939a3956ed4d718c326e5101c6e9ca476e829f1a8f3360cf641cda6be1c8dde",
+      "scope": "real Java/Jev/Go plus official tool implementation and synthetic DB",
+      "scenario": "submission-only",
+      "official_simulator_episodes": 0,
+      "official_reward": null,
+      "full_design_acceptance": "not-evaluated",
+      "observations": [
+        {
+          "message": "m1",
+          "expected": "new",
+          "proposal_status": "ready",
+          "passed": true,
+          "reason": "observations_resolved"
+        }
+      ],
+      "status": "component-chain-failed",
+      "error_type": "PermissionError",
+      "error": "Go adoption refused",
+      "usage": {
+        "requests": 2,
+        "input_tokens": 1343,
+        "output_tokens": 132
+      }
+    },
+    {
+      "run": "submission-chain-20261117-a01",
+      "summary_sha256": "275a510d41e45198c34657b49cad49ba041e08a7a415618b9aebcd99a4eaa4bc",
+      "scope": "real Java/Jev/Go plus official tool implementation and synthetic DB",
+      "scenario": "submission-only",
+      "official_simulator_episodes": 0,
+      "official_reward": null,
+      "full_design_acceptance": "not-evaluated",
+      "observations": [
+        {
+          "message": "m1",
+          "expected": "new",
+          "proposal_status": "ready",
+          "passed": true,
+          "reason": "observations_resolved"
+        },
+        {
+          "check": "official-tool-submission",
+          "passed": true,
+          "write_count": 1,
+          "business_status": "accepted",
+          "approved": false
+        },
+        {
+          "check": "different-call-id-duplicate",
+          "passed": true
+        },
+        {
+          "check": "missing-evidence-zero-extra-writes",
+          "passed": true
+        }
+      ],
+      "status": "component-chain-passed",
+      "usage": {
+        "requests": 2,
+        "input_tokens": 1343,
+        "output_tokens": 132
+      }
+    }
+  ],
+  "jev_usage": {
+    "inference_requests": 9,
+    "input_tokens": 8528,
+    "output_tokens": 1075,
+    "actual_response_models": [
+      "jev-1.14.0"
+    ],
+    "bill_amount": null
+  },
+  "credential_handling": {
+    "outside_repository": true,
+    "mode": "0600",
+    "authentication": "passed",
+    "unlimited_experiment_budget_authorized": true
+  },
+  "source_sha256": {
+    "experiments/plan-4-agent-hub-refined-skills/python/task_session.py": "dafbbdbf2574dc63c26fe154ff65bb24e9c49b409dbe2502a69aac4af274b543",
+    "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py": "cbb9706ecd4a8059c06a545fb5ae42ad338c3a4084c0235ce38adf42b200d907",
+    "experiments/plan-4-agent-hub-refined-skills/python/business_judgment.py": "b76ebe9fa8205d2d71c6b1c99b15a1c9936ed7ab5d3ed30f8e467d3bb9241ee0",
+    "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py": "f97b014da8c98aba182721753cda0ecd1e228b0fc7348a646893238c6f71fb34",
+    "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py": "ad1a817b25a159a854e725ec6a9046b5035f6c8f8144c0beabdad3ae4f5d2eba",
+    "experiments/plan-4-agent-hub-refined-skills/python/hub_gate.py": "93b8db5b50ffb33c7e4cb50be3a59208cce7b4c1d3fa1189af262f60cba391e8",
+    "experiments/plan-4-agent-hub-refined-skills/python/input_router.py": "543157a5a295a17093169966dd634ffa2b9ad9e73eac86fa3d12dec3db0b06ba",
+    "experiments/plan-4-agent-hub-refined-skills/python/controlled_effects.py": "a0a36b95a27ff3093128df1823e1e5a8c4c7a617a6099b773bc4ce716f4e83f5",
+    "experiments/plan-4-agent-hub-refined-skills/python/probe_jev.py": "f27043bc477de17de753e110ef53dc46f2819b7962877c922f6d111f22961eb6",
+    "experiments/plan-4-agent-hub-refined-skills/python/run_controlled_smoke.py": "08755e98566ceeba69edbf081ba5bfffcf8c7d686020d1dbc72c6a3650cc4d5e",
+    "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/hub/TaskHost.java": "e717f5afd8931000164ef8bc68fb8018b63ea7700e7d57400c40eb4e37ff8a14",
+    "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/hub/TaskCoordinator.java": "79b7460eb66c2faab3b4230f65a1c0bb081925fa55a6fb9fd5a0f65b08663c6d",
+    "experiments/plan-4-agent-hub-refined-skills/java/src/test/java/eval/hub/TaskCoordinatorTest.java": "1bf78d7dc259ce698f5ac880162b2d3b3c45fe4962390a064319e5ec48925dfb",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_input_router.py": "fbd55482a297fc70cd3854d7c727acf56374ee564bd66c60dcd421810e397eff",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_task_session.py": "ebdd3a8ef2485285b6d23305e3066d6a47bb15eff88bc0c03f9cb00bb6f3e03c",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_jev_provider.py": "484e1526002255371e8c63cf9a8b0fd41f04baa1d78e5df71bb1192ac4ba7ecd",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_go_transport.py": "a2a1f2fcbea504bd72bbac61892d25f72f2abce4c755a92791473f983a58da25",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_effect_boundary.py": "6bd318a46c4935ef8449e16728be0a12d3931c2c387ad8ce72754b6b80fb9986",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_controlled_effects.py": "e3649879114f67f543307d8c4cf7f8fa2507754d58cf053f29dfb39fd5638471",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_business_judgment.py": "c4ed5a2ec3a2f1649e9e6431ef82d20e2c71c1f5c1b672ede27dc225922baccc"
+  },
+  "limits": [
+    "No S2 DeepAgent in new chain",
+    "No official simulator or grader",
+    "Synthetic conditions do not prove complete public-policy coverage",
+    "Real multi-intent resume unresolved",
+    "Formal driver and all-39-contract acceptance pending"
+  ]
+}

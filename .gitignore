@@ -7,6 +7,7 @@
 
 # Python caches and test outputs
 __pycache__/
+__pycache__
 *.py[cod]
 .pytest_cache/
 .mypy_cache/
@@ -56,3 +57,23 @@ logs/
 *~
 .DS_Store
 Thumbs.db
+
+# Relocated historical reports retain the same intermediate-output exclusions
+/archive/*/reports/round-*/checkpoints/
+/archive/*/reports/round-*/postprocess*.json
+/archive/*/reports/round-*/report-phase-status.json
+/archive/*/reports/round-*/report-summary-output.json
+/archive/*/reports/round-*/wave-*-checkpoint.json
+/archive/*/reports/round-*/81卡明细.json
+/archive/reference-reports/banking-cases-zh/catalog-audit.json
+/archive/reference-reports/banking-cases-zh/case-notes.tsv
+
+# Fully archived local outputs; never add logs or old generated catalogs
+/archive/legacy-workspace/logs/
+/archive/legacy-workspace/design-snapshot/**/reports/round-*/checkpoints/
+
+# Local archive link farms are not portable source dependencies.
+/archive/reference-documents/.deps/
+/archive/local-artifacts-20261117/
+# Raw Runtime fault-injection captures; curated analysis lives beside this directory.
+/experiments/plan-3-moa-refined-skills/reports/no-replay-fault-20261117/

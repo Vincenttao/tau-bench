@@ -1,0 +1,154 @@
+{
+  "kind": "source_review_snapshot_not_execution_manifest",
+  "review_date": "2026-11-16",
+  "captured_at_utc": "2026-11-16T11:35:17.400889+00:00",
+  "repositories": [
+    {
+      "root": "/home/vincent/openjiuwen/agent-hub-alpha",
+      "head": "402149178c6ecc121c4a96fe9bed0c3918328246",
+      "worktree_status": [
+        "?? docs/testing/"
+      ],
+      "reviewed_files": [
+        {
+          "path": "README.md",
+          "sha256": "f2dc676f35b92d39a2509ebb11c389dd5e7504a67f053c79b2af874b8dfb3a0a"
+        },
+        {
+          "path": "achitecture design/07-nga-architecture-proposal.md",
+          "sha256": "4d35312e877876f0fa9bbd2b484ab4cdb6dfcf147a99938bf96c58fad0ad1e82"
+        },
+        {
+          "path": "achitecture design/08-r1-r6-acceptance-and-open-items.md",
+          "sha256": "497751c5084f1cb8ff2047719fe96e22ef80d637687c248bdd7efb53dca6c750"
+        },
+        {
+          "path": "agent-festival/go/internal/adopt/adopt.go",
+          "sha256": "407258e7dc42032182b5b61ebad3b41a7633772c354b696e2a2985ef6b982aba"
+        },
+        {
+          "path": "agent-festival/go/internal/e2e/t2host_test.go",
+          "sha256": "bb37706039ba5ba3af80bc01b7becf0d482c0b17d6d1ad27f2be0b8cdf9e6209"
+        },
+        {
+          "path": "agent-festival/go/internal/e2e/x3_entry_test.go",
+          "sha256": "04c734600ac5c128c3a524b1d38d6b47152665a39541753f4e270d205669ef74"
+        },
+        {
+          "path": "agent-festival/go/internal/e2e/verifier_test.go",
+          "sha256": "7992e21b2835c3e9ecb64f3c6e8d958cebe09867fcbe132b46ff921b39f1aabf"
+        },
+        {
+          "path": "agent-festival/go/internal/replay/replay.go",
+          "sha256": "714c68221409d8f28e07d93e28a1e0f99fb4c164dd9fd4170865511f39c48141"
+        },
+        {
+          "path": "agent-festival/review/2026-11-08/README.md",
+          "sha256": "2db6be51c6ffe0a61beb0456fdf4bb6a8c76f38a85d109cc7c49d8818f86237a"
+        },
+        {
+          "path": "agent-festival/examples/java-consumer/README.md",
+          "sha256": "1a0793b5be228dc355a651131445e5f53062853a2690f22d14ec54ec5486ce96"
+        }
+      ]
+    },
+    {
+      "root": "/home/vincent/openjiuwen/tau3",
+      "head": "f5103c4b004e0a3f094ad04911bd7ecb881ee36e",
+      "worktree_status": [
+        " M README.md",
+        " M experiments/deepagent-todo-skill-mcp/python/check_deepagent_protocol.py",
+        " M experiments/deepagent-todo-skill-mcp/skills/README.md",
+        " M experiments/deepagent-todo-skill-mcp/v0.4/README.md",
+        " M experiments/deepagent-todo-skill-mcp/v0.4/run_zh_e2e.py",
+        "?? experiments/deepagent-todo-skill-mcp/skills/releases/3.3.0/",
+        "?? experiments/deepagent-todo-skill-mcp/v0.4/plans/skill32-zh-single-round/",
+        "?? experiments/deepagent-todo-skill-mcp/v0.4/plans/skill33-zh-recovery20/",
+        "?? experiments/deepagent-todo-skill-mcp/v0.4/plans/skill33-zh-single-round/",
+        "?? experiments/deepagent-todo-skill-mcp/v0.4/run_zh_round.py"
+      ],
+      "reviewed_files": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "6ee61f19a736986c454c04a88047c0917ee3c6e2e9ed57fd23c87a2dd0366672"
+        },
+        {
+          "path": "README.md",
+          "sha256": "bd1ce52aa4061b2869b9fc49aadbe21cc5755e989ab4dbdb6bdd5387a403510a"
+        },
+        {
+          "path": "python/episode.py",
+          "sha256": "75f5dfe6ca6b950f71f96a4c458439a3d6d0a0f4d05ee2bf5d8f28ab22f202e5"
+        },
+        {
+          "path": "experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java",
+          "sha256": "fd4c09e0403db1b0214c1c19f636ee4e3423543b9ac303c62cce2bbacf6066c5"
+        },
+        {
+          "path": "experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentBridge.java",
+          "sha256": "bafcf0ab3cdf899d4d72723a03e90e2fa2e4880ec20f70a075cfeb84f2fb44c0"
+        },
+        {
+          "path": "experiments/deepagent-todo-skill-mcp/python/benchmark_mcp.py",
+          "sha256": "273b5a3c4b171e7b00e35c0b8ccda71fea8f6921c6104400fe4f99e12a87abdf"
+        },
+        {
+          "path": "experiments/deepagent-todo-skill-mcp/python/deepagent_java_agent.py",
+          "sha256": "54b48f722c760d85b44a8cb2fc0af6474e82064a56011f44e318da6ad2367469"
+        },
+        {
+          "path": "experiments/deepagent-todo-skill-mcp/tests/test_deepagent_mcp.py",
+          "sha256": "2121aa4475f4a04ea1936ff0d4e5627e764c54b77a379e42ef44d88688939cb5"
+        },
+        {
+          "path": "experiments/deepagent-todo-skill-mcp/v0.4/run_zh_e2e.py",
+          "sha256": "1584505ac6d5b8f921610295771433f6f7b644274cffbf0deb83fcb51b89a1a0"
+        },
+        {
+          "path": "experiments/deepagent-todo-skill-mcp/v0.4/run_zh_round.py",
+          "sha256": "c3e0a6b348310227f2bdd6b44ba8a9a0cddb3acfe62fa33574bf142c50b79584"
+        },
+        {
+          "path": "experiments/deepagent-todo-skill-mcp/v0.4/plans/skill33-zh-single-round/plan.json",
+          "sha256": "44cb3f1531df4cef43b6cfc6005a8912bb00b518b4724e4f54f52ae4ae1fbbfc"
+        },
+        {
+          "path": ".deps/tau2-bench/src/tau2/runner/build.py",
+          "sha256": "2c4b61b83d4108bb9a2b46724a7b9cc0823548cfd866ca0f415bc536269d964b"
+        },
+        {
+          "path": ".deps/tau2-bench/src/tau2/evaluator/evaluator_env.py",
+          "sha256": "b53ebfe6b0b06d7a2071b5f9dd03ee6ca8ac6000b0ef44f3bd345b346c30d8ac"
+        },
+        {
+          "path": ".deps/tau2-bench/src/tau2/domains/banking_knowledge/tools.py",
+          "sha256": "e7287dc76ab74f7c172a9b632b6ebdb067a85bbc0cb7c769f7bdf08ec18aa1c0"
+        },
+        {
+          "path": ".deps/tau2-bench-v2-zh/src/tau2/runner/build.py",
+          "sha256": "c54c8383da51a435b777c934f9e4fab73204381f5cf9443616f637fa1e0a4086"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "tau3_mcp": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv312/bin/python -m unittest discover -s experiments/deepagent-todo-skill-mcp/tests -p 'test_deepagent_mcp.py' -v",
+      "status": "passed",
+      "tests": 6,
+      "reported_seconds": 3.046,
+      "external_model_calls": 0,
+      "scope": "temporary synthetic local HTTP fixtures; no Java or official banking E2E"
+    },
+    "go": {
+      "status": "not_run",
+      "reason": "go executable unavailable in PATH"
+    },
+    "java_build": {
+      "status": "not_run"
+    },
+    "live_banking": {
+      "status": "not_run"
+    }
+  }
+}

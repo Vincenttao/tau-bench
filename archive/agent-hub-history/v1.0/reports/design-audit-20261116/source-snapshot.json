@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-16",
+  "files": {
+    "/home/vincent/openjiuwen/agent-hub-alpha/achitecture design/07-nga-architecture-proposal.md": "4d35312e877876f0fa9bbd2b484ab4cdb6dfcf147a99938bf96c58fad0ad1e82",
+    "/home/vincent/openjiuwen/agent-hub-alpha/achitecture design/08-r1-r6-acceptance-and-open-items.md": "497751c5084f1cb8ff2047719fe96e22ef80d637687c248bdd7efb53dca6c750",
+    "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/go.mod": "df1faa5e6e06bf5370495bb6e9885a27f3c78af35e68714e3569e6ceb90af3b2",
+    "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/adopt/adopt.go": "407258e7dc42032182b5b61ebad3b41a7633772c354b696e2a2985ef6b982aba",
+    "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/e2e/t2host_test.go": "bb37706039ba5ba3af80bc01b7becf0d482c0b17d6d1ad27f2be0b8cdf9e6209",
+    "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/e2e/verifier_test.go": "7992e21b2835c3e9ecb64f3c6e8d958cebe09867fcbe132b46ff921b39f1aabf",
+    "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/evidlog/evidlog.go": "3076d1f04b5da2b70ae14900cad117b322a2255164f943614d1c7c6b593e9b54",
+    "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/judgment/check.go": "d3f1083165dba6ddc84824439a90a7fab283d162b51e6cb841f8396dc8c0fd8c",
+    "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/go/internal/replay/replay.go": "714c68221409d8f28e07d93e28a1e0f99fb4c164dd9fd4170865511f39c48141",
+    "/home/vincent/openjiuwen/agent-hub-alpha/agent-festival/review/2026-11-08/README.md": "2db6be51c6ffe0a61beb0456fdf4bb6a8c76f38a85d109cc7c49d8818f86237a",
+    "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/reports/english-e2e-20261116-task054-a00/failure-evidence.json": "f6a9c9575084d9d083971e7e3dd7a03a9abdf426d3b97eb4f7b7c995e90ebb1b",
+    "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/reports/english-e2e-20261116-task054-a00/verification.json": "e66ab21343a077dca66ef64bf05a6f070591cee746602aa100fd2148641e1fc8",
+    "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/runs/english-e2e-20261116-task054-a00/execution.json": "007bb8f620dda69bebb2bf50ba601c624c9d82bc02af6bb40e19feb56d6d6757",
+    "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/tests/run_english_e2e.py": "b4265087efa0c7ff6bfc4758d73c92eb4f401cd92b883556e3b63f9894c279d0",
+    "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/tests/verify_english_e2e.py": "fb92c45e5a34207b1a69e46f922cf7030192d63c1c21ba53379764f8480239ec",
+    "/home/vincent/openjiuwen/tau3/experiments/agent-hub-banking/v1.0/\u6d4b\u8bd5\u65b9\u6848\u4e0e\u67b6\u6784\u8bc4\u5ba1.md": "8211cdaafdbd568cdf3610c4d64698ef5ddaf9b4e8dc482c3112f8dedc901324",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java": "fd4c09e0403db1b0214c1c19f636ee4e3423543b9ac303c62cce2bbacf6066c5",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentBridge.java": "bafcf0ab3cdf899d4d72723a03e90e2fa2e4880ec20f70a075cfeb84f2fb44c0",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/benchmark_mcp.py": "273b5a3c4b171e7b00e35c0b8ccda71fea8f6921c6104400fe4f99e12a87abdf",
+    "/home/vincent/openjiuwen/tau3/experiments/deepagent-todo-skill-mcp/python/deepagent_java_agent.py": "54b48f722c760d85b44a8cb2fc0af6474e82064a56011f44e318da6ad2367469"
+  },
+  "scope": "Read-only review inputs; no new live model or Go test execution."
+}

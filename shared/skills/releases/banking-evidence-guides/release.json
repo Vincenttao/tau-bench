@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "version": "banking-evidence-guides",
+  "origin": "Restores English instructions from historical release 3.2.0; document bytes unchanged.",
+  "files": {
+    "banking-mcp/SKILL.md": "7fc5292f8264abc2e8fbfa6d81671e6ad2bb5fdecf49e3946c4aa0a833109dc9",
+    "banking-mcp/guides/accounts/account-changes.md": "78f01d6dace4c57528092449ecfdb20189a5c085fdde908c49a65a00fd665179",
+    "banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+    "banking-mcp/guides/accounts/account-opening.md": "968695db702dd291a1229d59793411941fd2f9cec0c0b64765eea97fb0f7af2a",
+    "banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+    "banking-mcp/guides/credit-card/limit-adjustment.md": "32183c8fc9822b19fc79669352f5f1242bc7920297cda107c688e1ea2c327a57",
+    "banking-mcp/guides/disputes/transaction-dispute.md": "7183c8b38419d2e7a8a4abf4455d67ed63ef722deeabb805b74054e60ac4bb45",
+    "banking-mcp/guides/payments/transfer.md": "7bfec2fa63e0f05c02d1c601a14b1134ad318c74793ea953f499e36ed5b6ada2",
+    "catalog.json": "6c137898ba1f26d198e9fb5adce0a671bd6472f7f1e5835aa2ed61ef464858cd"
+  },
+  "language": "en"
+}

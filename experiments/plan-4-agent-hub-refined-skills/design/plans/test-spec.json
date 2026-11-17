@@ -1,0 +1,420 @@
+{
+  "schema_version": 1,
+  "name": "Agent Hub Alpha and openJiuwen Java English Banking Integration V1.1",
+  "document_type": "design_specification",
+  "executable": false,
+  "implementation_status": "pending",
+  "supersedes_design": "V1.0",
+  "benchmark": {
+    "language": "en",
+    "core_language": "en",
+    "domain": "banking_knowledge",
+    "commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+    "checkout": ".deps/tau2-bench",
+    "python": ".venv312/bin/python",
+    "skill_version": "3.2.0",
+    "system_prompt_version": "evidence-todo-v1",
+    "official_mutations_allowed": false,
+    "hidden_reference_inputs_allowed": false
+  },
+  "integration": {
+    "go_runtime_required": true,
+    "proposed_go_entrypoint": "agent-festival/go/cmd/tau3-host",
+    "entrypoint_implemented": false,
+    "baseline_fallback_allowed": false,
+    "java_owns_agent_scheduling": true,
+    "go_owns_control_state": true,
+    "official_scheduler_owns_bank_effects": true,
+    "final_enforcement_point": "Python MCP queue boundary before official tool dispatch",
+    "user_tools_remain_official": true,
+    "direct_reuse": [
+      "adopt.Machine",
+      "ledger",
+      "evidlog",
+      "judgment.CheckSpec",
+      "replay"
+    ],
+    "additional_contract_cases": [
+      "validate",
+      "compose",
+      "release"
+    ],
+    "extract_with_original_tests": [
+      "t2Host.nodeEntryExec",
+      "verifier test host ports"
+    ]
+  },
+  "arms": {
+    "B-pre": {
+      "historical_only": true,
+      "eligible_as_paired_control": false
+    },
+    "B0": {
+      "go_runtime_required": true,
+      "bank_semantic_mode": "shadow",
+      "semantic_feedback_to_agent": false,
+      "identity_authority_isolation_and_unknown_effect_controls": "enforced"
+    },
+    "B1": {
+      "go_runtime_required": true,
+      "bank_semantic_mode": "enforce",
+      "semantic_feedback_to_agent": true,
+      "identity_authority_isolation_and_unknown_effect_controls": "enforced"
+    },
+    "C0": {
+      "optional": true,
+      "go_runtime_required": false,
+      "purpose": "Concurrent total-solution comparison; not an enhanced run",
+      "included_in_default_episode_count": false
+    }
+  },
+  "configuration": {
+    "model_request": "deepseek-v4-flash",
+    "gateway": "repository-configured authorized gateway",
+    "temperature": 0,
+    "retrieval": "bm25",
+    "concurrency": 1,
+    "max_steps": 200,
+    "max_errors": 10,
+    "core_timeout_seconds": 1200,
+    "bridge_timeout_seconds": 1500,
+    "episode_timeout_seconds": 2400,
+    "mcp_timeout_seconds": 120,
+    "go_rpc_timeout_seconds": 30,
+    "cumulative_token_limit": null,
+    "max_correction_rounds_per_stable_goal_evidence_version": 3,
+    "automatic_business_write_retries": 0,
+    "automatic_episode_retries": 0,
+    "record_actual_response_model": true,
+    "cross_episode_online_learning": false
+  },
+  "stages": [
+    {
+      "id": "P0",
+      "type": "offline_contracts",
+      "external_model_calls": 0,
+      "contracts": [
+        "CT01",
+        "CT02",
+        "CT03",
+        "CT04",
+        "CT05",
+        "CT06",
+        "CT07",
+        "CT08",
+        "CT09",
+        "CT10",
+        "CT11",
+        "CT12",
+        "CT13",
+        "CT14",
+        "CT15",
+        "CT16",
+        "CT17",
+        "CT18",
+        "CT19",
+        "CT20",
+        "CT21",
+        "CT22",
+        "CT23"
+      ],
+      "additional_fixtures": [
+        "M08-business-await",
+        "M09-cancel-supported-and-unsupported",
+        "M10-compensation-and-no-reversal",
+        "M14-custom-imported-provider"
+      ]
+    },
+    {
+      "id": "P1",
+      "type": "minimal_live_integration",
+      "tasks": [
+        "task_054",
+        "task_003"
+      ],
+      "arms": [
+        "B0",
+        "B1"
+      ],
+      "seeds": [
+        300
+      ],
+      "episodes": 4
+    },
+    {
+      "id": "P2",
+      "type": "remaining_diagnostic_pilot",
+      "tasks": [
+        "task_022",
+        "task_041",
+        "task_051",
+        "task_060",
+        "task_072",
+        "task_077"
+      ],
+      "arms": [
+        "B0",
+        "B1"
+      ],
+      "seeds": [
+        300
+      ],
+      "episodes": 12,
+      "combine_with_P1_only_if_same_frozen_build": true
+    },
+    {
+      "id": "P3",
+      "type": "frozen_paired_regression",
+      "tasks": [
+        "task_003",
+        "task_017",
+        "task_031",
+        "task_036",
+        "task_043",
+        "task_051",
+        "task_060",
+        "task_076",
+        "task_077",
+        "task_093",
+        "task_098",
+        "task_016",
+        "task_022",
+        "task_033",
+        "task_041",
+        "task_049",
+        "task_054",
+        "task_062",
+        "task_072",
+        "task_087",
+        "task_097",
+        "task_100"
+      ],
+      "arms": [
+        "B0",
+        "B1"
+      ],
+      "seeds": [
+        300,
+        301,
+        302
+      ],
+      "episodes": 132
+    },
+    {
+      "id": "P4",
+      "type": "optional_total_solution_control",
+      "arm": "C0",
+      "episodes": null,
+      "requires_separate_frozen_design": true
+    }
+  ],
+  "default_live_episodes": 148,
+  "automatic_execution_authorized_by_this_file": false,
+  "pilot_task_ids": [
+    "task_003",
+    "task_022",
+    "task_041",
+    "task_051",
+    "task_054",
+    "task_060",
+    "task_072",
+    "task_077"
+  ],
+  "pair_order": "Alternate B0-first and B1-first by task ordinal plus repetition ordinal.",
+  "contracts": [
+    {
+      "id": "CT01",
+      "name": "Missing required evidence",
+      "expected": "No effect with missing or failed evidence; a valid evidence-complete request can proceed.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT02",
+      "name": "Evidence object and scope binding",
+      "expected": "Reject cross-account, cross-episode and forged evidence.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT03",
+      "name": "Semantic boundaries and arithmetic",
+      "expected": "Distinguish units, signs, time windows and counting scopes; reject missing required configuration.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT04",
+      "name": "Authoritative current decision",
+      "expected": "Block superseded decisions and revoked grants; an unadopted high revision is not current.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT05",
+      "name": "Final payload and outbound bypass",
+      "expected": "Block changed nested payloads, amounts, accounts and direct MCP bypass.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT06",
+      "name": "Intent and idempotency",
+      "expected": "Reuse same intent and payload; reject changed content under one key; allow independent legitimate intent.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT07",
+      "name": "Single owner and concurrency",
+      "expected": "Reject a second ledger writer and prevent duplicate effects.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT08",
+      "name": "Required audit failure",
+      "expected": "Prevent effects if intent or required audit cannot be persisted; preserve real refusals.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT09",
+      "name": "Unknown provider outcome",
+      "expected": "Keep one operation identity through lost, duplicate and late receipts; no blind redispatch.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT10",
+      "name": "Java restart",
+      "expected": "Restore waits and identities while Python and Go survive; no repeated completed effect.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT11",
+      "name": "Isolation and corruption",
+      "expected": "Reject swapped sessions or receipts and damaged stored state.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT12",
+      "name": "Isolated replay",
+      "expected": "Separate fidelity from conformance; detect altered input and missing evidence; zero live model or business calls.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT13",
+      "name": "Release and activation",
+      "expected": "Pin active task versions; reject silent migration or tampering; honor current revocation.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT14",
+      "name": "R K and first execution",
+      "expected": "Reuse confirmed same-instance results; give new knowledge consumers their own identities, evidence and results.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT15",
+      "name": "Completion reconciliation",
+      "expected": "Do not overstate receipts, close missing goals or equate requested transfer with completed handoff.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT16",
+      "name": "Infrastructure and evaluator failures",
+      "expected": "Preserve unscored simulator, model, judge and bridge errors without fabricating customer messages.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT17",
+      "name": "Hidden-answer and evidence access boundaries",
+      "expected": "Reject hidden-answer leakage and cross-scope evidence reads; prove legitimate HTTP evidence reads work.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT18",
+      "name": "Todo and structured error propagation",
+      "expected": "Reject invalid Todo transitions without leaking internal errors as customer answers or bypassing effect authorization.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT19",
+      "name": "Cross-goal dependency conflict",
+      "expected": "Use visible policy and evidence to clarify and replan before a conflicting effect; retain useful valid paths.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT20",
+      "name": "Mandatory live Go dependency",
+      "expected": "Missing or stopped Go, wrong binary or protocol must prevent new bank writes; no baseline fallback.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT21",
+      "name": "Control wiring mutation",
+      "expected": "Removing real Go checks or substituting fixed allow must fail independent wiring assertions.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT22",
+      "name": "Go restart",
+      "expected": "Recover the original ledger with Java and Python alive; preserve unknown outcomes and no blind resend.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    },
+    {
+      "id": "CT23",
+      "name": "Governed improvement lifecycle",
+      "expected": "Run case to candidate to evaluation to explicitly approved activation; preserve old replay and forbid self-publication.",
+      "positive_and_negative_required": true,
+      "independent_oracle_required": true
+    }
+  ],
+  "acceptance": {
+    "go_alive_flag_alone_sufficient": false,
+    "require_binary_and_source_hashes": true,
+    "require_real_control_to_official_call_linkage": true,
+    "require_stop_go_no_new_writes_probe": true,
+    "require_wiring_mutation_detection": true,
+    "hard_control_failure_exit_code": "nonzero",
+    "result_axes": [
+      "integration_status",
+      "control_acceptance",
+      "benchmark_reward"
+    ],
+    "never_overwrite_historical_reward": true
+  },
+  "metrics": {
+    "scored_success_rate": "scored reward-one episodes / scored episodes",
+    "planned_success_completion_rate": "scored reward-one episodes / 66 planned regression positions per arm",
+    "unscored_official_reward": null,
+    "planned_indicator_is_not_official_reward": true,
+    "primary_delta": "Mean of per-task B1 minus B0 planned-success indicators across three seeds",
+    "resampling_unit": "task",
+    "bootstrap_draws": 10000,
+    "bootstrap_seed": 500,
+    "confidence_level": 0.95,
+    "model_variant_mismatches": "Retain and flag in primary analysis; report matching-variant subset separately.",
+    "new_severe_effect_violation_blocks_promotion": true,
+    "minimum_point_estimate_delta_for_observed_improvement": 0,
+    "require_strictly_positive_delta": true,
+    "require_no_scoring_coverage_decline": true,
+    "interval_crossing_zero": "Improvement remains uncertain.",
+    "generalization_claim_allowed": false,
+    "predicted_uplift_percentage": null
+  }
+}

@@ -1,0 +1,600 @@
+{
+  "date": "2026-11-16",
+  "compressed": false,
+  "regular_file_content_verified": true,
+  "moves": [
+    {
+      "old_path": "experiments/deepagent-todo-skill-mcp",
+      "new_path": "implementations/deepagent",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 4716,
+        "bytes": 1315507280,
+        "sha256": "bf4963d874dcc5ac521d57e9763b7b60bea7ae78ff9b7c1025a10dac1058986f"
+      },
+      "after": {
+        "files": 4716,
+        "bytes": 1315507280,
+        "sha256": "bf4963d874dcc5ac521d57e9763b7b60bea7ae78ff9b7c1025a10dac1058986f"
+      }
+    },
+    {
+      "old_path": "experiments/baseline-native-skill",
+      "new_path": "archive/native-skill-history",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 2998,
+        "bytes": 433477348,
+        "sha256": "fae45418ef3b4691c669132f0445006c50dae3d4a1ea90a678f92cfee0b5e357"
+      },
+      "after": {
+        "files": 2998,
+        "bytes": 433477348,
+        "sha256": "fae45418ef3b4691c669132f0445006c50dae3d4a1ea90a678f92cfee0b5e357"
+      }
+    },
+    {
+      "old_path": "experiments/moa-banking-orchestration",
+      "new_path": "experiments/plan-3-moa-refined-skills",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 14,
+        "bytes": 95529,
+        "sha256": "80dba10987f02a6fa5395e5e161b36e75ac80364daa614762edd5bdc7bdc5d55"
+      },
+      "after": {
+        "files": 14,
+        "bytes": 95529,
+        "sha256": "80dba10987f02a6fa5395e5e161b36e75ac80364daa614762edd5bdc7bdc5d55"
+      }
+    },
+    {
+      "old_path": "experiments/agent-hub-banking",
+      "new_path": "experiments/plan-4-agent-hub-refined-skills",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 139,
+        "bytes": 9832979,
+        "sha256": "c1645e6de55fc618fb6393859232335ec5f1a125465b0e1c18b3133f8959ed03"
+      },
+      "after": {
+        "files": 139,
+        "bytes": 9832979,
+        "sha256": "c1645e6de55fc618fb6393859232335ec5f1a125465b0e1c18b3133f8959ed03"
+      }
+    },
+    {
+      "old_path": "implementations/deepagent/reports",
+      "new_path": "archive/deepagent-history/reports",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 48,
+        "bytes": 15697749,
+        "sha256": "fd4c9ee1ee56ac16bb218a2dac136947fc705d057bcbbe072ac49748106b424f"
+      },
+      "after": {
+        "files": 48,
+        "bytes": 15697749,
+        "sha256": "fd4c9ee1ee56ac16bb218a2dac136947fc705d057bcbbe072ac49748106b424f"
+      }
+    },
+    {
+      "old_path": "implementations/deepagent/plans",
+      "new_path": "archive/deepagent-history/plans",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 2,
+        "bytes": 27400,
+        "sha256": "0e04598f09faf1e5bd95efbb5c253b0332cde60a8750be166480f622fb219d68"
+      },
+      "after": {
+        "files": 2,
+        "bytes": 27400,
+        "sha256": "0e04598f09faf1e5bd95efbb5c253b0332cde60a8750be166480f622fb219d68"
+      }
+    },
+    {
+      "old_path": "implementations/deepagent/runs",
+      "new_path": "archive/deepagent-history/runs",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 2733,
+        "bytes": 1088453261,
+        "sha256": "78954ca0d0f0a642a96f6a7d13a58a2025dcdbd685b96da43b3560e4d78f00b9"
+      },
+      "after": {
+        "files": 2733,
+        "bytes": 1088453261,
+        "sha256": "78954ca0d0f0a642a96f6a7d13a58a2025dcdbd685b96da43b3560e4d78f00b9"
+      }
+    },
+    {
+      "old_path": "implementations/deepagent/v0.4/reports",
+      "new_path": "archive/deepagent-history/v0.4/reports",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 13,
+        "bytes": 65639,
+        "sha256": "562f084bc98c129138e3f7361e1e43469e43e024375de6468ca09dcc8d167f64"
+      },
+      "after": {
+        "files": 13,
+        "bytes": 65639,
+        "sha256": "562f084bc98c129138e3f7361e1e43469e43e024375de6468ca09dcc8d167f64"
+      }
+    },
+    {
+      "old_path": "implementations/deepagent/v0.4/plans",
+      "new_path": "archive/deepagent-history/v0.4/plans",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 7,
+        "bytes": 117050,
+        "sha256": "6c710d0d87fb371629963fd00937c7bac9d99c4206d876ba8484a677fa451cb7"
+      },
+      "after": {
+        "files": 7,
+        "bytes": 117050,
+        "sha256": "6c710d0d87fb371629963fd00937c7bac9d99c4206d876ba8484a677fa451cb7"
+      }
+    },
+    {
+      "old_path": "implementations/deepagent/v0.4/runs",
+      "new_path": "archive/deepagent-history/v0.4/runs",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 1816,
+        "bytes": 210642086,
+        "sha256": "a244157e9e769f27fa60204b27b233134d617dd34493d57e95b8db0d6a8b40f5"
+      },
+      "after": {
+        "files": 1816,
+        "bytes": 210642086,
+        "sha256": "a244157e9e769f27fa60204b27b233134d617dd34493d57e95b8db0d6a8b40f5"
+      }
+    },
+    {
+      "old_path": "experiments/plan-4-agent-hub-refined-skills/v1.0",
+      "new_path": "archive/agent-hub-history/v1.0",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 133,
+        "bytes": 9773610,
+        "sha256": "025dd1a594cdfb9a935e840ef959abc30a536ffd13152f281ce3d19021056890"
+      },
+      "after": {
+        "files": 133,
+        "bytes": 9773610,
+        "sha256": "025dd1a594cdfb9a935e840ef959abc30a536ffd13152f281ce3d19021056890"
+      }
+    },
+    {
+      "old_path": "experiments/plan-4-agent-hub-refined-skills/v1.1",
+      "new_path": "experiments/plan-4-agent-hub-refined-skills/design",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 5,
+        "bytes": 56419,
+        "sha256": "c7de0c94ee338af97f2f9132ec81b115914512431325c6c07f7eb0dff778d49c"
+      },
+      "after": {
+        "files": 5,
+        "bytes": 56419,
+        "sha256": "c7de0c94ee338af97f2f9132ec81b115914512431325c6c07f7eb0dff778d49c"
+      }
+    },
+    {
+      "old_path": "reports",
+      "new_path": "archive/reference-reports",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 3,
+        "bytes": 53507,
+        "sha256": "ecd41b7cdf10e37ab78f3cbb0b8a9068fc371bf2cff490d7a1e75d4764b7685d"
+      },
+      "after": {
+        "files": 3,
+        "bytes": 53507,
+        "sha256": "ecd41b7cdf10e37ab78f3cbb0b8a9068fc371bf2cff490d7a1e75d4764b7685d"
+      }
+    },
+    {
+      "old_path": "evidence",
+      "new_path": "archive/reference-evidence",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 5,
+        "bytes": 323739,
+        "sha256": "edfefb3f9ebe203ceedc130da47bb138ef069240eb6a8069e651420513b0ae7a"
+      },
+      "after": {
+        "files": 5,
+        "bytes": 323739,
+        "sha256": "edfefb3f9ebe203ceedc130da47bb138ef069240eb6a8069e651420513b0ae7a"
+      }
+    },
+    {
+      "old_path": "tau3-local-guide.md",
+      "new_path": "archive/reference-documents/tau3-local-guide.md",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 1,
+        "bytes": 27168,
+        "sha256": "2b00f3976ae4788eab9de7adea624da116c2da15f02855d000eec672fa5aa571"
+      },
+      "after": {
+        "files": 1,
+        "bytes": 27168,
+        "sha256": "2b00f3976ae4788eab9de7adea624da116c2da15f02855d000eec672fa5aa571"
+      }
+    },
+    {
+      "old_path": "企业任务执行效果指标卡-V0.2.md",
+      "new_path": "archive/reference-documents/企业任务执行效果指标卡-V0.2.md",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 1,
+        "bytes": 84948,
+        "sha256": "d9d2992df370ad7fe35dd40fd9e8143a6dd11461f48c3285a09cb1430a4ea952"
+      },
+      "after": {
+        "files": 1,
+        "bytes": 84948,
+        "sha256": "d9d2992df370ad7fe35dd40fd9e8143a6dd11461f48c3285a09cb1430a4ea952"
+      }
+    },
+    {
+      "old_path": "数据采集方法-V0.2.md",
+      "new_path": "archive/reference-documents/数据采集方法-V0.2.md",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 1,
+        "bytes": 35472,
+        "sha256": "9dcde68ac88e65b62efc1b318738af08ae88f2ceac92ba83a8a5bac9f93aed9d"
+      },
+      "after": {
+        "files": 1,
+        "bytes": 35472,
+        "sha256": "9dcde68ac88e65b62efc1b318738af08ae88f2ceac92ba83a8a5bac9f93aed9d"
+      }
+    },
+    {
+      "old_path": "测试执行计划-V0.2.md",
+      "new_path": "archive/reference-documents/测试执行计划-V0.2.md",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 1,
+        "bytes": 37067,
+        "sha256": "0cf48f6603f58b3681e7363ba52c92b81216281063b480c72274525c3d11a3fe"
+      },
+      "after": {
+        "files": 1,
+        "bytes": 37067,
+        "sha256": "0cf48f6603f58b3681e7363ba52c92b81216281063b480c72274525c3d11a3fe"
+      }
+    },
+    {
+      "old_path": "银行Bench全部测试用例-中文版.md",
+      "new_path": "archive/reference-documents/银行Bench全部测试用例-中文版.md",
+      "compatibility_symlink": true,
+      "before": {
+        "files": 1,
+        "bytes": 438680,
+        "sha256": "790a95f6618790121d82ff35f0e8d8a1bc8942b73c5fd224fd02f4bd6c807235"
+      },
+      "after": {
+        "files": 1,
+        "bytes": 438680,
+        "sha256": "790a95f6618790121d82ff35f0e8d8a1bc8942b73c5fd224fd02f4bd6c807235"
+      }
+    }
+  ],
+  "note": "Relative symlink targets were adjusted; frozen regular files and run manifests were not edited.",
+  "archive_link_aliases": [
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_001.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_002.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_003.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_004.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_005.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_006.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_007.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_008.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_010.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_012.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_014.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_015.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_016.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_017.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_018.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_019.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_020.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_021.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_022.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_023.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_024.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_025.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_026.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_027.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_028.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_029.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_031.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_032.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_033.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_034.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_035.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_036.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_037.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_038.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_039.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_040.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_041.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_043.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_044.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_045.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_046.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_047.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_048.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_049.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_050.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_051.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_052.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_053.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_054.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_055.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_056.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_057.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_058.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_059.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_060.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_061.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_062.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_063.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_064.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_065.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_066.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_067.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_068.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_069.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_070.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_071.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_072.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_073.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_074.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_075.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_076.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_077.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_078.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_079.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_080.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_081.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_082.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_083.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_084.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_085.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_086.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_087.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_088.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_089.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_090.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_091.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_092.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_093.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_094.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_095.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_096.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_097.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_098.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_099.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_100.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_101.json",
+    "archive/reference-documents/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_102.json",
+    "archive/reference-documents/DeepAgent搭建与验证-V0.3.1.md",
+    "archive/reference-documents/enterprise-java/README.md",
+    "archive/reference-documents/experiments/deepagent-todo-skill-mcp/reports/round-01-20261115-a00/人工核查与建议.md",
+    "archive/reference-documents/experiments/deepagent-todo-skill-mcp/reports/round-01-20261115-a00/本轮执行报告.md",
+    "archive/reference-documents/experiments/deepagent-todo-skill-mcp/v0.4/plans/skill33-zh-single-round/plan.json",
+    "archive/reference-documents/experiments/deepagent-todo-skill-mcp/v0.4/reports/zh-e2e-20261116-a02/端到端测试报告.md",
+    "archive/reference-documents/experiments/deepagent-todo-skill-mcp/v0.4/reports/zh-skill32-20261116-a00/Skill3.2复验报告.md",
+    "archive/reference-documents/experiments/deepagent-todo-skill-mcp/v0.4/reports/zh-todo-20261116-a00/提示词复验报告.md",
+    "archive/reference-documents/experiments/deepagent-todo-skill-mcp/v0.4/多轮优化总结.md",
+    "archive/reference-documents/experiments/deepagent-todo-skill-mcp/v0.4/测试方案与架构评审.md",
+    "archive/reference-documents/runs/enterprise-v02-20261114/progress.md",
+    "archive/reference-documents/runs/enterprise-v02-timeout1200-20261114/P06-repetition-analysis.json",
+    "archive/reference-documents/runs/enterprise-v02-timeout1200-20261114/P07-full-suite-analysis.json",
+    "archive/reference-documents/runs/enterprise-v02-timeout1200-20261114/freeze-plan/manifest.json",
+    "archive/reference-documents/runs/enterprise-v02-timeout1200-20261114/progress.md",
+    "archive/reference-documents/runs/smoke-20261113T154715Z/metrics-v02.md",
+    "archive/reference-documents/runs/smoke-20261113T154715Z/smoke-summary.json",
+    "archive/reference-documents/viewer/README.md"
+  ],
+  "unresolved_archive_links": [
+    {
+      "file": "archive/deepagent-history/reports/搭建与验证-V0.3.1.md",
+      "target": "runs/deepagent-development/验证结果.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/验证结果.md",
+      "target": "protocol-a03/result.json"
+    },
+    {
+      "file": "archive/deepagent-history/reports/验证结果.md",
+      "target": "live-a02/deepagent-diagnostics.json"
+    },
+    {
+      "file": "archive/deepagent-history/reports/验证结果.md",
+      "target": "live-a02/diagnostics/task041-trial0-db-diff.json"
+    },
+    {
+      "file": "archive/deepagent-history/reports/验证结果.md",
+      "target": "live-a02/metrics-v02.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/验证结果.md",
+      "target": "validation-results.json"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/rails/TaskPlanningRail.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/prompts/sections/TodoSection.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/deep_agent/DeepAgent.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/schema/config/DeepAgentConfig.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "runs/enterprise-v02-timeout1200-20261114/P07-single-round-summary.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "runs/enterprise-v02-timeout1200-20261114/当前Agent装配选型复核.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "runs/enterprise-v02-timeout1200-20261114/48个未通过案例逐项分析.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "企业任务执行效果指标卡-V0.2.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent规划对照测试方案-V0.1.md",
+      "target": "数据采集方法-V0.2.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "DeepAgent-Todo-Skill-MCP测试设计-V0.3.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "java/src/main/java/eval/Tau2Bridge.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "python/java_agent.py"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "python/episode.py"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "../agent-core-java/examples/deep_agent_without_jedis/src/main/java/examples/deepagent/DeepAgentWithoutJedisExample.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/rails/TaskPlanningRail.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/tools/FileTodoStorage.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/rails/interrupt/AskUserRail.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/core/foundation/tool/Tool.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/core/foundation/tool/ToolCard.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": ".deps/tau2-bench/src/tau2/domains/banking_knowledge/tools.py"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "企业任务执行效果指标卡-V0.2.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "target": "数据采集方法-V0.2.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "DeepAgent搭建与验证-V0.3.1.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "runs/enterprise-v02-timeout1200-20261114/单轮测试耗时原因分析.md"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "runs/enterprise-v02-timeout1200-20261114/single-round-latency-data.json"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "java/src/main/java/eval/Tau2Bridge.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "java/src/main/java/eval/ObservedToolContext.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/rails/skills/SkillUseRail.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "../agent-core-java/core/src/main/java/com/openjiuwen/harness/tools/skills/SkillTool.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "../agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/agent/skill/NativeSkillAgent.java"
+    },
+    {
+      "file": "archive/deepagent-history/reports/测试设计-V0.3.md",
+      "target": "../agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/agent/skill/SkillOperation.java"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/测试方案与架构评审.md",
+      "target": "../../deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/测试方案与架构评审.md",
+      "target": "../../deepagent-todo-skill-mcp/python/benchmark_mcp.py"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/测试方案与架构评审.md",
+      "target": "../../deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentBridge.java"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/测试方案与架构评审.md",
+      "target": "../../deepagent-todo-skill-mcp/python/deepagent_java_agent.py"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/测试方案与架构评审.md",
+      "target": "../../deepagent-todo-skill-mcp/python/run_deepagent.py"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/测试方案与架构评审.md",
+      "target": "../../deepagent-todo-skill-mcp/python/run_deepagent.py"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/测试方案与架构评审.md",
+      "target": "../../deepagent-todo-skill-mcp/reports/round-01-20261115-a00/人工核查与建议.md"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/reports/design-audit-20261116/测试方案审查与修订要求.md",
+      "target": "../../../../deepagent-todo-skill-mcp/java/src/main/java/eval/DeepAgentAssembly.java"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/reports/design-audit-20261116/测试方案审查与修订要求.md",
+      "target": "../../../../deepagent-todo-skill-mcp/python/deepagent_java_agent.py"
+    },
+    {
+      "file": "archive/agent-hub-history/v1.0/reports/design-audit-20261116/测试方案审查与修订要求.md",
+      "target": "../../../../deepagent-todo-skill-mcp/python/benchmark_mcp.py"
+    }
+  ]
+}

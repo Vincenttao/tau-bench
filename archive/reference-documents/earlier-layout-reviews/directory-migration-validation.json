@@ -1,0 +1,32 @@
+{
+  "new_navigation_links_valid": true,
+  "plan_skill_bindings": [
+    "plan-1-deepagent-original-skills",
+    "plan-2-deepagent-refined-skills",
+    "plan-3-moa-refined-skills",
+    "plan-4-agent-hub-refined-skills"
+  ],
+  "viewer_runs_discovered": 18,
+  "raw_run_git_ignored": true,
+  "agents_md_unchanged": true,
+  "unit_tests": {
+    "trace_viewer": 7,
+    "skill_assets": 7,
+    "mcp": 6
+  },
+  "live_model_test_performed": false,
+  "legacy_unresolved_link_occurrences": 47,
+  "legacy_links_note": "Missing also via retained old logical paths; listed in directory-migration.json; historical text not rewritten.",
+  "offline_plan_generation": [
+    {
+      "skill": "1.0.0",
+      "exit_code": 0,
+      "manifest_exists": true
+    },
+    {
+      "skill": "banking-evidence-guides",
+      "exit_code": 0,
+      "manifest_exists": true
+    }
+  ]
+}

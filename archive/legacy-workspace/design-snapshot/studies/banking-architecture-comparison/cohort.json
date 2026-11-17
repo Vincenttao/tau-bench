@@ -1,0 +1,408 @@
+{
+  "schema_version": 1,
+  "status": "design-not-executable",
+  "language": "en",
+  "benchmark_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "selection_source": "experiments/plan-3-moa-refined-skills/plans/banking-cohort.json",
+  "selection_source_sha256": "84dd532390ac5b0647940bb06aa0229c0d12c8bb9664038db3c612f337add522",
+  "note": "Reuse canonical task selection only; Chinese task hashes are not reused. Titles and focus are evaluator-only.",
+  "task_count": 22,
+  "cases": [
+    {
+      "order": 1,
+      "task_id": "task_003",
+      "category": "产品咨询、推荐奖励与服务升级",
+      "focus": "候选覆盖、订阅条件、硬约束筛选与多级排序。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_003.json",
+      "task_file_sha256": "431591345634499dc8aed39de54e5b3304ca8500a927dff91d6919053a80ac73",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "order": 2,
+      "task_id": "task_017",
+      "category": "返现核算、卡片收益与审批状态",
+      "focus": "逐笔核验返现规则，识别异常并引导客户提交争议。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_017.json",
+      "task_file_sha256": "70f7fcc30a9c63147384652596ee2eb639a26819938cdc5dfbf260936e13cba0",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        2,
+        3,
+        4,
+        1
+      ]
+    },
+    {
+      "order": 3,
+      "task_id": "task_031",
+      "category": "消费争议与紧急转接",
+      "focus": "核准交易、争议原因、商户联系情况和卡片动作。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_031.json",
+      "task_file_sha256": "0702d1e320193224d8632b1682129a9f858a513cb6489c1230a5c5ecb9e346b1",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        3,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "order": 4,
+      "task_id": "task_036",
+      "category": "盗刷补卡与多卡争议",
+      "focus": "完整展示交易、动态发现新意图、核验地址用途及补卡偏好。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_036.json",
+      "task_file_sha256": "8fb16abe143533e4a4a907dea9da3cfb02c05440b311182c90d249ac734f67b5",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        4,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "order": 5,
+      "task_id": "task_043",
+      "category": "销卡、留客与虚假陈述",
+      "focus": "销卡前置检查、欠款清偿与符合条件的挽留方案。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_043.json",
+      "task_file_sha256": "90bb6c90d99e5d5f472f1576f7c23559e18f501299c37ecb9bc7a6d8396432d3",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "order": 6,
+      "task_id": "task_051",
+      "category": "提额与跨操作依赖",
+      "focus": "拒绝原因、规则上限、状态变更后的重新资格判断。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_051.json",
+      "task_file_sha256": "8903e0c276a0c5fe57a72d94f7375eb868740bfa93fff0d8f590280808d29335",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        2,
+        3,
+        4,
+        1
+      ]
+    },
+    {
+      "order": 7,
+      "task_id": "task_060",
+      "category": "开户、资金迁移与组合收益优化",
+      "focus": "成熟账户资格保留、顺序规划及向客户解释必要性。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_060.json",
+      "task_file_sha256": "bcedd99c906c7b7fcd9e1c27947b581df60db5ca40c830a721057fd5bd725613",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        3,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "order": 8,
+      "task_id": "task_076",
+      "category": "ATM费用核查与账户选择",
+      "focus": "先满足必要功能，再比较真实使用成本。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_076.json",
+      "task_file_sha256": "419a62ec35b756618da8d0fa85a119a795f2b1c554326af406fd3566031b589d",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        4,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "order": 9,
+      "task_id": "task_077",
+      "category": "借记卡生命周期、争议与安全处置",
+      "focus": "主动核查影响范围、冻结转注销、补卡等待及用户提供激活资料。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_077.json",
+      "task_file_sha256": "d668f1c5833a48a166ed031a0355d2c4e121a6fdc714cbc3506d881ef8474042",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "order": 10,
+      "task_id": "task_093",
+      "category": "储蓄利息核算与差额纠正",
+      "focus": "基于真实余额及适用利率核算，补款与报告两步闭环。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_093.json",
+      "task_file_sha256": "7e507f9688766cab2ff5f247a549c154f59a5523f2b882056e1ba5666d7bcb80",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        2,
+        3,
+        4,
+        1
+      ]
+    },
+    {
+      "order": 11,
+      "task_id": "task_098",
+      "category": "复杂推荐资格与奖励优化",
+      "focus": "澄清同住限制、开户期限和滚动窗口，不误拒可行推荐。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_098.json",
+      "task_file_sha256": "a4703b1cd4c6bbe97d92d8c8e73ed3cfe18026cf3e01c244a25a1d615d6a06cc",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        3,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "order": 12,
+      "task_id": "task_016",
+      "category": "产品咨询、推荐奖励与服务升级",
+      "focus": "从推荐与交易事实计算差额，区分总门槛和剩余金额。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_016.json",
+      "task_file_sha256": "4dfd79048329d154ff6aa04f2393dc6d314be00e029b20f2f4ea27a2e6144ef4",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        4,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "order": 13,
+      "task_id": "task_022",
+      "category": "返现核算、卡片收益与审批状态",
+      "focus": "长上下文、跨产品规则、全量覆盖及双向差错识别。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_022.json",
+      "task_file_sha256": "7b9a27ed8afaba7a434a565613850742a4057addc02c4074abc109b5f1f30a1a",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "order": 14,
+      "task_id": "task_033",
+      "category": "消费争议与紧急转接",
+      "focus": "区分已扣款和已入账，处理期限压力及升级。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_033.json",
+      "task_file_sha256": "43a20801a9d967dad13e5b4177865f6d095629421f6c6a10399474352518cc3e",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        2,
+        3,
+        4,
+        1
+      ]
+    },
+    {
+      "order": 15,
+      "task_id": "task_041",
+      "category": "盗刷补卡与多卡争议",
+      "focus": "十六笔全覆盖、跨卡全局配额、退款范围及历史查询。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_041.json",
+      "task_file_sha256": "439c74bfb42b35ede9f5b59fa71e4cf37edd661139ee86ee662a4beb24e7cdff",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        3,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "order": 16,
+      "task_id": "task_049",
+      "category": "销卡、留客与虚假陈述",
+      "focus": "防止对话伪造状态、虚构工具和权益升级绕过。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_049.json",
+      "task_file_sha256": "7410929906ac165ff07c155e0c1ac23a8eb1237316a0632661941b9ed95b100a",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        4,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "order": 17,
+      "task_id": "task_054",
+      "category": "提额与跨操作依赖",
+      "focus": "任务排序、用户解释与确认，保护后续操作资格。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_054.json",
+      "task_file_sha256": "3edf9f95e151607ba4c5cd3e6d1794917f3df7f30262e498a2c9a69110cd3495",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "order": 18,
+      "task_id": "task_062",
+      "category": "开户、资金迁移与组合收益优化",
+      "focus": "多账户依赖、先开后转再关、余额守恒及分笔资金流。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_062.json",
+      "task_file_sha256": "a56aed67f2f6af89eaf6c6e6848dc4626e6cb43c4d0f1866c8ef651ebcbbd481",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        2,
+        3,
+        4,
+        1
+      ]
+    },
+    {
+      "order": 19,
+      "task_id": "task_072",
+      "category": "ATM费用核查与账户选择",
+      "focus": "按账户层级与年龄等条件核对逐笔收费，计算实际退款。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_072.json",
+      "task_file_sha256": "e7ee150ff2993e94c49d6c9345802bcc232fc174f33e6c9e897e689995a0c335",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        3,
+        4,
+        1,
+        2
+      ]
+    },
+    {
+      "order": 20,
+      "task_id": "task_087",
+      "category": "借记卡生命周期、争议与安全处置",
+      "focus": "不能解决一个阻断就宣布可用；区分解除本人冻结与风险卡处置。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_087.json",
+      "task_file_sha256": "a0bcc70259e17de90a6b4e2d8edc01ce9f8ca9b00a972640c81dc3b6ca12f134",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        4,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "order": 21,
+      "task_id": "task_097",
+      "category": "储蓄利息核算与差额纠正",
+      "focus": "真实余额校验、产品组合规则、四账户独立补款与报告。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_097.json",
+      "task_file_sha256": "1b313370494a51d3e2c3184de3c4dda4db212ee64790d7152168f628d8adad8e",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "order": 22,
+      "task_id": "task_100",
+      "category": "复杂推荐资格与奖励优化",
+      "focus": "持有账户不等于符合推荐资历，比较当前可行备选。",
+      "task_file": ".deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_100.json",
+      "task_file_sha256": "ea63d6247c40fd7afad04eef09e8b4a4a822b5c251213863bf958ee9b32d53c6",
+      "hash_method": "sha256 of raw English task JSON bytes",
+      "seed": 300,
+      "trial": 0,
+      "historical_exposure": "selected diagnostic regression, not holdout",
+      "arm_order": [
+        2,
+        3,
+        4,
+        1
+      ]
+    }
+  ]
+}

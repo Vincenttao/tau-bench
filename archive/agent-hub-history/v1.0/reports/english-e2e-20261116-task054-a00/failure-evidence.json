@@ -1,0 +1,162 @@
+{
+  "index_convention": "Zero-based indexes in official simulation messages and native JSONL events.",
+  "source_result_sha256": "5b58b9315b64bfcfd632bf39ddef3863ea424bc60b7788330f4c81ed3ef78c03",
+  "native_event_path": "experiments/agent-hub-banking/v1.0/runs/english-e2e-20261116-task054-a00/banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/deepagent-events.jsonl",
+  "native_events_sha256": "fa1448a5305334dad849d61fc9d18e069127d3e432f9a3924cf7e4a07bdd3ceb",
+  "policy_message_index": 7,
+  "policy_snippets": [
+    " eligible to submit again.\n3. No Pending Disputes: Verify the account has no active disputes.\n4. No Pending Replacement Cards: Verify there are no outstanding replacement card orders for this account. If a replacement is pending, the CLI cannot be processed until the r",
+    "nt has no active disputes.\n4. No Pending Replacement Cards: Verify there are no outstanding replacement card orders for this account. If a replacement is pending, the CLI cannot be processed until the replacement is delivered or cancelled.\n5. Account Good Standing: The account ",
+    "t credit limit per request.\n- Premium-tier cards: Maximum increase of 50% of current credit limit per request.\n\nIf the customer requests more than the maximum allowed for their tier, inform them of the maximum amount they are eligible for and ask if they would like to proceed with that amount"
+  ],
+  "first_model_request_with_conflict_policy": {
+    "event_index": 29,
+    "time_ms": 1794830397267,
+    "contains_50_percent_rule": true
+  },
+  "todo_tool_calls": [
+    {
+      "event_index": 31,
+      "time_ms": 1794830422869,
+      "data": {
+        "arguments": "{\"tasks\": [{\"id\": \"verify_identity\", \"content\": \"Verify customer identity (2 of 4 fields)\", \"activeForm\": \"Verifying customer identity\", \"description\": \"Source: bank policy (SKILL.md). Need full name + 2 of (DOB, email, phone, address) via get_user_information_*. Log verification after success. Blocks all account access.\"}, {\"id\": \"dispute_txn_evidence\", \"content\": \"Gather CloudSync charge transaction evidence\", \"activeForm\": \"Gathering dispute transaction evidence\", \"description\": \"Source: guides/disputes/transaction-dispute.md. Look up credit card transactions (get_credit_card_transactions_by_user) to confirm CloudSync Storage $487.50 charge, date, card last 4. Ask customer for purchase date, noticed date, merchant contact, resolution.\"}, {\"id\": \"dispute_eligibility\", \"content\": \"Check dispute eligibility and provisional credit\", \"activeForm\": \"Checking dispute eligibility and provisional credit\", \"description\": \"Source: doc_credit_cards_credit_cards_(general)_015. Gold=Premium tier max $10k provisional. Reason unauthorized_fraudulent_charge, amount $487.50 >= $25, account open >=60 days, <=2 disputes in past 12 months (query dispute history).\"}, {\"id\": \"dispute_submit\", \"content\": \"Submit credit card dispute via file_credit_card_transaction_dispute_4829\", \"activeForm\": \"Submitting credit card dispute\", \"description\": \"Source: doc_credit_cards_credit_cards_(general)_014. card_action per fraud = cancel_and_reissue. Requires verified identity, transaction evidence, eligibility done.\"}, {\"id\": \"dispute_verify\", \"content\": \"Verify dispute submission outcome\", \"activeForm\": \"Verifying dispute submission outcome\", \"description\": \"Source: guides/disputes/transaction-dispute.md. Check receipt/state for submitted dispute; report status accurately.\"}, {\"id\": \"replacement_eligibility\", \"content\": \"Check replacement card eligibility (no pending order, within tier limit)\", \"activeForm\": \"Checking replacement card eligibility\", \"description\": \"Source: doc_credit_cards_credit_card_replacements_004 + guide accounts/account-changes.md. Premium tier max 4 replacements/60 days; no existing pending replacement. Gold=Premium tier; expedited $0.\"}, {\"id\": \"replacement_confirm\", \"content\": \"Confirm shipping address and shipping speed with customer\", \"activeForm\": \"Confirming replacement card shipping details\", \"description\": \"Source: doc_credit_cards_credit_card_replacements_001. Confirm primary/alternate address, expedited vs standard. Reason = fraud_suspected (customer stated compromise).\"}, {\"id\": \"replacement_order\", \"content\": \"Order replacement card via order_replacement_credit_card_7291\", \"activeForm\": \"Ordering replacement credit card\", \"description\": \"Source: doc_credit_cards_credit_card_replacements_001. Requires eligibility + confirmed shipping details.\"}, {\"id\": \"replacement_verify\", \"content\": \"Verify replacement order outcome\", \"activeForm\": \"Verifying replacement order outcome\", \"description\": \"Source: guides/accounts/account-changes.md. Check receipt/state; old card cancelled, new card pending.\"}, {\"id\": \"cli_amount_confirm\", \"content\": \"Confirm CLI requested amount within tier max (50% of current limit)\", \"activeForm\": \"Confirming CLI requested amount\", \"description\": \"Source: doc_credit_cards_credit_card_account_logistics_006. Gold=Premium tier max 50% increase. Ask customer for requested amount.\"}, {\"id\": \"cli_submit\", \"content\": \"Submit CLI request via submit_credit_limit_increase_request_7392\", \"activeForm\": \"Submitting CLI request\", \"description\": \"Source: doc_credit_cards_credit_card_account_logistics_007. Requires confirmed amount within limits.\"}, {\"id\": \"cli_eligibility\", \"content\": \"Check CLI eligibility criteria (age, cooldown, disputes, replacement, standing, utilization, payment history)\", \"activeForm\": \"Checking CLI eligibility criteria\", \"description\": \"Source: doc_credit_cards_credit_card_account_logistics_005/006/007. Premium tier: age>=60d, cooldown 60d, util<90%, 3 consecutive on-time months; no pending disputes or replacements; not past due. Query each.\"}, {\"id\": \"cli_decision\", \"content\": \"Process CLI decision (approve_credit_limit_increase_5847 / deny_credit_limit_increase_5848)\", \"activeForm\": \"Processing CLI decision\", \"description\": \"Source: doc_credit_cards_credit_card_account_logistics_007. Approve only if all eligibility met; else deny with reason.\"}, {\"id\": \"cli_verify\", \"content\": \"Verify CLI decision and effective limit\", \"activeForm\": \"Verifying CLI decision\", \"description\": \"Source: guides/credit-card/limit-adjustment.md. Confirm new limit via authoritative readback or receipt.\"}]}",
+        "name": "todo_create"
+      },
+      "event": "tool_start"
+    },
+    {
+      "event_index": 52,
+      "time_ms": 1794830450659,
+      "data": {
+        "arguments": "{\"action\": \"update\", \"todos\": [{\"id\": \"verify_identity\", \"status\": \"completed\", \"description\": \"DONE: get_user_information_by_name matched. Verified DOB 01/25/1986 + phone 347-555-0387 (2 of 4). log_verification success at 2025-11-14 03:40:00 EST. user_id=584f9c5d00.\"}, {\"id\": \"dispute_txn_evidence\", \"status\": \"in_progress\"}]}",
+        "name": "todo_modify"
+      },
+      "event": "tool_start"
+    },
+    {
+      "event_index": 98,
+      "time_ms": 1794830593764,
+      "data": {
+        "arguments": "{\"action\": \"update\", \"todos\": [{\"id\": \"dispute_txn_evidence\", \"status\": \"completed\", \"description\": \"DONE: get_credit_card_transactions_by_user -> txn_584f9c5d00_001 CloudSync Storage $487.50 11/11/2025 COMPLETED, account cc_584f9c5d00_gold, card last4 7823. Customer: noticed 11/12/2025, no merchant contact, wants full refund, unauthorized/fraud. Account ACTIVE, balance $487.50, limit $5000.\"}, {\"id\": \"dispute_eligibility\", \"status\": \"completed\", \"description\": \"DONE: Provisional credit ELIGIBLE per doc_credit_cards_(general)_015: account opened 03/20/2023 (>60d); reason unauthorized_fraudulent_charge; $487.50 within $25-$10,000 (Premium/Gold max $10k); get_user_dispute_history_7291 = 0 prior disputes (<=2). => eligible_for_provisional_credit=true.\"}, {\"id\": \"replacement_eligibility\", \"status\": \"completed\", \"description\": \"DONE: get_pending_replacement_orders_5765 -> no pending orders (skill-16). Account cc_584f9c5d00_gold ACTIVE, single Gold card. Premium tier max 4 replacements/60d; no dedicated per-count history tool exists -> order tool enforces limit authoritatively. Within tier limit (will confirm on order receipt).\"}, {\"id\": \"replacement_confirm\", \"status\": \"completed\", \"description\": \"DONE: Customer confirmed address 1456 Astoria Boulevard, Queens, NY 11102 (matches address on file), STANDARD delivery (7-10 biz days, $0 fee), reason fraud_suspected.\"}, {\"id\": \"replacement_order\", \"status\": \"in_progress\", \"description\": \"Order replacement via order_replacement_credit_card_7291: account cc_584f9c5d00_gold, reason fraud_suspected, address 1456 Astoria Boulevard Queens NY 11102, shipping standard ($0, no expedited fee), notes fraud/compromised. Sequence: order replacement FIRST, then file dispute with card_action=cancel_and_reissue (per doc_credit_cards_(general)_014).\"}]}",
+        "name": "todo_modify"
+      },
+      "event": "tool_start"
+    },
+    {
+      "event_index": 108,
+      "time_ms": 1794830607829,
+      "data": {
+        "arguments": "{\"action\": \"update\", \"todos\": [{\"id\": \"dispute_submit\", \"status\": \"in_progress\", \"description\": \"File via file_credit_card_transaction_dispute_4829: txn_584f9c5d00_001, card_action=cancel_and_reissue (record only), card 7823, Sofia Papadopoulos 584f9c5d00, 347-555-0387, sofia.p@outlook.com, 1456 Astoria Blvd Queens NY 11102, contacted_merchant=false, purchase 11/11/2025, noticed 11/12/2025, reason unauthorized_fraudulent_charge, resolution full_refund, eligible_for_provisional_credit=true.\"}]}",
+        "name": "todo_modify"
+      },
+      "event": "tool_start"
+    },
+    {
+      "event_index": 121,
+      "time_ms": 1794830630783,
+      "data": {
+        "arguments": "{\"action\": \"update\", \"todos\": [{\"id\": \"dispute_submit\", \"status\": \"completed\", \"description\": \"DONE (official_call_id=skill-21): file_credit_card_transaction_dispute_4829 succeeded. Dispute ID dsp_f8aab53ad42b, txn_584f9c5d00_001, Unauthorized Fraudulent Charge, Full Refund, Provisional Credit ELIGIBLE - applied within 2 business days. card_action=cancel_and_reissue (record only).\"}, {\"id\": \"dispute_verify\", \"status\": \"in_progress\", \"description\": \"Verify dispute in authoritative state via get_user_dispute_history_7291 readback; compare dsp_f8aab53ad42b + status. Report accurately (filed, not resolved).\"}, {\"id\": \"replacement_order\", \"status\": \"in_progress\", \"description\": \"Order replacement via order_replacement_credit_card_7291: credit_card_account_id=cc_584f9c5d00_gold, user_id=584f9c5d00, shipping_address=1456 Astoria Boulevard, Queens, NY 11102, reason=fraud_suspected, expedited_shipping=false (standard, free).\"}]}",
+        "name": "todo_modify"
+      },
+      "event": "tool_start"
+    },
+    {
+      "event_index": 125,
+      "time_ms": 1794830643875,
+      "data": {
+        "arguments": "{\"action\": \"update\", \"todos\": [{\"id\": \"dispute_submit\", \"status\": \"completed\", \"description\": \"DONE (skill-21): Dispute dsp_f8aab53ad42b filed, txn_584f9c5d00_001, Unauthorized Fraudulent Charge, Full Refund, provisional credit eligible.\"}, {\"id\": \"dispute_verify\", \"status\": \"completed\", \"description\": \"DONE (skill-22 readback): get_user_dispute_history_7291 shows dsp_f8aab53ad42b status=SUBMITTED, provisional_credit_given=True, submitted_at 11/14/2025. Filed, not yet resolved.\"}, {\"id\": \"replacement_order\", \"status\": \"completed\", \"description\": \"DONE (skill-23): order_replacement_credit_card_7291 success. Order ID ccord_ad344b6a4227, reason Fraud Suspected, standard shipping to 1456 Astoria Blvd Queens NY 11102, 7-10 business days. Old card 7823 cancelled.\"}, {\"id\": \"replacement_verify\", \"status\": \"in_progress\", \"description\": \"Verify replacement order via get_pending_replacement_orders_5765 readback; confirm order ccord_ad344b6a4227 pending.\"}]}",
+        "name": "todo_modify"
+      },
+      "event": "tool_start"
+    },
+    {
+      "event_index": 132,
+      "time_ms": 1794830680757,
+      "data": {
+        "arguments": "{\"action\": \"update\", \"todos\": [{\"id\": \"replacement_verify\", \"status\": \"completed\", \"description\": \"DONE (skill-24 readback): get_pending_replacement_orders_5765 shows ccord_ad344b6a4227 status=ORDERED, old_card_cancelled=True, standard shipping, order_date 11/14/2025. Replacement ordered (not yet delivered).\"}, {\"id\": \"cli_amount_confirm\", \"status\": \"completed\", \"description\": \"DONE: Premium/Gold max increase = 50% of current limit ($5,000) = $2,500 (max new limit $7,500). Customer requested $4,000 -> EXCEEDS tier max. Per doc_..._007 Step 0 must NOT submit over-limit request; must inform customer of $2,500 max.\"}, {\"id\": \"cli_eligibility\", \"status\": \"completed\", \"description\": \"DONE evaluating: age 03/20/2023 (>60d) OK; cooldown none OK; utilization $487.50/$5,000=9.75% <90% OK; payment 3 on-time OK; past_due $0 OK. BUT pending dispute dsp_f8aab53ad42b (SUBMITTED) FAILS 'no pending disputes' + pending replacement ccord_ad344b6a4227 (ORDERED) FAILS 'no pending replacement cards'. -> NOT eligible to process now.\"}, {\"id\": \"cli_submit\", \"status\": \"pending\", \"description\": \"BLOCKED - NOT submitted. Two blockers: (1) $4,000 exceeds $2,500 tier max (doc_007 Step 0 prohibits submitting over-limit); (2) pending dispute dsp_f8aab53ad42b + pending replacement ccord_ad344b6a4227 (doc_007 Step 2 requires none). No CLI write executed.\"}, {\"id\": \"cli_decision\", \"status\": \"pending\", \"description\": \"BLOCKED - not reached; depends on cli_submit which is blocked. Await signs resolving dispute/replacement + customer adjusting amount to <=$2,500.\"}, {\"id\": \"cli_verify\", \"status\": \"pending\", \"description\": \"Not applicable yet - no CLI submitted; verification pending future eligible request.\"}]}",
+        "name": "todo_modify"
+      },
+      "event": "tool_start"
+    },
+    {
+      "event_index": 138,
+      "time_ms": 1794830747337,
+      "data": {
+        "arguments": "{\"action\": \"update\", \"todos\": [{\"id\": \"cli_amount_confirm\", \"description\": \"DONE: Customer agreed to reduce to $2,500 increase (new limit $7,500). Still blocked by pending dispute + pending replacement.\", \"status\": \"completed\"}, {\"id\": \"cli_submit\", \"description\": \"BLOCKED - not submitted. Reorder request (CLI before fraud) DECLINED: fraud protections already in place (dispute dsp_f8aab53ad42b + old card 7823 cancelled / replacement ccord_ad344b6a4227 ordered); reversing them would expose customer and reordering to make CLI pass is prohibited. $2,500 still blocked by pending dispute + pending replacement. Customer requested supervisor exception review -> offering transfer.\", \"status\": \"pending\"}]}",
+        "name": "todo_modify"
+      },
+      "event": "tool_start"
+    }
+  ],
+  "customer_visible_todo_errors": [
+    {
+      "message_index": 46,
+      "role": "assistant",
+      "content": "Tool execution error: More than one task is marked as 'in_progress' (only one allowed)",
+      "tool_calls": null,
+      "is_audio": false,
+      "turn_idx": 46,
+      "timestamp": "2026-11-16T20:03:27.879224",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "bridge": "openjiuwen-java-deepagent-todo-skill-mcp",
+        "latency_seconds": 0.027095288001873996,
+        "model": null,
+        "session_id": "86968724-3eb3-46ac-b924-4e6e31d1dfe4"
+      },
+      "generation_time_seconds": null,
+      "audio_format": null,
+      "audio_path": null,
+      "audio_script_gold": null,
+      "speech_effects": null,
+      "source_effects": null,
+      "channel_effects": null,
+      "turn_taking_action": null,
+      "utterance_ids": null,
+      "chunk_id": null,
+      "is_final_chunk": true,
+      "source": null,
+      "contains_speech": true
+    },
+    {
+      "message_index": 52,
+      "role": "assistant",
+      "content": "Tool execution error: More than one task is marked as 'in_progress' (only one allowed)",
+      "tool_calls": null,
+      "is_audio": false,
+      "turn_idx": 52,
+      "timestamp": "2026-11-16T20:03:50.788386",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "bridge": "openjiuwen-java-deepagent-todo-skill-mcp",
+        "latency_seconds": 0.007749060001515318,
+        "model": null,
+        "session_id": "86968724-3eb3-46ac-b924-4e6e31d1dfe4"
+      },
+      "generation_time_seconds": null,
+      "audio_format": null,
+      "audio_path": null,
+      "audio_script_gold": null,
+      "speech_effects": null,
+      "source_effects": null,
+      "channel_effects": null,
+      "turn_taking_action": null,
+      "utterance_ids": null,
+      "chunk_id": null,
+      "is_final_chunk": true,
+      "source": null,
+      "contains_speech": true
+    }
+  ],
+  "shipping_preference": {
+    "message_index": 9,
+    "content": "Sure, here are the details you asked for.\n\nMy full name is Sofia Papadopoulos. For verification, you can use my date of birth\u201401/25/1986\u2014and my phone number, 347-555-0387.\n\nFor the fraudulent charge: the CloudSync Storage transaction was about three days ago. I first noticed it on November 12th, 2025, when I was reviewing my statement. I have not contacted the merchant\u2014I\u2019ve never even heard of CloudSync Storage, so this is clearly fraud, not a merchant issue. I\u2019d like a full refund since I didn\u2019t authorize it at all.\n\nFor the replacement card: please send it to my address on file, which is 1456 Astoria Boulevard, Queens, NY 11102. Standard delivery is fine.\n\nFor the credit limit increase: I\u2019m requesting an increase of $4,000, so my limit would go from $5,000 to $9,000. The reason is a home renovation project coming up that I need more headroom for."
+  },
+  "termination_message": {
+    "message_index": 59,
+    "content": "Yes, please transfer me to a human or supervisor team to review the exception request. I\u2019d really like to get the credit limit increase approved now if possible, since I have the renovation coming up. If they can\u2019t make an exception, then I\u2019ll wait and request it later once the dispute and card replacement clear.\n\n###TRANSFER###"
+  },
+  "interpretation": "Policy was already visible before business writes. The first customer-visible Todo error follows the dispute write. This is not proof of a single Core root cause."
+}

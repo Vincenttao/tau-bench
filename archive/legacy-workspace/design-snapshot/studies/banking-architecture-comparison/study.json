@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "id": "banking-architecture-comparison",
+  "document_type": "test-design-not-runtime-manifest",
+  "status": "design-reviewed-implementation-pending",
+  "executable": false,
+  "execution_authorized": false,
+  "language": "en",
+  "benchmark_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "cohort": "cohort.json",
+  "cohort_sha256": "3b3868ce9734b9665f2b51fcf083822cc64308f36604c42e7a9a1cf951bf7a04",
+  "arms": [
+    "experiments/plan-1-deepagent-original-skills",
+    "experiments/plan-2-deepagent-refined-skills",
+    "experiments/plan-3-moa-refined-skills",
+    "experiments/plan-4-agent-hub-refined-skills"
+  ],
+  "tasks_per_arm": 22,
+  "trials_per_task": 1,
+  "total_formal_episodes": 88,
+  "seed": 300,
+  "global_concurrency": 1,
+  "automatic_episode_retries": 0,
+  "automatic_business_write_retries": 0,
+  "system_prompt_for_deepagent_pair": "evidence-todo-v1",
+  "agent_hub_mode": "enforce",
+  "episode_timeout_seconds": 2400,
+  "batch_timeout_seconds": 230400,
+  "max_steps": 200,
+  "max_errors": 10,
+  "cumulative_token_limit": null,
+  "cohort_exposure": "diagnostic-regression-not-holdout",
+  "legacy_hub_148_episode_plan_included": false,
+  "legacy_moa_chinese_profile_included": false,
+  "required_gates": [
+    "offline-contracts",
+    "real-component-wiring",
+    "immutable-input-freeze",
+    "episode-isolation",
+    "all-four-arms-ready"
+  ],
+  "blocking_gaps": [
+    "shared study controller not implemented",
+    "DeepAgent prompt/profile binding must be explicitly frozen",
+    "MOA English adapter and full remote continuation not implemented",
+    "Agent Hub real Go control chain not implemented"
+  ]
+}

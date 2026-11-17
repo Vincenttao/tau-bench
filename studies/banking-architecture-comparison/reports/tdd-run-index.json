@@ -1,0 +1,196 @@
+{
+  "scope": "development diagnostics; not formal comparison",
+  "four_architectures_accepted": false,
+  "runs": [
+    {
+      "run": "experiments/plan-1-deepagent-original-skills/runs/tdd-product-consultation-attempt-01",
+      "arm": "plan-1-deepagent-original-skills",
+      "driver": "deepagent",
+      "task_id": "task_003",
+      "status": {
+        "status": "scored",
+        "domain": "banking_knowledge",
+        "task_id": "task_003",
+        "trial": 0,
+        "reward": 0.0,
+        "termination_reason": "user_stop",
+        "duration": 152.1825442430054
+      },
+      "formal_comparison": false,
+      "manifest_sha256": "0e064b9a2ce27835f46c1bd965da72e91348b41070499d46d13804ef57f38b3a",
+      "result_sha256": "cf306bc7a6b1e44f8858c057fb4e52fbcba9ae16b4b15a4a1d36cdcae36e970c",
+      "post_run_wiring_inspection": {
+        "status": "passed",
+        "scope": "single DeepAgent episode wiring; not full study release or paired equivalence",
+        "checks": {
+          "one_session": true,
+          "skill_identity": true,
+          "skill_bytes": true,
+          "native_task_loop": true,
+          "no_general_purpose_agent": true,
+          "language": true,
+          "system_prompt": true,
+          "actual_driver": true,
+          "mcp_official_binding": true,
+          "no_official_tool_bypass": true,
+          "official_score_preserved": true
+        },
+        "error_type": null,
+        "business_reward_is_not_architecture_oracle": true
+      },
+      "agent_official_calls": 18,
+      "messages": 50
+    },
+    {
+      "run": "experiments/plan-1-deepagent-original-skills/runs/tdd-zero-retry-product-consultation",
+      "arm": "plan-1-deepagent-original-skills",
+      "driver": "deepagent",
+      "task_id": "task_003",
+      "status": {
+        "status": "scored",
+        "domain": "banking_knowledge",
+        "task_id": "task_003",
+        "trial": 0,
+        "reward": 0.0,
+        "termination_reason": "user_stop",
+        "duration": 136.35053280199645
+      },
+      "formal_comparison": false,
+      "manifest_sha256": "d35c5c6a8316a2ac80ce98bb2b7152e5350effa926326724d2e220afc16d9035",
+      "result_sha256": "a2516fef3105166e56022a8209ec06c506fc246be79e48505e591cfe4350c1a0",
+      "post_run_wiring_inspection": {
+        "status": "passed",
+        "scope": "single DeepAgent episode wiring; not full study release or paired equivalence",
+        "checks": {
+          "one_session": true,
+          "skill_identity": true,
+          "skill_bytes": true,
+          "native_task_loop": true,
+          "no_general_purpose_agent": true,
+          "language": true,
+          "system_prompt": true,
+          "actual_driver": true,
+          "mcp_official_binding": true,
+          "no_official_tool_bypass": true,
+          "official_score_preserved": true
+        },
+        "error_type": null,
+        "business_reward_is_not_architecture_oracle": true
+      },
+      "agent_official_calls": 15,
+      "messages": 40
+    },
+    {
+      "run": "experiments/plan-2-deepagent-refined-skills/runs/tdd-product-consultation-attempt-01",
+      "arm": "plan-2-deepagent-refined-skills",
+      "driver": "deepagent",
+      "task_id": "task_003",
+      "status": {
+        "status": "scored",
+        "domain": "banking_knowledge",
+        "task_id": "task_003",
+        "trial": 0,
+        "reward": 1.0,
+        "termination_reason": "user_stop",
+        "duration": 160.94423180299782
+      },
+      "formal_comparison": false,
+      "manifest_sha256": "02a81ab0f7fbdb6d79e5b65bb7210c642d1c6c8b9d38738bc6f9710af50c7284",
+      "result_sha256": "272e943d2df6d22773774ebbe64deca149810804cfbf94d930f347bc41c69a71",
+      "post_run_wiring_inspection": {
+        "status": "passed",
+        "scope": "single DeepAgent episode wiring; not full study release or paired equivalence",
+        "checks": {
+          "one_session": true,
+          "skill_identity": true,
+          "skill_bytes": true,
+          "native_task_loop": true,
+          "no_general_purpose_agent": true,
+          "language": true,
+          "system_prompt": true,
+          "actual_driver": true,
+          "mcp_official_binding": true,
+          "no_official_tool_bypass": true,
+          "official_score_preserved": true
+        },
+        "error_type": null,
+        "business_reward_is_not_architecture_oracle": true
+      },
+      "agent_official_calls": 18,
+      "messages": 48
+    },
+    {
+      "run": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot",
+      "arm": "plan-3-moa-refined-skills",
+      "driver": "moa-pilot",
+      "task_id": "task_003",
+      "status": {
+        "status": "scored",
+        "domain": "banking_knowledge",
+        "task_id": "task_003",
+        "trial": 0,
+        "reward": 0.0,
+        "termination_reason": "user_stop",
+        "duration": 254.04121016400313
+      },
+      "formal_comparison": false,
+      "manifest_sha256": "e2a74448278edce5374d95563abe739f3ee416933d9210cb86414d7fbf51595f",
+      "result_sha256": "a84ce2d63b4307ab233255f5cca97dd8e709a37368b8cfd92310105468f4e4af",
+      "architecture_acceptance": "pending-full-architecture-contracts",
+      "agent_official_calls": 22,
+      "messages": 58,
+      "actual_runtime_count": 8,
+      "observed_domain_tool_actors": [
+        "card-application-agent",
+        "credit-limit-agent"
+      ]
+    },
+    {
+      "run": "experiments/plan-3-moa-refined-skills/runs/tdd-seven-runtime-product-pilot",
+      "arm": "plan-3-moa-refined-skills",
+      "driver": "moa-pilot",
+      "task_id": "task_003",
+      "status": {
+        "status": "scored",
+        "domain": "banking_knowledge",
+        "task_id": "task_003",
+        "trial": 0,
+        "reward": 0.0,
+        "termination_reason": "user_stop",
+        "duration": 55.866058990002784
+      },
+      "formal_comparison": false,
+      "manifest_sha256": "00b69139d45329f622db42e75dee8893ec9aa92776e0057ef1e0c9cfdc788add",
+      "result_sha256": "1af0887ee1e6509d440b5337a22e2ed3171c3dc9872647a80d8433e019d7b56b",
+      "architecture_acceptance": "pending-full-architecture-contracts",
+      "agent_official_calls": 0,
+      "messages": 8,
+      "actual_runtime_count": 8,
+      "observed_domain_tool_actors": []
+    },
+    {
+      "run": "experiments/plan-4-agent-hub-refined-skills/runs/tdd-actual-go-read-product-pilot",
+      "arm": "plan-4-agent-hub-refined-skills",
+      "driver": "hub-read-pilot",
+      "task_id": "task_003",
+      "status": {
+        "status": "scored",
+        "domain": "banking_knowledge",
+        "task_id": "task_003",
+        "trial": 0,
+        "reward": 0.0,
+        "termination_reason": "user_stop",
+        "duration": 119.06237625599897
+      },
+      "formal_comparison": false,
+      "manifest_sha256": "ee56186b9abc44034018170dce4017ba96cc8c8a3dc7b977f7f14e9091baa724",
+      "result_sha256": "a3a732fa689c819385beac04decf28b96fe1afcf0a84580ca39b697a35e78e43",
+      "architecture_acceptance": "pending-full-architecture-contracts",
+      "agent_official_calls": 9,
+      "messages": 28,
+      "go_dispatches": 9,
+      "go_completions": 9,
+      "go_official_call_ids_match": true
+    }
+  ]
+}

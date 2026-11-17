@@ -1,0 +1,139 @@
+{
+  "date": "2026-11-16",
+  "compatibility_preserved": false,
+  "compressed": false,
+  "moves": [
+    {
+      "old": "python",
+      "archived": "archive/legacy-workspace/python",
+      "regular_files_verified": 85
+    },
+    {
+      "old": "java",
+      "archived": "archive/legacy-workspace/java",
+      "regular_files_verified": 23
+    },
+    {
+      "old": "enterprise-java",
+      "archived": "archive/legacy-workspace/enterprise-java",
+      "regular_files_verified": 14
+    },
+    {
+      "old": "replay-java",
+      "archived": "archive/legacy-workspace/replay-java",
+      "regular_files_verified": 4
+    },
+    {
+      "old": "config",
+      "archived": "archive/legacy-workspace/config",
+      "regular_files_verified": 5
+    },
+    {
+      "old": "tests",
+      "archived": "archive/legacy-workspace/tests",
+      "regular_files_verified": 38
+    },
+    {
+      "old": "viewer",
+      "archived": "archive/legacy-workspace/viewer",
+      "regular_files_verified": 4
+    },
+    {
+      "old": "skills",
+      "archived": "archive/legacy-workspace/skills",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "logs",
+      "archived": "archive/legacy-workspace/logs",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "implementations/deepagent",
+      "archived": "archive/deepagent-source",
+      "regular_files_verified": 97
+    },
+    {
+      "old": "runs",
+      "archived": "archive/legacy-workspace/root-shortcuts/runs",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "reports",
+      "archived": "archive/legacy-workspace/root-shortcuts/reports",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "数据采集方法-V0.2.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/数据采集方法-V0.2.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "DeepAgent搭建与验证-V0.3.1.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/DeepAgent搭建与验证-V0.3.1.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "evidence",
+      "archived": "archive/legacy-workspace/root-shortcuts/evidence",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "测试执行计划-V0.2.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/测试执行计划-V0.2.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "银行Bench全部测试用例-中文版.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/银行Bench全部测试用例-中文版.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "企业任务执行效果指标卡-V0.2.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/企业任务执行效果指标卡-V0.2.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "DeepAgent-Todo-Skill-MCP测试设计-V0.3.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/DeepAgent-Todo-Skill-MCP测试设计-V0.3.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "DeepAgent规划对照测试方案-V0.1.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/DeepAgent规划对照测试方案-V0.1.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/DeepAgent-Todo单组测试与代码设计-V0.2.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "tau3-local-guide.md",
+      "archived": "archive/legacy-workspace/root-shortcuts/tau3-local-guide.md",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "experiments/baseline-native-skill",
+      "archived": "archive/legacy-workspace/experiment-shortcuts/baseline-native-skill",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "experiments/deepagent-todo-skill-mcp",
+      "archived": "archive/legacy-workspace/experiment-shortcuts/deepagent-todo-skill-mcp",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "experiments/agent-hub-banking",
+      "archived": "archive/legacy-workspace/experiment-shortcuts/agent-hub-banking",
+      "regular_files_verified": 0
+    },
+    {
+      "old": "experiments/moa-banking-orchestration",
+      "archived": "archive/legacy-workspace/experiment-shortcuts/moa-banking-orchestration",
+      "regular_files_verified": 0
+    }
+  ],
+  "root_shortcuts_removed": true,
+  "note": "Frozen historical regular files not rewritten; archived relative symlinks point to archived physical locations."
+}

@@ -1,0 +1,449 @@
+{
+  "summary": {
+    "overall_score": 58,
+    "risk_level": "high",
+    "primary_pattern": "delegation",
+    "conclusion": "评分仅评价当前 MOA pilot 委派集成成熟度：通用 27/40、委派 26/50、复杂度 5/10；不是四框架业务排名。真实委派可运行，但业务交付验收与恢复实证不足。"
+  },
+  "scope": {
+    "repository": "/home/vincent/openjiuwen/tau3",
+    "revision": null,
+    "reviewed_paths": [
+      "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+      "experiments/plan-3-moa-refined-skills/java/src/eval/BankingRuntimeHost.java",
+      "experiments/plan-3-moa-refined-skills/python/moa_pilot_agent.py",
+      "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+      "shared/python/episode_acceptance.py",
+      "studies/banking-architecture-comparison/reports/tdd-run-index.json"
+    ],
+    "excluded_paths": [
+      "完整上游框架的生产能力",
+      "历史22题跨配置成绩归因"
+    ],
+    "languages": [
+      "Java",
+      "Python",
+      "Go"
+    ],
+    "frameworks": [
+      "DeepAgent",
+      "MOA",
+      "agent-hub read pilot",
+      "official tau2 banking evaluator"
+    ]
+  },
+  "entities": [
+    {
+      "id": "deepagent",
+      "entity_type": "agent",
+      "symbol": "DeepAgentAssembly",
+      "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+      "line_start": 26,
+      "tools": [
+        "skill_tool",
+        "invoke_skill",
+        "ask_user",
+        "todo_create",
+        "todo_modify"
+      ],
+      "state_owner": "单 Agent 会话、原生 Todo",
+      "notes": "方案1/2/4业务执行器；方案3子业务Agent也复用"
+    },
+    {
+      "id": "main",
+      "entity_type": "agent",
+      "symbol": "BankingRuntimeHost",
+      "file": "experiments/plan-3-moa-refined-skills/java/src/eval/BankingRuntimeHost.java",
+      "line_start": 24,
+      "state_owner": "总体计划及远端任务接续"
+    },
+    {
+      "id": "domain",
+      "entity_type": "agent",
+      "symbol": "MoaPilotAgent._start",
+      "file": "experiments/plan-3-moa-refined-skills/python/moa_pilot_agent.py",
+      "line_start": 70,
+      "permissions": [
+        "按业务域限制官方操作"
+      ],
+      "state_owner": "独立 Runtime 内局部会话"
+    },
+    {
+      "id": "mcp",
+      "entity_type": "tool",
+      "symbol": "SkillOperationTool",
+      "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+      "line_start": 122
+    },
+    {
+      "id": "hub",
+      "entity_type": "controller",
+      "symbol": "HubPilotAgent",
+      "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+      "line_start": 24,
+      "permissions": [
+        "当前仅只读操作"
+      ],
+      "state_owner": "Go adopt/dispatch/complete ledger"
+    },
+    {
+      "id": "official",
+      "entity_type": "state_store",
+      "symbol": "predicted_environment",
+      "file": ".deps/tau2-bench/src/tau2/evaluator/evaluator_env.py",
+      "line_start": 85,
+      "state_owner": "官方环境及用户数据库"
+    }
+  ],
+  "interaction_edges": [
+    {
+      "id": "delegate",
+      "source": "main",
+      "target": "domain",
+      "classification": "delegation",
+      "classification_confidence": 0.95,
+      "trigger": "主 Agent 分派业务目标",
+      "payload_type": "业务查询和 A2A task/context",
+      "response_type": "input-required/completed 文本及任务状态",
+      "execution_mode": "async",
+      "control_owner": "MAIN 保留父目标，子 Agent 控制局部工具选择，返回后 MAIN 继续",
+      "shared_state": [
+        "远端 task/context 标识"
+      ],
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/python/moa_pilot_agent.py",
+          "symbol": "_invoke",
+          "line_start": 113,
+          "confidence": "direct",
+          "summary": "A2A 主流程调用与待接续任务标识"
+        },
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 55,
+          "confidence": "direct",
+          "summary": "汇总业务子任务结果"
+        }
+      ],
+      "rationale": "目标委派加自主检索与任务生命周期；没有本次持续双向协商证据。"
+    },
+    {
+      "id": "skill",
+      "source": "deepagent",
+      "target": "mcp",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1.0,
+      "execution_mode": "sync",
+      "control_owner": "DeepAgent",
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "SkillOperationTool",
+          "line_start": 122,
+          "confidence": "direct",
+          "summary": "结构化操作入口"
+        }
+      ],
+      "rationale": "Skill 是指南和工具入口，不是独立 Agent。"
+    },
+    {
+      "id": "control",
+      "source": "deepagent",
+      "target": "hub",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 1.0,
+      "execution_mode": "sync",
+      "control_owner": "Agent 选查询，Go 控制读操作执行，官方环境提供结果",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "decision",
+          "line_start": 39,
+          "confidence": "direct",
+          "summary": "只读门禁"
+        }
+      ],
+      "rationale": "确定性控制组件，无自主业务目标。"
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "DEL-07",
+      "severity": "high",
+      "title": "MOA 汇总缺少业务一致性验收",
+      "conclusion": "子 Agent 正确回答局部问题，主 Agent 仍新增与先前证据矛盾的 Silver 淘汰理由。",
+      "why_it_matters": "运行完成或局部任务完成不能替代父业务目标的正确性验收。",
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 49,
+          "confidence": "direct",
+          "summary": "Silver 额度为 10K–100K"
+        },
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 55,
+          "confidence": "direct",
+          "summary": "主 Agent 汇总称 Silver 不满足额度要求"
+        },
+        {
+          "file": "../agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/agent/planning/StagePlanningRail.java",
+          "symbol": "applyCompletion",
+          "line_start": 1225,
+          "confidence": "direct",
+          "summary": "当前源码依据远端失败状态决定 SUCCEEDED；不等同于业务目标验收"
+        }
+      ],
+      "recommendation": "把原始硬要求、候选矩阵和证据引用作为父任务验收条件；矛盾时拒绝汇总结论。"
+    },
+    {
+      "rule_id": "DEL-06",
+      "severity": "medium",
+      "title": "公开咨询被统一高风险确认阻塞",
+      "conclusion": "早期 pilot 尚未检索就反复请求确认；英文修复后任务描述仍出现中文。",
+      "why_it_matters": "运行完成或局部任务完成不能替代父业务目标的正确性验收。",
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/java/src/eval/BankingRuntimeHost.java",
+          "symbol": "bankingCandidates",
+          "line_start": 34,
+          "confidence": "direct",
+          "summary": "所有业务卡均为 Risk.HIGH"
+        },
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-seven-runtime-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 3,
+          "confidence": "direct",
+          "summary": "早期中文确认"
+        },
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 51,
+          "confidence": "direct",
+          "summary": "英文模板内仍包含中文 Todo"
+        }
+      ],
+      "recommendation": "按动作风险区分确认策略，并检查模板、生成 Todo 和子响应的语言。"
+    },
+    {
+      "rule_id": "COM-04",
+      "severity": "medium",
+      "title": "未注册工具错误进入客户对话",
+      "conclusion": "模型直接调用 KB_search，错误被桥作为普通 content 返回；后续接线检查仍通过。",
+      "why_it_matters": "运行完成或局部任务完成不能替代父业务目标的正确性验收。",
+      "evidence": [
+        {
+          "file": "experiments/plan-1-deepagent-original-skills/runs/tdd-zero-retry-product-consultation/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 3,
+          "confidence": "direct",
+          "summary": "客户收到 Ability not found 错误"
+        },
+        {
+          "file": "shared/python/episode_acceptance.py",
+          "symbol": "inspect_deepagent",
+          "line_start": 11,
+          "confidence": "direct",
+          "summary": "检查接线和评分保真，不检查客户可见错误"
+        }
+      ],
+      "recommendation": "结构化识别执行错误，加入独立服务质量检查，保留官方 reward 不变。"
+    },
+    {
+      "rule_id": "COM-03",
+      "severity": "medium",
+      "title": "Hub 读授权不包含推荐语义契约",
+      "conclusion": "只读门禁放行查询，但没有校验最终推荐的业务条件。",
+      "why_it_matters": "运行完成或局部任务完成不能替代父业务目标的正确性验收。",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+          "symbol": "decision",
+          "line_start": 39,
+          "confidence": "direct",
+          "summary": "只读操作权限与版本；银行写入判断未实现"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/runs/tdd-actual-go-read-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 23,
+          "confidence": "direct",
+          "summary": "模型将已检索的 Silver 条件仍标为不确定"
+        }
+      ],
+      "recommendation": "在正式方案定义业务结论与操作授权各自的验收对象，不把权限通过当作答案正确。"
+    },
+    {
+      "rule_id": "COM-01",
+      "severity": "medium",
+      "title": "简单咨询的委派收益尚未证明",
+      "conclusion": "本题拆分增加确认和汇总面，尚未展示跨目标暂停恢复价值。",
+      "why_it_matters": "运行完成或局部任务完成不能替代父业务目标的正确性验收。",
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 50,
+          "confidence": "direct",
+          "summary": "公开购买保护与额度查询"
+        },
+        {
+          "file": "experiments/plan-3-moa-refined-skills/python/moa_pilot_agent.py",
+          "symbol": "_start",
+          "line_start": 70,
+          "confidence": "direct",
+          "summary": "主加七个独立业务 Runtime"
+        }
+      ],
+      "recommendation": "公开产品字段比较可集中到咨询 Agent；额度调整等独立业务保留专属 Agent。"
+    }
+  ],
+  "hard_failures": [
+    {
+      "rule_id": "DEL-07",
+      "severity": "high",
+      "title": "MOA 汇总缺少业务一致性验收",
+      "conclusion": "子 Agent 正确回答局部问题，主 Agent 仍新增与先前证据矛盾的 Silver 淘汰理由。",
+      "why_it_matters": "运行完成或局部任务完成不能替代父业务目标的正确性验收。",
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 49,
+          "confidence": "direct",
+          "summary": "Silver 额度为 10K–100K"
+        },
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 55,
+          "confidence": "direct",
+          "summary": "主 Agent 汇总称 Silver 不满足额度要求"
+        },
+        {
+          "file": "../agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/agent/planning/StagePlanningRail.java",
+          "symbol": "applyCompletion",
+          "line_start": 1225,
+          "confidence": "direct",
+          "summary": "当前源码依据远端失败状态决定 SUCCEEDED；不等同于业务目标验收"
+        }
+      ],
+      "recommendation": "把原始硬要求、候选矩阵和证据引用作为父任务验收条件；矛盾时拒绝汇总结论。"
+    }
+  ],
+  "design_smells": [
+    {
+      "rule_id": "COM-01",
+      "severity": "medium",
+      "title": "简单咨询的委派收益尚未证明",
+      "conclusion": "本题拆分增加确认和汇总面，尚未展示跨目标暂停恢复价值。",
+      "why_it_matters": "运行完成或局部任务完成不能替代父业务目标的正确性验收。",
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 50,
+          "confidence": "direct",
+          "summary": "公开购买保护与额度查询"
+        },
+        {
+          "file": "experiments/plan-3-moa-refined-skills/python/moa_pilot_agent.py",
+          "symbol": "_start",
+          "line_start": 70,
+          "confidence": "direct",
+          "summary": "主加七个独立业务 Runtime"
+        }
+      ],
+      "recommendation": "公开产品字段比较可集中到咨询 Agent；额度调整等独立业务保留专属 Agent。"
+    }
+  ],
+  "simplification_opportunities": [
+    {
+      "target": "公开产品咨询",
+      "current_design": "主 Agent 拆分购买保护与公开额度查询给不同业务 Runtime",
+      "recommended_design": "retain_current",
+      "reason": "保留多业务架构用于完整实验，但避免把本题字段查询必然跨域拆分；是否收敛需明确实验因素。",
+      "expected_benefit": "减少本题确认和无依据重新概括的机会。",
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/runs/tdd-english-confirmation-product-pilot/episodes/task_003/official-trajectory.jsonl",
+          "symbol": "official_message",
+          "line_start": 50,
+          "confidence": "direct",
+          "summary": "两个公开产品字段问题"
+        }
+      ]
+    }
+  ],
+  "remediation_plan": [
+    {
+      "priority": "P0",
+      "action": "验证数值边界、客户偏好和父任务证据一致性",
+      "addresses_rules": [
+        "DEL-07",
+        "COM-03"
+      ],
+      "acceptance_criteria": [
+        "等于阈值的候选不能因不大于阈值被排除",
+        "子任务 completed 不自动使父业务目标通过",
+        "最终结论不能无证据新增候选淘汰理由"
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "补 MOA 风险区分、语言一致性和跨目标恢复实验",
+      "addresses_rules": [
+        "DEL-06",
+        "DEL-05"
+      ],
+      "acceptance_criteria": [
+        "公开读咨询不被统一高风险确认阻塞",
+        "A 等待后 B 完成，恢复原 A 且不重复效果"
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "分别验收 Hub 权限控制、业务语义与实际银行效果",
+      "addresses_rules": [
+        "COM-03",
+        "COM-09"
+      ],
+      "acceptance_criteria": [
+        "只读 pilot 不宣称完整写入控制通过",
+        "拒绝和恢复场景有独立负向证据"
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "unknown": "四组稳定业务成功率",
+      "impact": "仅同题诊断，不能作统计排名",
+      "needed_evidence": "冻结配置的完整已选用例配对结果"
+    },
+    {
+      "unknown": "完整 MOA 暂停/恢复及 Hub 银行写入判定",
+      "impact": "当前 pilot 不能代表完整设计验收",
+      "needed_evidence": "对应架构契约和真实端到端证据"
+    },
+    {
+      "unknown": "证据压缩对答案的因果影响",
+      "impact": "可见引用压缩，但不能认定为根因",
+      "needed_evidence": "固定输入下回读/不回读的独立对照"
+    },
+    {
+      "unknown": "全部框架层的统一 Token 费用",
+      "impact": "不作完整费用和效率排名",
+      "needed_evidence": "主子 Agent、用户模拟器及控制阶段统一计量"
+    },
+    {
+      "unknown": "原始指标来自未提交工作树；当前代码可能晚于运行",
+      "impact": "运行事实以冻结轨迹为准，当前源码只说明实现机制",
+      "needed_evidence": "正式发布必须完整冻结源码和依赖"
+    }
+  ]
+}

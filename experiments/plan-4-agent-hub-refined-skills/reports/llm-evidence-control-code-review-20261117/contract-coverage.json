@@ -1,0 +1,483 @@
+{
+  "basis": "experiments/plan-4-agent-hub-refined-skills/plans/llm-evidence-control/test-spec.json",
+  "status_definitions": {
+    "partial": "有基础代码，但完整条款未实现或未验收",
+    "not_implemented": "所审运行路径未找到该机制",
+    "not_verified": "模型观察缺少本修订证据"
+  },
+  "counts": {
+    "partial": 23,
+    "not_implemented": 14,
+    "not_verified": 2
+  },
+  "contracts": [
+    {
+      "id": "H01",
+      "subject": "判断协议",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py",
+        "line": 23
+      },
+      "explanation": "Go结构验证存在，应用判断提案/证据引用尚无接线。"
+    },
+    {
+      "id": "H02",
+      "subject": "证据隔离",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+        "line": 44
+      },
+      "explanation": "仅policy hash，无客户/目标/时间覆盖证据检查。"
+    },
+    {
+      "id": "H03",
+      "subject": "执行倾向污染",
+      "blocking": false,
+      "implementation_status": "not_verified",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/probe_jev.py",
+        "line": 44
+      },
+      "explanation": "新版执行倾向污染观察未运行。"
+    },
+    {
+      "id": "H04",
+      "subject": "数值与偏好",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+        "line": 30
+      },
+      "explanation": "未见候选矩阵数值/偏好验证器；只存在提示要求。"
+    },
+    {
+      "id": "H05",
+      "subject": "推荐出口",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+        "line": 100
+      },
+      "explanation": "最终文字和ask_user直接输出。"
+    },
+    {
+      "id": "H06",
+      "subject": "业务写入判断",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+        "line": 40
+      },
+      "explanation": "非读操作明确拒绝，无合法银行写入链。"
+    },
+    {
+      "id": "H07",
+      "subject": "稳定操作身份",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+        "line": 42
+      },
+      "explanation": "同ID去重存在，业务意图身份未实现；P01换ID两次派发。"
+    },
+    {
+      "id": "H08",
+      "subject": "固定参数",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py",
+        "line": 19
+      },
+      "explanation": "深拷贝和Go摘要验证已测试；完整包装操作/目标绑定未验收。"
+    },
+    {
+      "id": "H09",
+      "subject": "有效修订",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+        "line": 42
+      },
+      "explanation": "未见当前有效目标/决策修订登记；原生版本字段不等于该机制。"
+    },
+    {
+      "id": "H10",
+      "subject": "实时权限",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+        "line": 49
+      },
+      "explanation": "Go可拒绝空grants；运行时仍重复静态许可。"
+    },
+    {
+      "id": "H11",
+      "subject": "分层结果",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+        "line": 54
+      },
+      "explanation": "只有工具错误布尔映射；P02 accepted登记completed。"
+    },
+    {
+      "id": "H12",
+      "subject": "派发入队窗口",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+        "line": 30
+      },
+      "explanation": "Go重开转unresolved，未覆盖两个真实入队故障窗口。"
+    },
+    {
+      "id": "H13",
+      "subject": "持久恢复",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+        "line": 67
+      },
+      "explanation": "Go恢复有测试；Java为内存，pilot旧目录不可重入。"
+    },
+    {
+      "id": "H14",
+      "subject": "回执时序",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/benchmark_mcp.py",
+        "line": 212
+      },
+      "explanation": "有调用ID关联；重复/迟到/取消回执未完整处理。"
+    },
+    {
+      "id": "H15",
+      "subject": "审计持久化",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+        "line": 49
+      },
+      "explanation": "Go写入错误可返回拒绝，缺应用证据落盘失败全链测试。"
+    },
+    {
+      "id": "H16",
+      "subject": "控制失联",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_gate.py",
+        "line": 36
+      },
+      "explanation": "真实Go、进程关闭拒绝和参数检查已测；其他故障组合未覆盖。"
+    },
+    {
+      "id": "H17",
+      "subject": "依赖与等待",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+        "line": 33
+      },
+      "explanation": "仅Todo/提示词，没有权威目标依赖和A-B-A恢复链。"
+    },
+    {
+      "id": "H18",
+      "subject": "主体边界",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/run_episode.py",
+        "line": 63
+      },
+      "explanation": "工厂不传隐藏task，pilot排除用户工具；完整合法写入主体未验收。"
+    },
+    {
+      "id": "H19",
+      "subject": "隔离重放",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/diagnostic_run.py",
+        "line": 25
+      },
+      "explanation": "所审新版路径无隔离决策重放入口。"
+    },
+    {
+      "id": "H20",
+      "subject": "学习发布禁用",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/java_agent.py",
+        "line": 33
+      },
+      "explanation": "每episode独立session和固定Skill，未见新版跨题残留专项。"
+    },
+    {
+      "id": "H21",
+      "subject": "变异检查",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/tests/test_effect_boundary.py",
+        "line": 17
+      },
+      "explanation": "现有测试无固定allow/删除校验/输出旁路变异。"
+    },
+    {
+      "id": "H22",
+      "subject": "预算计量",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/study_policy.py",
+        "line": 8
+      },
+      "explanation": "有墙钟/单请求超时；累计预算函数未接运行链。"
+    },
+    {
+      "id": "H23",
+      "subject": "未知与拒绝",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py",
+        "line": 81
+      },
+      "explanation": "Jev探针有unknown，但没有业务补证/拒绝/修正状态机。"
+    },
+    {
+      "id": "H24",
+      "subject": "判断能力观察",
+      "blocking": false,
+      "implementation_status": "not_verified",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/probe_jev.py",
+        "line": 44
+      },
+      "explanation": "历史6探针不等于新版24次独立观察。"
+    },
+    {
+      "id": "H25",
+      "subject": "受控节点路由",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+        "line": 96
+      },
+      "explanation": "无注册Workflow/Loop/等待节点的采纳与路由。"
+    },
+    {
+      "id": "H26",
+      "subject": "状态所有权与并发修订",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/go/gate.go",
+        "line": 13
+      },
+      "explanation": "Go局部锁/原生旧写者保护存在，任务修订与跨存储投影未接。"
+    },
+    {
+      "id": "H27",
+      "subject": "有界重入与取消",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/diagnostic_run.py",
+        "line": 122
+      },
+      "explanation": "监督器可终止，未有目标取消和持久有界重入。"
+    },
+    {
+      "id": "H28",
+      "subject": "Jev原生协议与业务适配",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py",
+        "line": 56
+      },
+      "explanation": "Noul/Box解析及异常测试存在，Choice/应用提案适配缺失。"
+    },
+    {
+      "id": "H29",
+      "subject": "Jev版本与用量",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/probe_jev.py",
+        "line": 79
+      },
+      "explanation": "usage与探针固定名检查存在，别名漂移和共享预算未接。"
+    },
+    {
+      "id": "H30",
+      "subject": "S1组合与未决分支",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py",
+        "line": 81
+      },
+      "explanation": "只有相关性与支持两问的探针三分支，无完整业务真值表。"
+    },
+    {
+      "id": "H31",
+      "subject": "自由文本与事件分流",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/java_agent.py",
+        "line": 80
+      },
+      "explanation": "新文本直接交DeepAgent；无Jev输入分流和消息去重。"
+    },
+    {
+      "id": "H32",
+      "subject": "多目标与歧义",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/java/src/main/java/eval/DeepAgentBridge.java",
+        "line": 83
+      },
+      "explanation": "未见多目标路由/歧义阻断；waitingId直接填值。"
+    },
+    {
+      "id": "H33",
+      "subject": "输入路由提交",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/java_agent.py",
+        "line": 81
+      },
+      "explanation": "无message级期待revision和新输入派发阻断。"
+    },
+    {
+      "id": "H34",
+      "subject": "episode与隐藏输入隔离",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/run_episode.py",
+        "line": 63
+      },
+      "explanation": "episode UUID和工厂隔离已有，目标候选/终止索引未实现。"
+    },
+    {
+      "id": "H35",
+      "subject": "公开确认与时间",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+        "line": 103
+      },
+      "explanation": "官方政策进入提示词，没有目标/参数绑定确认记录。"
+    },
+    {
+      "id": "H36",
+      "subject": "官方终止与环境恢复",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/python/diagnostic_run.py",
+        "line": 122
+      },
+      "explanation": "监督器期限/取消及官方终止已有，环境恢复与待办持久化未接。"
+    },
+    {
+      "id": "H37",
+      "subject": "完整接线与旁路",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py",
+        "line": 17
+      },
+      "explanation": "最终工具队列接Go，输入/节点/推荐完整旁路检查缺失。"
+    },
+    {
+      "id": "H38",
+      "subject": "目标覆盖与分层完成",
+      "blocking": true,
+      "implementation_status": "not_implemented",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+        "line": 178
+      },
+      "explanation": "目标覆盖及父子验收未实现；Todo仍由S2自报。"
+    },
+    {
+      "id": "H39",
+      "subject": "双层日志与可追溯性",
+      "blocking": true,
+      "implementation_status": "partial",
+      "full_revision_accepted": false,
+      "evidence": {
+        "file": "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py",
+        "line": 42
+      },
+      "explanation": "已有session/tool/Go日志，缺输入路由/目标/S1全链关联。"
+    }
+  ]
+}

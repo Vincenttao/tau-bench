@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "version": "3.3.0",
+  "origin": "3.2.0 的中文业务说明等义版本；工具标识、参数、目录路径与业务约束保持一致",
+  "language": "zh",
+  "files": {
+    "banking-mcp/SKILL.md": "fa0456105db09baa1f6e75d9ede9c0f86eebc682bebc9f08419afaf108a2d913",
+    "banking-mcp/guides/accounts/account-changes.md": "ae3d360d9f21b65d22b45bfe0691468ce8be56045c8aeb146b859020f25a1006",
+    "banking-mcp/guides/accounts/account-closure.md": "c23e693d8be5d8aec7ab304f1160074dc75a112558d7dd811605543270053616",
+    "banking-mcp/guides/accounts/account-opening.md": "23f1bf84a7915c78a959735a8ffbdd3cfee529cbacab6ffa596120dc8beceb03",
+    "banking-mcp/guides/credit-card/card-application.md": "9c62ae877adc1b6e62827e7f5dfd780d5ee3371586771b2c315e63bbc611ee0d",
+    "banking-mcp/guides/credit-card/limit-adjustment.md": "343e8f19c76284de7364b1150366bbaa08ba31a1b2b2a18caed886bd6fe745e3",
+    "banking-mcp/guides/disputes/transaction-dispute.md": "4f1380c9bed868551eaf2c988f893a0e9e1959dae079511f40d3e58e59835918",
+    "banking-mcp/guides/payments/transfer.md": "b4feafcdf5c4aeebe644af9106b587b5d557354d625e4f4f6bd925ee8606621a",
+    "catalog.json": "c2d8b61c466b64ebfc263b9e73f2be77eb93492db6a7b4ff46c9d9dae37a5e7e"
+  }
+}

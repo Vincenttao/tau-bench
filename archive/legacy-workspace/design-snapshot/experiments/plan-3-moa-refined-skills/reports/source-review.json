@@ -1,0 +1,243 @@
+{
+  "summary": {
+    "overall_score": 58,
+    "risk_level": "high",
+    "primary_pattern": "delegation",
+    "secondary_patterns": [
+      "calling"
+    ],
+    "conclusion": "面向本需求的源码适配就绪度：common 26/40、delegation 24/50、complexity 8/10。不是 MOA 产品质量评分或实测效果；关键远端恢复硬门禁未满足。"
+  },
+  "scope": {
+    "repository": "agent-solution/common/agents/moa-agent",
+    "revision": "0298dcd28a1f3613b47f2af9def52512bab7dbd6",
+    "reviewed_paths": [
+      "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/routing/IntentRouter.java",
+      "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/routing/IntentRoutingRail.java",
+      "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/planning/StagePlanningRail.java",
+      "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/planning/StagePlan.java",
+      "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/continuation/SuspendedTasks.java",
+      "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/execution/ExecutionEngine.java"
+    ],
+    "languages": [
+      "Java"
+    ],
+    "excluded_paths": [
+      "未部署的银行 L2 服务",
+      "外部网关及持久化服务"
+    ]
+  },
+  "entities": [
+    {
+      "id": "moa",
+      "entity_type": "agent",
+      "symbol": "MoaRuntimeAutoConfiguration",
+      "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/runtime/orchestration/MoaRuntimeAutoConfiguration.java",
+      "state_owner": "MOA Session / StagePlan"
+    },
+    {
+      "id": "planner",
+      "entity_type": "task_manager",
+      "symbol": "StagePlanningRail",
+      "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/planning/StagePlanningRail.java"
+    },
+    {
+      "id": "business-agents",
+      "entity_type": "agent",
+      "symbol": "planned seven banking agents",
+      "file": "config/experiment.json",
+      "notes": "待实现；每个 Agent 需要独立权限和状态"
+    },
+    {
+      "id": "bank-bridge",
+      "entity_type": "tool",
+      "symbol": "planned official environment bridge",
+      "file": "architecture.md",
+      "notes": "待实现"
+    }
+  ],
+  "interaction_edges": [
+    {
+      "id": "moa-business",
+      "source": "moa",
+      "target": "business-agents",
+      "classification": "delegation",
+      "classification_confidence": 0.95,
+      "execution_mode": "async",
+      "control_owner": "MOA owns plan; L2 owns execution checkpoint",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/execution/ExecutionEngine.java",
+          "symbol": "dispatch",
+          "line_start": 133,
+          "confidence": "direct",
+          "summary": "绑定候选经远端执行器派发"
+        }
+      ],
+      "rationale": "业务目标委派、独立会话与中间交互；新增恢复须扩展契约"
+    },
+    {
+      "id": "business-bank",
+      "source": "business-agents",
+      "target": "bank-bridge",
+      "classification": "calling",
+      "classification_confidence": 0.7,
+      "execution_mode": "sync",
+      "control_owner": "business agent",
+      "evidence": [],
+      "rationale": "设计中的有界工具调用，尚未实现"
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "CALL-01",
+      "severity": "high",
+      "title": "只配置路由 policy 不足以禁用全部快路径",
+      "conclusion": "只配置路由 policy 不足以禁用全部快路径",
+      "why_it_matters": "阻碍本次完整银行流程要求；不能以现有本地恢复或新任务重启代替验收。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/routing/IntentRouter.java",
+          "symbol": "route",
+          "line_start": 181,
+          "confidence": "direct",
+          "summary": "显式意图绕过 policy 返回 FAST"
+        }
+      ],
+      "recommendation": "所有新请求决策出口增加 slow-only 闸门并测试显式/交接分支"
+    },
+    {
+      "rule_id": "DEL-05",
+      "severity": "high",
+      "title": "远端现场接续缺少本次要求的支持",
+      "conclusion": "远端现场接续缺少本次要求的支持",
+      "why_it_matters": "阻碍本次完整银行流程要求；不能以现有本地恢复或新任务重启代替验收。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/routing/IntentRoutingRail.java",
+          "symbol": "requestResume",
+          "line_start": 688,
+          "confidence": "direct",
+          "summary": "远端 RUNNING 任务恢复被明确拒绝"
+        }
+      ],
+      "recommendation": "增加持久化远端业务任务关联和 CAS 检查点恢复"
+    },
+    {
+      "rule_id": "DEL-02",
+      "severity": "high",
+      "title": "现有调度不能直接完成逐项等待 A 后执行 B",
+      "conclusion": "现有调度不能直接完成逐项等待 A 后执行 B",
+      "why_it_matters": "阻碍本次完整银行流程要求；不能以现有本地恢复或新任务重启代替验收。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/planning/StagePlanningRail.java",
+          "symbol": "execute/canExecute",
+          "line_start": 911,
+          "confidence": "direct",
+          "summary": "优先恢复 RUNNING；否则选首个 PENDING，条件未知阻断计划"
+        }
+      ],
+      "recommendation": "增加 WAITING_DEPENDENCY 与 ready-task 调度，保留原任务身份"
+    }
+  ],
+  "hard_failures": [
+    {
+      "rule_id": "DEL-05",
+      "severity": "high",
+      "title": "远端现场接续缺少本次要求的支持",
+      "conclusion": "远端现场接续缺少本次要求的支持",
+      "why_it_matters": "阻碍本次完整银行流程要求；不能以现有本地恢复或新任务重启代替验收。",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/routing/IntentRoutingRail.java",
+          "symbol": "requestResume",
+          "line_start": 688,
+          "confidence": "direct",
+          "summary": "远端 RUNNING 任务恢复被明确拒绝"
+        }
+      ],
+      "recommendation": "增加持久化远端业务任务关联和 CAS 检查点恢复"
+    }
+  ],
+  "design_smells": [
+    {
+      "rule_id": "COM-01",
+      "severity": "medium",
+      "title": "仅按提示词命名七个 Agent 会形成伪隔离",
+      "conclusion": "必须在工具授权和检查点上实现独立边界",
+      "why_it_matters": "多个 Agent 否则可重复执行同一银行写入",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/execution/ExecutionEngine.java",
+          "symbol": "dispatch",
+          "line_start": 133,
+          "confidence": "direct",
+          "summary": "绑定候选经远端执行器派发"
+        }
+      ],
+      "recommendation": "部署 allowlist，写操作唯一归属，官方环境仍按 episode 共享"
+    }
+  ],
+  "simplification_opportunities": [
+    {
+      "target": "七个业务 Agent 之间的互相调用",
+      "current_design": "潜在递归交接",
+      "recommended_design": "delegation",
+      "reason": "由 MOA 唯一调度和仲裁依赖，不需要对等 Coordination",
+      "evidence": [
+        {
+          "file": "/home/vincent/openjiuwen/agent-solution/common/agents/moa-agent/src/main/java/com/moaagent/planning/StagePlanningRail.java",
+          "symbol": "execute/canExecute",
+          "line_start": 911,
+          "confidence": "direct",
+          "summary": "优先恢复 RUNNING；否则选首个 PENDING，条件未知阻断计划"
+        }
+      ]
+    }
+  ],
+  "remediation_plan": [
+    {
+      "priority": "P0",
+      "action": "所有新请求决策出口增加 slow-only 闸门并测试显式/交接分支",
+      "addresses_rules": [
+        "CALL-01"
+      ],
+      "acceptance_criteria": [
+        "对应 scenarios.json 场景通过真实 MOA 协议测试"
+      ]
+    },
+    {
+      "priority": "P0",
+      "action": "增加持久化远端业务任务关联和 CAS 检查点恢复",
+      "addresses_rules": [
+        "DEL-05"
+      ],
+      "acceptance_criteria": [
+        "对应 scenarios.json 场景通过真实 MOA 协议测试"
+      ]
+    },
+    {
+      "priority": "P0",
+      "action": "增加 WAITING_DEPENDENCY 与 ready-task 调度，保留原任务身份",
+      "addresses_rules": [
+        "DEL-02"
+      ],
+      "acceptance_criteria": [
+        "对应 scenarios.json 场景通过真实 MOA 协议测试"
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "unknown": "银行 Agent、远端恢复、重启、结果验证及幂等均未部署验证",
+      "impact": "不可宣称完整 E2E 就绪",
+      "needed_evidence": "协议门禁、真实模型联调与官方评分"
+    },
+    {
+      "unknown": "高风险动作授权、超时/非幂等重试、租户一致性和终止边界的完整跨仓验证",
+      "impact": "当前源码检查不能证明整栈安全；须按 test-plan 实测",
+      "needed_evidence": "工具权限拒绝、重复恢复、超时未知写入和取消测试"
+    }
+  ]
+}

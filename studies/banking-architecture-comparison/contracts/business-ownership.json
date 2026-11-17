@@ -1,0 +1,1045 @@
+{
+  "schema_version": 1,
+  "status": "proposed-ownership-not-runtime-enforcement",
+  "benchmark_source": ".deps/tau2-bench/src/tau2/domains/banking_knowledge/tools.py",
+  "benchmark_source_sha256": "e7287dc76ab74f7c172a9b632b6ebdb067a85bbc0cb7c769f7bdf08ec18aa1c0",
+  "agents": [
+    "card-application-agent",
+    "credit-limit-agent",
+    "payments-agent",
+    "account-opening-agent",
+    "account-closure-agent",
+    "transaction-dispute-agent",
+    "card-lifecycle-agent"
+  ],
+  "role_extensions": {
+    "card-application-agent": "product/referral advice and rewards servicing",
+    "account-opening-agent": "deposit relationship, identity/profile, opening and interest servicing",
+    "payments-agent": "transfers, repayments and checking-fee corrections",
+    "card-lifecycle-agent": "credit and debit card closure; bank-account closure stays with account-closure-agent"
+  },
+  "rules": [
+    "unknown operation denied",
+    "shared-read remains customer/episode scoped",
+    "bank writes serialized by episode effect arbiter; same operationId cannot have two writers",
+    "wrapper authorization uses inner operation and payload; wrapper permission never grants all tools",
+    "broker is deterministic bridge service, not a new business agent or MOA banking writer",
+    "user tools only official simulator; grant does not execute user action",
+    "discovery/unlock follows official policy AND actor allowlist; no auto unlock",
+    "all rules require runtime wiring and positive/negative fixtures before release"
+  ],
+  "operations": [
+    {
+      "operation": "transfer_to_human_agents",
+      "principal": "episode-handoff-broker",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "control",
+      "discoverable": false,
+      "source_line": 367,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_current_time",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 387,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_user_information_by_id",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 396,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_user_information_by_name",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 405,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_user_information_by_email",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 416,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "change_user_email",
+      "principal": "account-opening-agent",
+      "allowed_requesters": [
+        "account-opening-agent"
+      ],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 425,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_referrals_by_user",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 446,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_credit_card_transactions_by_user",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 457,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_credit_card_accounts_by_user",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 468,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "log_verification",
+      "principal": "account-opening-agent",
+      "allowed_requesters": [
+        "account-opening-agent"
+      ],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 482,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "give_discoverable_user_tool",
+      "principal": "episode-capability-broker",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 533,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "unlock_discoverable_agent_tool",
+      "principal": "resolved-inner-operation-owner",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 603,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "call_discoverable_agent_tool",
+      "principal": "resolved-inner-operation-owner",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 644,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "list_discoverable_agent_tools",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 703,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "example_agent_tool_0000",
+      "principal": "disabled-example",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 726,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "update_transaction_rewards_3847",
+      "principal": "card-application-agent",
+      "allowed_requesters": [
+        "card-application-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 735,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "initial_transfer_to_human_agent_0218",
+      "principal": "episode-handoff-broker",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "control",
+      "discoverable": true,
+      "source_line": 772,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "initial_transfer_to_human_agent_1822",
+      "principal": "episode-handoff-broker",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "control",
+      "discoverable": true,
+      "source_line": 785,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "emergency_credit_bureau_incident_transfer_1114",
+      "principal": "episode-handoff-broker",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "control",
+      "discoverable": true,
+      "source_line": 798,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "file_credit_card_transaction_dispute_4829",
+      "principal": "transaction-dispute-agent",
+      "allowed_requesters": [
+        "transaction-dispute-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 811,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "file_debit_card_transaction_dispute_6281",
+      "principal": "transaction-dispute-agent",
+      "allowed_requesters": [
+        "transaction-dispute-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 940,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "set_debit_card_recurring_block_7382",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 1143,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_debit_dispute_status_7483",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 1188,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_atm_deposit_images_8473",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 1224,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "order_replacement_credit_card_7291",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 1396,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_user_dispute_history_7291",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 1499,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_pending_replacement_orders_5765",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 1535,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "log_credit_card_closure_reason_4521",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 1575,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_closure_reason_history_8293",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 1627,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "apply_statement_credit_8472",
+      "principal": "transaction-dispute-agent",
+      "allowed_requesters": [
+        "transaction-dispute-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 1667,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "apply_credit_card_account_flag_6147",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 1754,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "close_credit_card_account_7834",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 1852,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "pay_credit_card_from_checking_9182",
+      "principal": "payments-agent",
+      "allowed_requesters": [
+        "payments-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 1902,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "submit_credit_limit_increase_request_7392",
+      "principal": "credit-limit-agent",
+      "allowed_requesters": [
+        "credit-limit-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 1994,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_credit_limit_increase_history_4829",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 2071,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_payment_history_6183",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 2113,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "approve_credit_limit_increase_5847",
+      "principal": "credit-limit-agent",
+      "allowed_requesters": [
+        "credit-limit-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 2173,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "deny_credit_limit_increase_5848",
+      "principal": "credit-limit-agent",
+      "allowed_requesters": [
+        "credit-limit-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 2304,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "open_bank_account_4821",
+      "principal": "account-opening-agent",
+      "allowed_requesters": [
+        "account-opening-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 2373,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "close_bank_account_7392",
+      "principal": "account-closure-agent",
+      "allowed_requesters": [
+        "account-closure-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 2508,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_all_user_accounts_by_user_id_3847",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 2615,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "transfer_funds_between_bank_accounts_7291",
+      "principal": "payments-agent",
+      "allowed_requesters": [
+        "payments-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 2661,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "apply_checking_account_credit_5829",
+      "principal": "payments-agent",
+      "allowed_requesters": [
+        "payments-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 2730,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "apply_savings_account_credit_6831",
+      "principal": "account-opening-agent",
+      "allowed_requesters": [
+        "account-opening-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 2815,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "submit_interest_discrepancy_report_7294",
+      "principal": "account-opening-agent",
+      "allowed_requesters": [
+        "account-opening-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 2902,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_bank_account_transactions_9173",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 2981,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "order_debit_card_5739",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3048,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "activate_debit_card_8291",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3338,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "activate_debit_card_8292",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3409,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "activate_debit_card_8293",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3492,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "close_debit_card_4721",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3577,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "freeze_debit_card_3892",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3652,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "unfreeze_debit_card_3893",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3698,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "clear_debit_card_fraud_alert_4892",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3745,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "reset_debit_card_pin_6284",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3819,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "change_debit_card_pin_6285",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3879,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "get_debit_cards_by_account_id_7823",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 3936,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "request_temporary_debit_card_limit_increase_8374",
+      "principal": "card-lifecycle-agent",
+      "allowed_requesters": [
+        "card-lifecycle-agent"
+      ],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 3986,
+      "source_class": "KnowledgeTools"
+    },
+    {
+      "operation": "submit_cash_back_dispute_0589",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 4185,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "get_referral_link",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 4245,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "get_card_last_4_digits",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "read",
+      "discoverable": true,
+      "source_line": 4286,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "deposit_check_3847",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": true,
+      "source_line": 4327,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "apply_for_credit_card",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 4404,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "submit_referral",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 4468,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "call_discoverable_user_tool",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 4518,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "list_discoverable_user_tools",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "read",
+      "discoverable": false,
+      "source_line": 4571,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "request_human_agent_transfer",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 4587,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "submit_transaction",
+      "principal": "official-user-simulator",
+      "allowed_requesters": [],
+      "access": "write",
+      "discoverable": false,
+      "source_line": 4691,
+      "source_class": "KnowledgeUserTools"
+    },
+    {
+      "operation": "KB_search",
+      "principal": "shared-read",
+      "allowed_requesters": [
+        "card-application-agent",
+        "credit-limit-agent",
+        "payments-agent",
+        "account-opening-agent",
+        "account-closure-agent",
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "access": "read",
+      "discoverable": false,
+      "source_class": "KBSearchMixin",
+      "source_line": 64
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "product-and-referral-advice",
+      "lead": "card-application-agent",
+      "collaborators": [
+        "account-opening-agent"
+      ],
+      "required_operations": [
+        "get_referrals_by_user",
+        "give_discoverable_user_tool"
+      ]
+    },
+    {
+      "id": "rewards-investigation",
+      "lead": "card-application-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ],
+      "required_operations": [
+        "get_credit_card_transactions_by_user",
+        "update_transaction_rewards_3847"
+      ]
+    },
+    {
+      "id": "transaction-disputes",
+      "lead": "transaction-dispute-agent",
+      "collaborators": [
+        "card-lifecycle-agent"
+      ],
+      "required_operations": [
+        "file_credit_card_transaction_dispute_4829",
+        "file_debit_card_transaction_dispute_6281"
+      ]
+    },
+    {
+      "id": "fraud-and-replacement",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ],
+      "required_operations": [
+        "order_replacement_credit_card_7291",
+        "get_user_dispute_history_7291"
+      ]
+    },
+    {
+      "id": "card-closure-retention",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "payments-agent",
+        "transaction-dispute-agent"
+      ],
+      "required_operations": [
+        "log_credit_card_closure_reason_4521",
+        "close_credit_card_account_7834"
+      ]
+    },
+    {
+      "id": "credit-limit-dependencies",
+      "lead": "credit-limit-agent",
+      "collaborators": [
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ],
+      "required_operations": [
+        "submit_credit_limit_increase_request_7392",
+        "approve_credit_limit_increase_5847",
+        "deny_credit_limit_increase_5848"
+      ]
+    },
+    {
+      "id": "account-migration",
+      "lead": "account-opening-agent",
+      "collaborators": [
+        "payments-agent",
+        "account-closure-agent"
+      ],
+      "required_operations": [
+        "open_bank_account_4821",
+        "transfer_funds_between_bank_accounts_7291",
+        "close_bank_account_7392"
+      ]
+    },
+    {
+      "id": "atm-fees-and-account-choice",
+      "lead": "payments-agent",
+      "collaborators": [
+        "account-opening-agent"
+      ],
+      "required_operations": [
+        "get_bank_account_transactions_9173",
+        "apply_checking_account_credit_5829"
+      ]
+    },
+    {
+      "id": "debit-card-security",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ],
+      "required_operations": [
+        "freeze_debit_card_3892",
+        "close_debit_card_4721",
+        "order_debit_card_5739"
+      ]
+    },
+    {
+      "id": "savings-interest-servicing",
+      "lead": "account-opening-agent",
+      "collaborators": [
+        "payments-agent"
+      ],
+      "required_operations": [
+        "get_all_user_accounts_by_user_id_3847",
+        "apply_savings_account_credit_6831",
+        "submit_interest_discrepancy_report_7294"
+      ]
+    }
+  ]
+}

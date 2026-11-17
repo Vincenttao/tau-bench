@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "checks": [
+    "Design-only and not executable",
+    "English benchmark configuration and test specification",
+    "23 unique CT contracts match document",
+    "M01-M15 coverage rows present",
+    "22 official task IDs exist",
+    "Task 003 has user-side tools",
+    "B0 and B1 require real Go and forbid baseline fallback",
+    "Pilot stages are disjoint and total 16 episodes",
+    "Formal regression is 132 episodes; combined default is 148",
+    "Historical score and configuration-drift evidence verified"
+  ],
+  "document_links_verified": 26,
+  "source_hashes_verified": 59,
+  "runtime_tests_executed": false,
+  "model_calls": 0,
+  "go_started": false,
+  "diagram_check": "Control ownership and edge labels reviewed; rendering not executed."
+}

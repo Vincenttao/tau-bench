@@ -1,0 +1,578 @@
+{
+  "document_type": "test-design-not-runtime-manifest",
+  "revision_id": "llm-evidence-control",
+  "parent_revision": "existing-plan-4-design-and-read-pilot",
+  "status": "proposed-implementation-pending",
+  "executable": false,
+  "execution_enabled": false,
+  "comparison_ready": false,
+  "arm_id": "plan-4-agent-hub-refined-skills",
+  "provider": {
+    "id": "jev-judgment-provider",
+    "kind": "native-typesafe-system-one",
+    "service_ready": true,
+    "hub_business_integration_ready": false,
+    "endpoint": "https://api.typesafe.ai/v1/systemone",
+    "request_model": "jev-latest",
+    "expected_response_model": "jev-1.14.0",
+    "formal_version_binding": "verify-direct-version-id-before-freeze; otherwise freeze alias and reject response drift",
+    "independent_request_context": true,
+    "native_jev_readout": true,
+    "native_types_in_scope": [
+      "noul",
+      "choice"
+    ],
+    "images_in_formal_scope": false,
+    "proposal_origin": "application-adapter-from-native-observations-and-rules",
+    "evidence_reference_origin": "application-input-binding-not-model-generated",
+    "threshold_policy": "pending-task-specific-freeze; probe-0.3-0.7-not-production-policy",
+    "schema_status": "proposed-not-adapted-to-native-hub-schema",
+    "automatic_fallback": false
+  },
+  "comparison": {
+    "primary_control": "plan-2-deepagent-refined-skills",
+    "effect": "combined Jev/S1 judgment plus deterministic validation plus Hub task and effect controls",
+    "language": "en",
+    "task_count": 22,
+    "trials_per_task": 1,
+    "seed": 300,
+    "global_concurrency": 1,
+    "automatic_episode_retries": 0,
+    "extra_ablation_episodes": 0,
+    "cohort_path": "studies/banking-architecture-comparison/cohort.json",
+    "cohort_sha256": "be671adfbd3c2dd07c5865f61ae3fc64aecc454d2290d1fc8fd75bcbe88fff59",
+    "baseline_study_sha256": "10b0cc02eaf89e749b6878939ec91deac74365b8a75d09326ccec284447759fe",
+    "activation_requires_new_freeze": true
+  },
+  "skill_release": "banking-evidence-guides",
+  "skill_manifest_sha256": "949ea01d2b231fb986a0ee936b5cf8e57e0e9f978233e04ef749c29daf2d064c",
+  "inherited_limits": {
+    "episode_timeout_seconds": 2400,
+    "batch_timeout_seconds": 230400,
+    "max_steps": 200,
+    "max_errors": 10,
+    "cumulative_token_limit": null,
+    "global_concurrency": 1,
+    "automatic_episode_retries": 0,
+    "automatic_business_write_retries": 0,
+    "model_request_timeout_seconds": 120,
+    "model_sdk_retries": 0,
+    "gateway_retries": 0,
+    "core_call_timeout_seconds": 1200,
+    "bridge_call_timeout_seconds": 1500,
+    "remote_call_timeout_seconds": 120,
+    "hub_rpc_timeout_seconds": 30,
+    "max_internal_model_calls": 512,
+    "max_todos": 32,
+    "max_resumes_per_task": 8,
+    "max_dependency_depth": 4,
+    "max_correction_rounds": 3
+  },
+  "proposed_judgment_limit": {
+    "max_calls_per_episode": 64,
+    "counts_within_shared_model_call_limit": true,
+    "max_revisions_per_goal_and_evidence_version": 3,
+    "automatic_sdk_retries": 0,
+    "request_timeout_seconds": 120,
+    "status": "design_guardrail_not_measured_optimum"
+  },
+  "contracts": [
+    {
+      "id": "H01",
+      "subject": "判断协议",
+      "acceptance": "应用判断提案字段、枚举与引用有效；缺失或伪造引用拒绝采纳，不要求Jev原生答案生成引用",
+      "maps_to": "P4-01",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H02",
+      "subject": "证据隔离",
+      "acceptance": "同客户同目标有效证据可用；跨客户、跨任务、过期或覆盖不足证据进入 unknown/拒绝",
+      "maps_to": "P4-01",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H03",
+      "subject": "执行倾向污染",
+      "acceptance": "相同原始要求和证据不因 S2 的推荐措辞改变允许动作；实质反证必须改变结果或进入 unknown",
+      "maps_to": "P4-01",
+      "kind": "model-observation",
+      "blocking": false,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H04",
+      "subject": "数值与偏好",
+      "acceptance": "max=threshold 满足可能至少达到；低于阈值淘汰；最低年费优先不能被高返现覆盖；单位不明不比较",
+      "maps_to": "P4-01",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H05",
+      "subject": "推荐出口",
+      "acceptance": "固定oracle案例中错误理由和无依据断言被阻止、正确建议放行；ask_user不能旁路，真实语义准确率另报",
+      "maps_to": "P4-09",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H06",
+      "subject": "业务写入判断",
+      "acceptance": "有效公开流程证据及授权下合法争议提交成功；缺前提拒绝且官方写入零次",
+      "maps_to": "P4-01",
+      "kind": "integration",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H07",
+      "subject": "稳定操作身份",
+      "acceptance": "同业务步骤换 tool_call_id 不重复效果；客户确认的新业务请求即使参数相同仍可执行",
+      "maps_to": "P4-04",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H08",
+      "subject": "固定参数",
+      "acceptance": "合法原参数通过；嵌套参数改动、同操作身份改内容、未知动作或包装工具旁路拒绝",
+      "maps_to": "P4-03",
+      "kind": "integration",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H09",
+      "subject": "有效修订",
+      "acceptance": "已采纳有效修订可执行；高但未采纳修订、已失效修订和乱序更新拒绝",
+      "maps_to": "P4-02",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H10",
+      "subject": "实时权限",
+      "acceptance": "当前有效权限通过；派发前撤权拒绝；权限提供方不可用则禁止新增效果",
+      "maps_to": "P4-02",
+      "kind": "integration",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H11",
+      "subject": "分层结果",
+      "acceptance": "读取完成、申请受理、业务拒绝、等待、成功、未知映射正确；接口无错不使总目标自动完成",
+      "maps_to": "P4-09",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H12",
+      "subject": "派发入队窗口",
+      "acceptance": "Go dispatched 后入队前崩溃、入队后回执前崩溃均保留未知并核对；不盲重发",
+      "maps_to": "P4-06",
+      "kind": "fault",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H13",
+      "subject": "持久恢复",
+      "acceptance": "原官方环境存活时Java/Go重启恢复旧身份且不重复效果、不重置预算；Python环境宿主丢失则安全停止，不假装续跑",
+      "maps_to": "P4-07",
+      "kind": "fault",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H14",
+      "subject": "回执时序",
+      "acceptance": "正常回执推进；重复幂等、迟到按原操作对账、错误身份隔离；取消后回执仍保留事实",
+      "maps_to": "P4-06",
+      "kind": "fault",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H15",
+      "subject": "审计持久化",
+      "acceptance": "账本或必需证据落盘失败时新增效果为零；已发生效果保留未知待核对",
+      "maps_to": "P4-05",
+      "kind": "fault",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H16",
+      "subject": "控制失联",
+      "acceptance": "实际 Go 正常可派发；杀进程、超时、错误响应身份、错误二进制拒绝；不回退直通",
+      "maps_to": "P4-10",
+      "kind": "integration",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H17",
+      "subject": "依赖与等待",
+      "acceptance": "合法顺序可完成；破坏后续资格的顺序需澄清/重排；A 等待后 B 完成能恢复原 A",
+      "maps_to": "P4-08",
+      "kind": "integration",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H18",
+      "subject": "主体边界",
+      "acceptance": "用户侧申请只由模拟用户执行；不能代理申请或读取隐藏评分材料；合法 Agent 操作仍可执行",
+      "maps_to": "P4-09",
+      "kind": "integration",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H19",
+      "subject": "隔离重放",
+      "acceptance": "记录的模型结果可离线重放同一控制链；缺证据/改输入产生差异，外部调用零次",
+      "maps_to": "P4-11",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H20",
+      "subject": "学习发布禁用",
+      "acceptance": "跨题记忆、自动规则发布和动态 Skill 更新均禁用；显式检查无遗留状态",
+      "maps_to": "P4-12",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H21",
+      "subject": "变异检查",
+      "acceptance": "固定 allow、删除摘要/权限检查、跳过建议出口任一变异都必须被测试检测",
+      "maps_to": "P4-10",
+      "kind": "integration",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H22",
+      "subject": "预算计量",
+      "acceptance": "执行/判断/用户模拟全部调用计量；到限停止；修正不新增总预算，不自动重跑题目",
+      "maps_to": "shared",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H23",
+      "subject": "未知与拒绝",
+      "acceptance": "证据不足可补证或等待；拒绝有原因；超出纠错上限明确未完成；不能全部拒绝取得通过",
+      "maps_to": "P4-01",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H24",
+      "subject": "判断能力观察",
+      "acceptance": "固定等价改写、关键事实改变、证据冲突和提示注入样例，报告一致性与正确率而非仅JSON合法率",
+      "maps_to": "P4-01",
+      "kind": "model-observation",
+      "blocking": false,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H25",
+      "subject": "受控节点路由",
+      "acceptance": "工具、固定版本Workflow、有界Loop和等待各有正例；未知入口、错版本和越权节点拒绝；恢复复用有效决策，不因检查边重新调用模型",
+      "maps_to": "routing",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H26",
+      "subject": "状态所有权与并发修订",
+      "acceptance": "唯一写者与期待版本有效；旧写者、并发过期提交、重复事件不能推进状态；账本事实与任务投影可核对",
+      "maps_to": "state-ownership",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H27",
+      "subject": "有界重入与取消",
+      "acceptance": "新证据或修订可重入；无进展、到限和取消时停止新增派发，保留已发生效果和迟到回执",
+      "maps_to": "continuation",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H28",
+      "subject": "Jev原生协议与业务适配",
+      "acceptance": "Noul/Choice按原生类型解析；问题不能依赖同批答案；证据映射由适配器追溯，API错误不转成业务否定或allow",
+      "maps_to": "jev-s1",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H29",
+      "subject": "Jev版本与用量",
+      "acceptance": "冻结实际模型、问题和策略；别名漂移阻断，批量请求计请求数和问题数，usage与全层预算关联，不自动换普通模型",
+      "maps_to": "jev-s1",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H30",
+      "subject": "S1组合与未决分支",
+      "acceptance": "充分反证、证据缺失、冲突、概率边界各有独立案例；Choice无适用项不误放行，规则真值表有完整去向",
+      "maps_to": "jev-s1",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H31",
+      "subject": "自由文本与事件分流",
+      "acceptance": "每条新自由文本均解释，即使带goal关联；结构化回执/终止按契约处理；技术重复不新增模型请求或效果",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H32",
+      "subject": "多目标与歧义",
+      "acceptance": "回应与新请求分别保留；取消不误填确认槽；候选不足或动作冲突时澄清并阻断受影响派发，不强选或建重任务",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H33",
+      "subject": "输入路由提交",
+      "acceptance": "路由绑定message与期待revision；新输入待处理时阻止旧计划抢跑；过期路由不能提交，相同文本不同message不粗暴去重",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H34",
+      "subject": "episode与隐藏输入隔离",
+      "acceptance": "候选仅来自同episode可见记录，保留已终止目标索引；题号/覆盖清单/隐藏参考不进入运行时判断或路由",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H35",
+      "subject": "公开确认与时间",
+      "acceptance": "确认按官方政策和对象参数绑定；实质修改不复用旧确认；不新增OTP或无必要确认；业务时间不取宿主时钟",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H36",
+      "subject": "官方终止与环境恢复",
+      "acceptance": "STOP/超时优先保存未完成事项；恢复不重置预算；原环境不能接续时报告受阻，不重建环境补做旧效果",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H37",
+      "subject": "完整接线与旁路",
+      "acceptance": "输入解释、局部Loop、Workflow及直接工具调用都受协调器和效果边界约束；关掉输入路由或直通工具的变异被检测",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H38",
+      "subject": "目标覆盖与分层完成",
+      "acceptance": "目标及验收条件覆盖可见请求；Todo完成不代替目标验收；子成功父未完成记partial、未知不记success，转接不编造解决",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    },
+    {
+      "id": "H39",
+      "subject": "双层日志与可追溯性",
+      "acceptance": "每轮消息可追到输入路由、目标修订、S1观察、采纳、工具和验收；缺关键记录阻止完整验收，密钥不进入证据",
+      "maps_to": "episode-input-and-full-chain",
+      "kind": "contract",
+      "blocking": true,
+      "status": "not-run-for-this-revision"
+    }
+  ],
+  "activation_gates": [
+    "offline-contracts",
+    "real-component-wiring",
+    "legitimate-write-and-refusal",
+    "identity-outcome-recovery",
+    "freeze-and-provenance",
+    "all-four-arms-ready"
+  ],
+  "planned_model_observations": {
+    "fixtures": 24,
+    "protocol": "8 synthetic semantic cases x 3 inputs (base/equivalent/material-change), one call per input",
+    "official_cases": false,
+    "authorized_by_this_document": false,
+    "adds_formal_repetitions": false,
+    "provider": "jev-judgment-provider",
+    "case_themes": [
+      "continuation",
+      "new-goal",
+      "cancel-and-modify",
+      "status-query",
+      "multi-goal",
+      "ambiguous-target",
+      "claim-support-and-counterevidence",
+      "missing-and-conflicting-evidence"
+    ]
+  },
+  "not_implemented": [
+    "jev-business-judgment-adapter",
+    "evidence-snapshot-builder",
+    "recommendation-egress-validator",
+    "stable-business-operation-registry",
+    "trusted-live-grant-provider",
+    "business-receipt-mapping",
+    "task-resume-and-reconciliation",
+    "new-revision-runner-binding",
+    "persistent-task-coordinator",
+    "controlled-node-routing",
+    "single-writer-and-revision-fencing",
+    "input-envelope-and-route-contract",
+    "per-turn-Jev-input-routing",
+    "parent-goal-acceptance",
+    "official-environment-continuity-check"
+  ],
+  "execution_note": "Design only. Existing --runtime-pilot cannot execute or validate this revision. No model calls are authorized merely by this specification.",
+  "design_structure": [
+    "scope-and-research",
+    "flow-and-sequence",
+    "architecture",
+    "verification",
+    "delivery"
+  ],
+  "alternative_provider": {
+    "id": "llm-judgment-provider",
+    "enabled": false,
+    "requires_separate_freeze": true,
+    "extra_formal_episodes": 0
+  },
+  "target_scope": "complete-arm-4-for-frozen-22-case-benchmark-not-mobile-banking-product",
+  "scope_exclusions": [
+    "mobile-app-and-channel-apis",
+    "real-login-otp",
+    "new-bank-policies",
+    "hidden-reference-routing",
+    "cross-episode-task-sharing",
+    "additional-formal-trials"
+  ],
+  "input_routing": {
+    "free_text": "every-new-official-user-message-requires-Jev-interpretation",
+    "structured_events": "deterministic-contract-parser",
+    "duplicate_events": "reuse-recorded-result-without-new-inference",
+    "task_id_role": "internal-context-not-intent-or-permission",
+    "case_id_role": "evaluator-only-never-agent-routing",
+    "candidate_scope": "same-episode-visible-goals-including-terminal-index",
+    "actions": [
+      "respond",
+      "new_goal",
+      "modify",
+      "cancel",
+      "query",
+      "clarify",
+      "no_business_action"
+    ],
+    "multi_target": true,
+    "commit": "expected-revision-check-before-mutation",
+    "provider_error": "block-dependent-progression-no-fallback",
+    "pending_input": "block-affected-dispatch; block-all-new-business-dispatch-if-impact-unknown; persist-inflight-receipts",
+    "goal_ids": "existing-ids-must-be-candidates; new-ids-assigned-by-coordinator-at-commit"
+  },
+  "state_model": {
+    "goal_lifecycle": [
+      "active",
+      "waiting",
+      "closed"
+    ],
+    "goal_outcome": [
+      "undetermined",
+      "success",
+      "partial",
+      "failed",
+      "cancelled",
+      "unknown"
+    ],
+    "todo_is_authoritative": false,
+    "resume_requires_same_environment_continuity": true,
+    "official_termination_overrides_internal_plan": true,
+    "goal_acceptance": "validate-visible-request-coverage-and-public-policy; accept-authoritative-results-not-todo-completion",
+    "initial_restart_scope": "Java-and-Go-with-official-Python-environment-still-alive; owner-process-loss-stops-episode"
+  },
+  "cohort_coverage": {
+    "source": "studies/banking-architecture-comparison/cohort.json",
+    "task_ids": [
+      "task_003",
+      "task_017",
+      "task_031",
+      "task_036",
+      "task_043",
+      "task_051",
+      "task_060",
+      "task_076",
+      "task_077",
+      "task_093",
+      "task_098",
+      "task_016",
+      "task_022",
+      "task_033",
+      "task_041",
+      "task_049",
+      "task_054",
+      "task_062",
+      "task_072",
+      "task_087",
+      "task_097",
+      "task_100"
+    ],
+    "evaluator_only": true,
+    "never_used_as_runtime_router": true
+  },
+  "registered_node_templates": [
+    "evidence-investigation",
+    "candidate-comparison",
+    "guarded-operation",
+    "dependent-goals",
+    "receipt-reconciliation"
+  ],
+  "official_turn_boundary": "yield-on-official-response-or-tool-call; resume-from-persisted-node-on-correlated-event",
+  "ownership_mapping": "reuse-operation-and-principal-constraints; map-business-roles-to-approved-nodes-not-extra-agents"
+}

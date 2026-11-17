@@ -1,0 +1,18 @@
+{
+  "evidence_hashes_verified": 120,
+  "document_links_verified": 21,
+  "artifact_files_scanned_for_provided_credential": 130,
+  "credential_matches": 0,
+  "passing_checks": 12,
+  "failing_business_checks": [
+    "business_reward_passed",
+    "one_each_expected_write",
+    "cli_before_replacement_and_dispute",
+    "adjusted_cli_amount"
+  ],
+  "active_episodes": 0,
+  "strict_db_diagnostic_completed": true,
+  "report_sha256": "b4cc7c0628b501c3388ff8b7f2a85adc319adbbf69a2895a5a2a4bdc300b9fc1",
+  "verification_sha256": "e66ab21343a077dca66ef64bf05a6f070591cee746602aa100fd2148641e1fc8",
+  "failure_evidence_sha256": "f6a9c9575084d9d083971e7e3dd7a03a9abdf426d3b97eb4f7b7c995e90ebb1b"
+}

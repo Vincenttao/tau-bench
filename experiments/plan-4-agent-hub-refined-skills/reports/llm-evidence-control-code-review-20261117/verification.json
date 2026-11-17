@@ -1,0 +1,87 @@
+{
+  "checked_at": "2026-11-17T05:14:22.499572+00:00",
+  "scope": "source review plus offline component checks; no runtime source edits",
+  "checks": [
+    {
+      "command": "bash experiments/plan-4-agent-hub-refined-skills/go/check-gate.sh",
+      "exit_code": 0,
+      "source_pin": "verified",
+      "fresh_go_build": true,
+      "go_tests_passed": 2
+    },
+    {
+      "command": ".venv312/bin/python -m unittest discover -s experiments/plan-4-agent-hub-refined-skills/tests -v",
+      "exit_code": 0,
+      "python_tests_passed": 8,
+      "model_http": "mocked"
+    },
+    {
+      "command": ".venv312/bin/python /tmp/review_hub_gap_probes.py",
+      "exit_code": 0,
+      "probes_reproduced": 4,
+      "official_calls": 0,
+      "model_calls": 0
+    },
+    {
+      "command": "jsonschema.Draft202012Validator(assessment-output.schema.json).validate(assessment)",
+      "passed": true
+    }
+  ],
+  "probes": [
+    {
+      "id": "P01",
+      "observed": "相同操作参数，更换调用ID后出现2条Go dispatched及2个内存队列事件",
+      "scope": "合成decision、真实Go、无官方环境；不能认定实际发生重复银行写入"
+    },
+    {
+      "id": "P02",
+      "observed": "accepted正文且error=false，经真实_send处理登记Go completed",
+      "scope": "直接调用结果处理器并mock父_send；绕开pilot写入口，仅证明布尔映射"
+    },
+    {
+      "id": "P03",
+      "observed": "mock的意外model和空answers被JevClient.ask接受",
+      "scope": "无HTTP请求；下游Noul parser仍能拒绝缺失Noul"
+    },
+    {
+      "id": "P04",
+      "observed": "合成环境下Go Popen env含TYPESAFE_API_KEY、不含OPENAI_API_KEY",
+      "scope": "mock启动；无真实凭证打印或外传"
+    }
+  ],
+  "no_fresh_java_build": true,
+  "model_inference_requests": 0,
+  "official_episodes": 0,
+  "import_note": "探针导入tau2/LiteLLM时尝试读取公开价格表，DNS失败后使用本地备份；未请求推理服务。",
+  "documentation_sources": [
+    "https://docs.typesafe.ai/api/system-one.md",
+    "https://docs.typesafe.ai/primitives/noul"
+  ],
+  "source_hashes": {
+    "experiments/plan-4-agent-hub-refined-skills/python/hub_pilot_agent.py": "f97b014da8c98aba182721753cda0ecd1e228b0fc7348a646893238c6f71fb34",
+    "experiments/plan-4-agent-hub-refined-skills/python/hub_boundary.py": "ad1a817b25a159a854e725ec6a9046b5035f6c8f8144c0beabdad3ae4f5d2eba",
+    "experiments/plan-4-agent-hub-refined-skills/go/gate.go": "d147076d3d59b0960583cf670303371a860d57affefe62e8df814f014e0048c1",
+    "experiments/plan-4-agent-hub-refined-skills/python/hub_gate.py": "0d4dc3c3906acc52309bd3cef8c28c816f08cc67ddfd53dad82d19b7ce995920",
+    "experiments/plan-4-agent-hub-refined-skills/go/cmd/banking-gate/main.go": "90f8af84698f1051fcbd9b0c7f75e1b4dd356e43851ec8811d5733ce485b74a3",
+    "experiments/plan-4-agent-hub-refined-skills/python/jev_provider.py": "cbb9706ecd4a8059c06a545fb5ae42ad338c3a4084c0235ce38adf42b200d907",
+    "experiments/plan-4-agent-hub-refined-skills/python/probe_jev.py": "f27043bc477de17de753e110ef53dc46f2819b7962877c922f6d111f22961eb6",
+    "shared/java/src/main/java/eval/DeepAgentBridge.java": "e7cb4d2bf0274acf07fd3e57cf9b218fdddc1b6d5d69ada15bbf388f0ffd1fd1",
+    "shared/java/src/main/java/eval/DeepAgentAssembly.java": "fd4c09e0403db1b0214c1c19f636ee4e3423543b9ac303c62cce2bbacf6066c5",
+    "shared/python/java_agent.py": "47c5a401d9666e2cdf1be0a144bceeda54fda61100a84e344d8eb16109dfed1a",
+    "shared/python/benchmark_mcp.py": "273b5a3c4b171e7b00e35c0b8ccda71fea8f6921c6104400fe4f99e12a87abdf",
+    "shared/python/run_episode.py": "19ed0f04793197349ed669ce8da72d1cd6dfa46493464c2e2212991d18a5258f",
+    "shared/python/diagnostic_run.py": "bb48f1e61072ae3ef568ace99fc61e6590e8d11b587b4fc6460167a39dd20903",
+    "shared/python/study_policy.py": "4a4c80ae0083cf50dcf7eb886a9bb2be49019e250b786fc8d339400393f6e07d",
+    "shared/python/episode_acceptance.py": "247be5782c23c2cae7c7acca6a3b71dbcadbeb5edc797d26d956f52fac24834e",
+    "experiments/plan-4-agent-hub-refined-skills/go/gate_test.go": "b84644216c1215e18b5a0bd23c504e821c8a2c1c173747161b88e2435afdcedc",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_effect_boundary.py": "6bd318a46c4935ef8449e16728be0a12d3931c2c387ad8ce72754b6b80fb9986",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_go_transport.py": "061086584d698ac2fadb6ea8fdd5ab825d9990c49c097d76ff9ab088c1c1b1d5",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_jev_provider.py": "484e1526002255371e8c63cf9a8b0fd41f04baa1d78e5df71bb1192ac4ba7ecd",
+    "experiments/plan-4-agent-hub-refined-skills/plans/llm-evidence-control/test-spec.json": "19eaedf51171c7e9d94cb6307ab4c3b39036dd88e2671575bc35f64824b2c12c",
+    "experiments/plan-4-agent-hub-refined-skills/plans/llm-evidence-control/test-design.md": "e6fee07984e92bc3cc1a18dd43847bb8573df65ccfebdd890923a09e0a82159f"
+  },
+  "build_artifact_hashes": {
+    "experiments/plan-4-agent-hub-refined-skills/go/target/banking-gate": "2e745bb776626620250220c2efa637d5db3136abbc49eb63530d8158b6c084aa",
+    "experiments/plan-4-agent-hub-refined-skills/go/target/gate.test": "af5d637ca58522d4061174b1122e2deeb17758163e79d238ff10d8c44842b852"
+  }
+}

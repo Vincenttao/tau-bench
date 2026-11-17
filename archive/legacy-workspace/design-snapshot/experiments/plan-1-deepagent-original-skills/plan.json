@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "plan_id": "plan-1-deepagent-original-skills",
+  "display_number": 1,
+  "status": "shared-runner-available",
+  "comparison_ready": false,
+  "skill_release": "1.0.0",
+  "skill_manifest": "implementations/deepagent/skills/releases/1.0.0/release.json",
+  "skill_manifest_sha256": "193fbec5dbfd62cc877a2356ce7c1cfbb940f44558c5d290f0ba2b1159488362",
+  "implementation": "implementations/deepagent",
+  "historical_results_are_comparison_results": false,
+  "execution_enabled": false,
+  "note": "Detailed comparison design only; existing legacy runners do not consume this registration. Execution remains disabled pending implementation and freeze.",
+  "test_design": "test-design.md",
+  "design_status": "detailed-design-reviewed",
+  "comparison_study": "studies/banking-architecture-comparison/study.json",
+  "comparison_language": "en",
+  "comparison_profile": "single-round-four-arm",
+  "comparison_cases": 22,
+  "comparison_trials": 1
+}

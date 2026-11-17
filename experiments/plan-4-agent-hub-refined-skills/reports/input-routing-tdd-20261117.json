@@ -1,0 +1,29 @@
+{
+  "scope": "J1 offline route proposal module; not live integration",
+  "python_tests_passed": 22,
+  "new_router_tests_passed": 14,
+  "java_assertions_passed": 43,
+  "model_calls": 0,
+  "official_episodes": 0,
+  "source_sha256": {
+    "experiments/plan-4-agent-hub-refined-skills/python/input_router.py": "7b82f748c638bd6d0e3dcce438c6d8b9f6231a261e0ee2afb437b59ba089860a",
+    "experiments/plan-4-agent-hub-refined-skills/tests/test_input_router.py": "fbd55482a297fc70cd3854d7c727acf56374ee564bd66c60dcd421810e397eff",
+    "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/hub/TaskCoordinator.java": "233f646c8bb9271f89558003c244f57fb0c1834c2687e86ca9016faf0238b779",
+    "experiments/plan-4-agent-hub-refined-skills/java/src/test/java/eval/hub/TaskCoordinatorTest.java": "1bf78d7dc259ce698f5ac880162b2d3b3c45fe4962390a064319e5ec48925dfb"
+  },
+  "red_phase": [
+    "missing input_router module",
+    "pause route missing",
+    "Java pause unsupported",
+    "malformed answer raised AttributeError instead of provider error"
+  ],
+  "pending": [
+    "Java/Python request-response wiring",
+    "persistent proposal audit",
+    "budget reservation wiring",
+    "candidate generation",
+    "formal threshold policy",
+    "live Jev quality observation",
+    "official driver"
+  ]
+}

@@ -1,0 +1,788 @@
+{
+  "scope": "Existing baseline only; agent-hub enhancement is not installed; N=1 is not a general performance claim.",
+  "status": {
+    "status": "scored",
+    "domain": "banking_knowledge",
+    "task_id": "task_054",
+    "trial": 0,
+    "reward": 0.0,
+    "termination_reason": "user_stop",
+    "duration": 369.62772568999935
+  },
+  "reward_info": {
+    "reward": 0.0,
+    "db_check": {
+      "db_match": false,
+      "db_reward": 0.0
+    },
+    "env_assertions": [],
+    "action_checks": [
+      {
+        "action": {
+          "action_id": "054_0",
+          "requestor": "assistant",
+          "name": "log_verification",
+          "arguments": {
+            "name": "Sofia Papadopoulos",
+            "user_id": "584f9c5d00",
+            "address": "1456 Astoria Boulevard, Queens, NY 11102",
+            "email": "sofia.p@outlook.com",
+            "phone_number": "347-555-0387",
+            "date_of_birth": "01/25/1986",
+            "time_verified": "2025-11-14 03:40:00 EST"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "write"
+      },
+      {
+        "action": {
+          "action_id": "054_1",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "submit_credit_limit_increase_request_7392"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": false,
+        "action_reward": 0.0,
+        "tool_type": "generic"
+      },
+      {
+        "action": {
+          "action_id": "054_2",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "submit_credit_limit_increase_request_7392",
+            "arguments": "{\"credit_card_account_id\": \"cc_584f9c5d00_gold\", \"user_id\": \"584f9c5d00\", \"requested_increase_amount\": 2500}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": false,
+        "action_reward": 0.0,
+        "tool_type": "write"
+      },
+      {
+        "action": {
+          "action_id": "054_3",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_user_dispute_history_7291"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "generic"
+      },
+      {
+        "action": {
+          "action_id": "054_4",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_user_dispute_history_7291",
+            "arguments": "{\"user_id\": \"584f9c5d00\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "write"
+      },
+      {
+        "action": {
+          "action_id": "054_5",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_pending_replacement_orders_5765"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "generic"
+      },
+      {
+        "action": {
+          "action_id": "054_6",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_pending_replacement_orders_5765",
+            "arguments": "{\"credit_card_account_id\": \"cc_584f9c5d00_gold\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "write"
+      },
+      {
+        "action": {
+          "action_id": "054_7",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_credit_limit_increase_history_4829"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "generic"
+      },
+      {
+        "action": {
+          "action_id": "054_8",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_credit_limit_increase_history_4829",
+            "arguments": "{\"credit_card_account_id\": \"cc_584f9c5d00_gold\"}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "write"
+      },
+      {
+        "action": {
+          "action_id": "054_9",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_payment_history_6183"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "generic"
+      },
+      {
+        "action": {
+          "action_id": "054_10",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "get_payment_history_6183",
+            "arguments": "{\"credit_card_account_id\": \"cc_584f9c5d00_gold\", \"months\": 3}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "write"
+      },
+      {
+        "action": {
+          "action_id": "054_11",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "approve_credit_limit_increase_5847"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": false,
+        "action_reward": 0.0,
+        "tool_type": "generic"
+      },
+      {
+        "action": {
+          "action_id": "054_12",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "approve_credit_limit_increase_5847",
+            "arguments": "{\"credit_card_account_id\": \"cc_584f9c5d00_gold\", \"user_id\": \"584f9c5d00\", \"new_credit_limit\": 7500}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": false,
+        "action_reward": 0.0,
+        "tool_type": "write"
+      },
+      {
+        "action": {
+          "action_id": "054_13",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "order_replacement_credit_card_7291"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "generic"
+      },
+      {
+        "action": {
+          "action_id": "054_14",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "order_replacement_credit_card_7291",
+            "arguments": "{\"credit_card_account_id\": \"cc_584f9c5d00_gold\", \"user_id\": \"584f9c5d00\", \"shipping_address\": \"1456 Astoria Boulevard, Queens, NY 11102\", \"reason\": \"fraud_suspected\", \"expedited_shipping\": true}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": false,
+        "action_reward": 0.0,
+        "tool_type": "write"
+      },
+      {
+        "action": {
+          "action_id": "054_15",
+          "requestor": "assistant",
+          "name": "unlock_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "file_credit_card_transaction_dispute_4829"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "generic"
+      },
+      {
+        "action": {
+          "action_id": "054_16",
+          "requestor": "assistant",
+          "name": "call_discoverable_agent_tool",
+          "arguments": {
+            "agent_tool_name": "file_credit_card_transaction_dispute_4829",
+            "arguments": "{\"transaction_id\": \"txn_584f9c5d00_001\", \"card_action\": \"cancel_and_reissue\", \"card_last_4_digits\": \"7823\", \"full_name\": \"Sofia Papadopoulos\", \"user_id\": \"584f9c5d00\", \"phone\": \"347-555-0387\", \"email\": \"sofia.p@outlook.com\", \"address\": \"1456 Astoria Boulevard, Queens, NY 11102\", \"contacted_merchant\": false, \"purchase_date\": \"11/11/2025\", \"issue_noticed_date\": \"11/12/2025\", \"dispute_reason\": \"unauthorized_fraudulent_charge\", \"resolution_requested\": \"full_refund\", \"eligible_for_provisional_credit\": true}"
+          },
+          "info": null,
+          "compare_args": null
+        },
+        "action_match": true,
+        "action_reward": 1.0,
+        "tool_type": "write"
+      }
+    ],
+    "nl_assertions": null,
+    "communicate_checks": null,
+    "reward_basis": [
+      "DB"
+    ],
+    "reward_breakdown": {
+      "DB": 0.0
+    },
+    "info": {
+      "env": null,
+      "nl": null,
+      "communicate": {
+        "note": "No communicate_info to evaluate"
+      },
+      "action": null
+    }
+  },
+  "checks": {
+    "single_english_task": true,
+    "official_commit": true,
+    "skill_release": true,
+    "protocol_passed": true,
+    "runtime_language_en": true,
+    "runtime_prompt": true,
+    "no_cjk_in_customer_dialogue": true,
+    "frozen_sources_intact": true,
+    "deployed_skill_matches_release": true,
+    "mcp_raw_receipt_hashes": true,
+    "officially_scored": true,
+    "business_reward_passed": false,
+    "strict_offline_reconstruction": true,
+    "one_each_expected_write": false,
+    "cli_before_replacement_and_dispute": false,
+    "adjusted_cli_amount": false
+  },
+  "all_checks_passed": false,
+  "language": [
+    {
+      "benchmark_language": "en",
+      "core_language": "en"
+    }
+  ],
+  "system_prompt": [
+    {
+      "sha256": "f055952eedb1eb0cfddb52a1858059272b9e61d64c65bae53799cf2d1510f751",
+      "version": "evidence-todo-v1"
+    }
+  ],
+  "messages": 60,
+  "assistant_tool_calls": 24,
+  "user_tool_calls": 0,
+  "user_tool_scope": "task_054 has an empty user_tools list; user-simulator dialogue is exercised, user-side business writes are not covered.",
+  "mcp_receipts": 24,
+  "mcp_error_receipts": 0,
+  "java_model_responses": 19,
+  "java_usage_records": 19,
+  "java_observed_tokens": 875794,
+  "simulator_or_judge_observed_tokens": 15350,
+  "gateway_probe_tokens": 108,
+  "gateway_returned_models": [
+    "deepseek-v4-flash-ga-260731",
+    "deepseek-v4.1-flash-1017"
+  ],
+  "business_writes": [
+    {
+      "message_index": 44,
+      "actor": "assistant",
+      "name": "file_credit_card_transaction_dispute_4829",
+      "arguments": {
+        "transaction_id": "txn_584f9c5d00_001",
+        "card_action": "cancel_and_reissue",
+        "card_last_4_digits": "7823",
+        "full_name": "Sofia Papadopoulos",
+        "user_id": "584f9c5d00",
+        "phone": "347-555-0387",
+        "email": "sofia.p@outlook.com",
+        "address": "1456 Astoria Boulevard, Queens, NY 11102",
+        "contacted_merchant": false,
+        "purchase_date": "11/11/2025",
+        "issue_noticed_date": "11/12/2025",
+        "dispute_reason": "unauthorized_fraudulent_charge",
+        "resolution_requested": "full_refund",
+        "eligible_for_provisional_credit": true
+      }
+    },
+    {
+      "message_index": 50,
+      "actor": "assistant",
+      "name": "order_replacement_credit_card_7291",
+      "arguments": {
+        "credit_card_account_id": "cc_584f9c5d00_gold",
+        "user_id": "584f9c5d00",
+        "shipping_address": "1456 Astoria Boulevard, Queens, NY 11102",
+        "reason": "fraud_suspected",
+        "expedited_shipping": false
+      }
+    }
+  ],
+  "official_actions": [
+    {
+      "message_index": 2,
+      "actor": "assistant",
+      "name": "KB_search",
+      "arguments": {
+        "query": "credit card dispute fraud unauthorized charge provisional credit policy"
+      }
+    },
+    {
+      "message_index": 4,
+      "actor": "assistant",
+      "name": "KB_search",
+      "arguments": {
+        "query": "replacement card compromised card number fee shipping policy"
+      }
+    },
+    {
+      "message_index": 6,
+      "actor": "assistant",
+      "name": "KB_search",
+      "arguments": {
+        "query": "credit limit increase eligibility cooldown utilization policy"
+      }
+    },
+    {
+      "message_index": 10,
+      "actor": "assistant",
+      "name": "get_user_information_by_name",
+      "arguments": {
+        "customer_name": "Sofia Papadopoulos"
+      }
+    },
+    {
+      "message_index": 12,
+      "actor": "assistant",
+      "name": "get_current_time",
+      "arguments": {}
+    },
+    {
+      "message_index": 14,
+      "actor": "assistant",
+      "name": "log_verification",
+      "arguments": {
+        "name": "Sofia Papadopoulos",
+        "user_id": "584f9c5d00",
+        "address": "1456 Astoria Boulevard, Queens, NY 11102",
+        "email": "sofia.p@outlook.com",
+        "phone_number": "347-555-0387",
+        "date_of_birth": "01/25/1986",
+        "time_verified": "2025-11-14 03:40:00 EST"
+      }
+    },
+    {
+      "message_index": 16,
+      "actor": "assistant",
+      "name": "get_credit_card_accounts_by_user",
+      "arguments": {
+        "user_id": "584f9c5d00"
+      }
+    },
+    {
+      "message_index": 18,
+      "actor": "assistant",
+      "name": "get_credit_card_transactions_by_user",
+      "arguments": {
+        "user_id": "584f9c5d00"
+      }
+    },
+    {
+      "message_index": 20,
+      "actor": "assistant",
+      "name": "KB_search",
+      "arguments": {
+        "query": "credit card dispute status history tool get disputes filed"
+      }
+    },
+    {
+      "message_index": 22,
+      "actor": "assistant",
+      "name": "KB_search",
+      "arguments": {
+        "query": "check credit card replacement order status pending tool"
+      }
+    },
+    {
+      "message_index": 24,
+      "actor": "assistant",
+      "name": "unlock_discoverable_agent_tool",
+      "arguments": {
+        "agent_tool_name": "get_pending_replacement_orders_5765"
+      }
+    },
+    {
+      "message_index": 26,
+      "actor": "assistant",
+      "name": "unlock_discoverable_agent_tool",
+      "arguments": {
+        "agent_tool_name": "get_user_dispute_history_7291"
+      }
+    },
+    {
+      "message_index": 28,
+      "actor": "assistant",
+      "name": "unlock_discoverable_agent_tool",
+      "arguments": {
+        "agent_tool_name": "get_credit_limit_increase_history_4829"
+      }
+    },
+    {
+      "message_index": 30,
+      "actor": "assistant",
+      "name": "unlock_discoverable_agent_tool",
+      "arguments": {
+        "agent_tool_name": "get_payment_history_6183"
+      }
+    },
+    {
+      "message_index": 32,
+      "actor": "assistant",
+      "name": "get_user_dispute_history_7291",
+      "arguments": {
+        "user_id": "584f9c5d00"
+      }
+    },
+    {
+      "message_index": 34,
+      "actor": "assistant",
+      "name": "get_pending_replacement_orders_5765",
+      "arguments": {
+        "credit_card_account_id": "cc_584f9c5d00_gold"
+      }
+    },
+    {
+      "message_index": 36,
+      "actor": "assistant",
+      "name": "get_credit_limit_increase_history_4829",
+      "arguments": {
+        "credit_card_account_id": "cc_584f9c5d00_gold"
+      }
+    },
+    {
+      "message_index": 38,
+      "actor": "assistant",
+      "name": "get_payment_history_6183",
+      "arguments": {
+        "credit_card_account_id": "cc_584f9c5d00_gold",
+        "months": 3
+      }
+    },
+    {
+      "message_index": 40,
+      "actor": "assistant",
+      "name": "unlock_discoverable_agent_tool",
+      "arguments": {
+        "agent_tool_name": "order_replacement_credit_card_7291"
+      }
+    },
+    {
+      "message_index": 42,
+      "actor": "assistant",
+      "name": "unlock_discoverable_agent_tool",
+      "arguments": {
+        "agent_tool_name": "file_credit_card_transaction_dispute_4829"
+      }
+    },
+    {
+      "message_index": 44,
+      "actor": "assistant",
+      "name": "file_credit_card_transaction_dispute_4829",
+      "arguments": {
+        "transaction_id": "txn_584f9c5d00_001",
+        "card_action": "cancel_and_reissue",
+        "card_last_4_digits": "7823",
+        "full_name": "Sofia Papadopoulos",
+        "user_id": "584f9c5d00",
+        "phone": "347-555-0387",
+        "email": "sofia.p@outlook.com",
+        "address": "1456 Astoria Boulevard, Queens, NY 11102",
+        "contacted_merchant": false,
+        "purchase_date": "11/11/2025",
+        "issue_noticed_date": "11/12/2025",
+        "dispute_reason": "unauthorized_fraudulent_charge",
+        "resolution_requested": "full_refund",
+        "eligible_for_provisional_credit": true
+      }
+    },
+    {
+      "message_index": 48,
+      "actor": "assistant",
+      "name": "get_user_dispute_history_7291",
+      "arguments": {
+        "user_id": "584f9c5d00"
+      }
+    },
+    {
+      "message_index": 50,
+      "actor": "assistant",
+      "name": "order_replacement_credit_card_7291",
+      "arguments": {
+        "credit_card_account_id": "cc_584f9c5d00_gold",
+        "user_id": "584f9c5d00",
+        "shipping_address": "1456 Astoria Boulevard, Queens, NY 11102",
+        "reason": "fraud_suspected",
+        "expedited_shipping": false
+      }
+    },
+    {
+      "message_index": 54,
+      "actor": "assistant",
+      "name": "get_pending_replacement_orders_5765",
+      "arguments": {
+        "credit_card_account_id": "cc_584f9c5d00_gold"
+      }
+    }
+  ],
+  "customer_dialogue": [
+    {
+      "message_index": 0,
+      "role": "assistant",
+      "content": "Hi! How can I help you today?"
+    },
+    {
+      "message_index": 1,
+      "role": "user",
+      "content": "Hi, I need help with a few things on my Gold Rewards Card. Most urgently, there's a fraudulent charge from CloudSync Storage for $487.50 that I need to dispute right away\u2014I've never used that service and I'm honestly worried about my card security. I'd also like a replacement card sent to me since my card info was clearly compromised. Oh, and I've also been meaning to request a credit limit increase for a renovation project, but let's handle the fraud situation first since that's the priority. Can you help me with all of this?"
+    },
+    {
+      "message_index": 8,
+      "role": "assistant",
+      "content": "Thanks for reaching out \u2014 I can help with all three. To get started, I first need to verify your identity before I can access your account details. Could you please provide:\n\n1. **Your full name**\n2. **Two of the following** for verification: date of birth, email address, phone number, or home address\n\nWhile I have you, it would also help to gather a few details so I can handle everything in one go:\n\n**For the fraud dispute (CloudSync Storage, $487.50):**\n- The date the charge posted (if you know it)\n- When you first noticed it\n- Did you contact the merchant about it?\n- What resolution you'd like (e.g., full refund/chargeback)\n\n**For the replacement card:**\n- The shipping address you'd like it sent to (confirm your address on file or provide an alternate)\n- Whether you'd like standard delivery (7\u201310 business days, free) or expedited (2\u20133 business days)\n\n**For the credit limit increase:**\n- The increase amount you're requesting (or the new total limit you'd like), plus a brief reason\n\nOnce I verify your identity, I'll pull up your card details and start with the fraud situation right away."
+    },
+    {
+      "message_index": 9,
+      "role": "user",
+      "content": "Sure, here are the details you asked for.\n\nMy full name is Sofia Papadopoulos. For verification, you can use my date of birth\u201401/25/1986\u2014and my phone number, 347-555-0387.\n\nFor the fraudulent charge: the CloudSync Storage transaction was about three days ago. I first noticed it on November 12th, 2025, when I was reviewing my statement. I have not contacted the merchant\u2014I\u2019ve never even heard of CloudSync Storage, so this is clearly fraud, not a merchant issue. I\u2019d like a full refund since I didn\u2019t authorize it at all.\n\nFor the replacement card: please send it to my address on file, which is 1456 Astoria Boulevard, Queens, NY 11102. Standard delivery is fine.\n\nFor the credit limit increase: I\u2019m requesting an increase of $4,000, so my limit would go from $5,000 to $9,000. The reason is a home renovation project coming up that I need more headroom for."
+    },
+    {
+      "message_index": 46,
+      "role": "assistant",
+      "content": "Tool execution error: More than one task is marked as 'in_progress' (only one allowed)"
+    },
+    {
+      "message_index": 47,
+      "role": "user",
+      "content": "Is everything okay on your end? I just want to make sure you got all my information\u2014I provided my name, date of birth, and phone number for verification, plus all the details for the dispute, replacement card, and credit limit increase. Let me know if you need anything else from me, or if we can go ahead and start with the fraud dispute."
+    },
+    {
+      "message_index": 52,
+      "role": "assistant",
+      "content": "Tool execution error: More than one task is marked as 'in_progress' (only one allowed)"
+    },
+    {
+      "message_index": 53,
+      "role": "user",
+      "content": "Looks like something went wrong on your side\u2014are you still able to access my account? I can repeat anything you need. I\u2019m hoping we can get started with the fraudulent CloudSync Storage charge first, and then handle the replacement card and credit limit increase."
+    },
+    {
+      "message_index": 56,
+      "role": "assistant",
+      "content": "Here's the full status on all three requests:\n\n**1. Fraud dispute (CloudSync Storage, $487.50) \u2014 \u2705 Filed**\n- Dispute ID **dsp_f8aab53ad42b**, status **SUBMITTED**, reason: unauthorized fraudulent charge, resolution requested: full refund.\n- You're **eligible for provisional credit** \u2014 the $487.50 will be temporarily credited within ~2 business days while the investigation (up to 10 business days) runs.\n\n**2. Replacement card \u2014 \u2705 Ordered**\n- Order **ccord_ad344b6a4227**, standard delivery (7\u201310 business days) to 1456 Astoria Boulevard, Queens, NY 11102.\n- Old card ending **7823** has been cancelled for security. New card keeps the same account number with a new card number/CVV. Watch your email for shipping updates, and please review your recent transactions for any other unauthorized activity.\n\n**3. Credit limit increase \u2014 \u26a0\ufe0f Cannot be processed right now**\nI looked into this, and two things stand in the way:\n- **Requested amount:** For your Gold Rewards (premium tier) card, the maximum increase in a single request is 50% of your current limit \u2014 i.e., **$2,500** (new limit $7,500), not the $4,000 you asked for.\n- **Pending items:** A credit limit increase can't be processed while there is an **open dispute** and an **outstanding replacement card order** on the account \u2014 both of which now exist because of the fraud handling you prioritized.\n\nOnce the dispute is resolved and your replacement card is delivered/activated, we can revisit the increase, and you could request up to **$2,500** at that time. No limit increase request has been submitted, so nothing was denied or recorded against your account.\n\nWould you like me to do anything else now, or shall we leave the credit limit increase to revisit once the fraud items clear?"
+    },
+    {
+      "message_index": 57,
+      "role": "user",
+      "content": "Wait, really? I had no idea those were connected. I do want all three taken care of, and the credit limit increase is important for my renovation. Is there any way to reorder this\u2014maybe submit the credit limit increase first and then continue the fraud handling\u2014so all three can still be completed?\n\nI agree to reduce the request to $2,500, bringing my limit to $7,500. If the dispute and card order have to clear first, please tell me the exact timing for when I can submit that increase and whether you can add a note or reminder to my account. I also don\u2019t want to undo any security protections if that would leave me exposed. Is there a supervisor or team who could review the increase now as an exception, given the circumstances?"
+    },
+    {
+      "message_index": 58,
+      "role": "assistant",
+      "content": "[Exception review] The $2,500 credit limit increase can't be approved while your dispute and replacement card are pending, and I can't grant an exception myself. Would you like me to transfer you to a human/supervisor team to review the exception request?\n- Yes, transfer to a supervisor/team: A human team will review whether an exception to the pending-item rule is possible for your $2,500 increase. I can't guarantee approval.\n- No, I'll wait and request later: I'll leave the increase unsubmitted; you can request up to $2,500 once the dispute and replacement card clear (~late Nov\u2013early Dec 2025)."
+    },
+    {
+      "message_index": 59,
+      "role": "user",
+      "content": "Yes, please transfer me to a human or supervisor team to review the exception request. I\u2019d really like to get the credit limit increase approved now if possible, since I have the renovation coming up. If they can\u2019t make an exception, then I\u2019ll wait and request it later once the dispute and card replacement clear.\n\n###TRANSFER###"
+    }
+  ],
+  "evidence_sha256": {
+    "source-freeze.json": "3ec77a7236f529783909ecdb1dbed5ee48f24efe98d54efc6043f764d09bc14d",
+    "analysis.log": "0db317fb40522f1cda53b71bcd57ed68370b6f1de539c800cd876b9ace0b64c3",
+    "gateway.log": "1906a7ca20da6181436f6bb541355c2ad838b27d61a3bc982bd913c195ed0bb7",
+    "db-diagnostic.log": "9ffafacbe7dbdde21826694f42644f541b95f799016097cd37e9e7149754b15b",
+    "banking.log": "7c8ecad8be906f717bad2d38288639a139de00c27c4ab4bbe3edadd3b9467f8a",
+    "execution.json": "007bb8f620dda69bebb2bf50ba601c624c9d82bc02af6bb40e19feb56d6d6757",
+    "strict-state-reconstruction.log": "e6b851caf20501f8d847c781a9e2fc95c93f681d080d6a206599f928f3c76d58",
+    "build.log": "66020bef905c462020db91752570201a8b55bebd234dbe7e893a8fcc474201e2",
+    "protocol.log": "e2358f9e360ae6ed8ef4a55f1c247a6af60a4eb7f824e1e34907b6c46373b372",
+    "strict-state-reconstruction.json": "fd9963244967ecdaa4af2adf2658da937642622a23aa329a150dbe61d65abb0d",
+    "banking/analysis-v2.json": "61f5e44bdc467121aee8623ed03863df614c4fdd18de41fbf9d113fccf0694a6",
+    "banking/task-summary.csv": "b5a6c376966a330353d887a65a665db4e290171b2ac64f8ef70fd8697a3a7a2b",
+    "banking/manifest.json": "5b96734a8ac02b3aa645f73c71ee42a8ecff562abf511e6495457c99ca4d9a92",
+    "banking/supervisor.jsonl": "6a8d8ad612eab44c18706fbca6c56d2cd6d6ef99ea9f6992857d745b3f010633",
+    "banking/progress.json": "aedbfb1d43eb86a77eadf1aa1c5cf46e9e747abd6c3a745aafc2379c33cc7c9f",
+    "protocol/model-requests.json": "d4100e3e3ca5cdf985fa599eb953402ab449f5267e85a810b7c8f107f69c6932",
+    "protocol/java.stderr.log": "2d60cfa639209a92cddc77c06e66104f8386f66c8925dcaf8785eaca00d32a96",
+    "protocol/result.json": "15010583d320c1b247f948e8e4d9ee0f9f2601edeb6dd9aa3a33f594e0737050",
+    "banking/diagnostics/task054-trial0-db-diff.json": "74edb91ea3a18ee1f2ab51d5a4fe64599ffef604420ed562a9172536a0ffe5e6",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/user-usage.jsonl": "62a50f6897561d9bc7c2c8936b5f79821cdba1f700e0de4ef1a898ac8e87ac39",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/trajectory-unscored.json": "5f0c16fa62f7c3247c2b0527b9ac6a4debecf3c03c8cfd7f6fb51b753dac9bf6",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/process.log": "48ac3d13e8e8cb70854b8e3a5827d5c6b342fa3b6db523d26db3eb5a7b1deb8f",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/runner.log": "a1b6b1bd92fe957c29548d320fba88a2f890af562739ac0544c6d86fa81492db",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/official-trajectory.jsonl": "1aa78d3c1d78f80de2de8275c7338d64f86301d5674445ed92bc23cd92cc88da",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/status.json": "6774ed9a5b8f2b51b7ed7fdb780bfcbe73e191de7f79884c8328fd21e382325a",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/result.json": "5b58b9315b64bfcfd632bf39ddef3863ea424bc60b7788330f4c81ed3ef78c03",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/java/86968724-3eb3-46ac-b924-4e6e31d1dfe4.jsonl": "053a0af14b1d6a75e735f1b42dee7c3dbf3e2f5e45d7287a95f6560635dc3c75",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/java/86968724-3eb3-46ac-b924-4e6e31d1dfe4.stderr.log": "43f3469ebbf43f3dffd7fc15036d04f2e882b16d1af219fdf7b876dabb30357e",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/SOUL.md": "88b693ccf5c281d736b40af8709528084c5b24567b9aed5c4b3ff83c4bccd50f",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/deepagent-events.jsonl": "fa1448a5305334dad849d61fc9d18e069127d3e432f9a3924cf7e4a07bdd3ceb",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/USER.md": "d343ffd6c33017a3e054ec2ebda98eda9507ab34da81b08c0c0657229afe7533",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/IDENTITY.md": "1d921e7d51545c1741121d4df7e62eb94a0ba05fef2e423d4643ed85edc65e2b",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/AGENT.md": "f7d901dc9930a148d403072a896f2d61c02ddf27143dbfc2bc868bd810be079b",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/HEARTBEAT.md": "565645169418ed6f9276fe705b76befdfaf00fa8064c286966dbada12470d446",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/mcp/evidence.jsonl": "5bf864b6e3b0e3158924a4d878d41203a36a6e219e6b5a6185a96b710d705eb5",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/mcp/mcp.jsonl": "b50b543433647887fcf8f7ca11fb1dc070e48861dc8c44b4d72e7819d21433d1",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/mcp/skill.jsonl": "4cc9e5b81a47d26af0dc0dafc058cafd0fbc1e11abf6462fee03e74d32843c2c",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/messages/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/agents/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/todo/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/context/session_memory.md": "5eb9c8a9421a17bf276131c37a6236ac3df5d6d7b1467b3da1754fc607087809",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/context/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/coding_memory/MEMORY.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/coding_memory/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/memory/MEMORY.md": "ab5bc94587bd9397fbe179971e2b83bb8910024fa3bdb6d18dc4eeabd750b87d",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/memory/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/SKILL.md": "7fc5292f8264abc2e8fbfa6d81671e6ad2bb5fdecf49e3946c4aa0a833109dc9",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/operations.json": "cb26b334992a8a8acbde3cc1dd36c39a70db0041646fd240e91f9247d6c087fe",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/guides/accounts/account-opening.md": "968695db702dd291a1229d59793411941fd2f9cec0c0b64765eea97fb0f7af2a",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/guides/accounts/account-changes.md": "78f01d6dace4c57528092449ecfdb20189a5c085fdde908c49a65a00fd665179",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/guides/disputes/transaction-dispute.md": "7183c8b38419d2e7a8a4abf4455d67ed63ef722deeabb805b74054e60ac4bb45",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/guides/payments/transfer.md": "7bfec2fa63e0f05c02d1c601a14b1134ad318c74793ea953f499e36ed5b6ada2",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/skills/banking-mcp/guides/credit-card/limit-adjustment.md": "32183c8fc9822b19fc79669352f5f1242bc7920297cda107c688e1ea2c327a57",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/memory/daily_memory/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/deepagent/86968724-3eb3-46ac-b924-4e6e31d1dfe4/.todo/86968724-3eb3-46ac-b924-4e6e31d1dfe4/todo.json": "97e78cb41abebb111e628ca136bba0be914900e0b4656446792f387a4bbf791d",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/artifacts/task_task_054/sim_0914fde0-8c79-41a8-a58d-164003ea73db/task.log": "5291df61adf8142fd26cbd96979e5df79314dbab17f298025328e2174904222b",
+    "banking/episodes/banking_knowledge-t0-9e41c675cb4df039/artifacts/task_task_054/sim_0914fde0-8c79-41a8-a58d-164003ea73db/llm_debug/20261116_200550_890_user_simulator_response_4de06179.json": "84952e98af760ab4d2c0f0eb2a38ca9eb386c7c31c7ad6b3188869854d9ebf4d",
+    "protocol/mcp/evidence.jsonl": "102acf099cc03099acee803916ebfb3a45a5d68487c2920f423324b0165aa3d0",
+    "protocol/mcp/mcp.jsonl": "1273fe5a5c3220c1792d6a15e0fd9160235cbd3a0b69978d682eccfe3be14f14",
+    "protocol/mcp/skill.jsonl": "9c68e39b7b2308ac01317a844c72478118728d2cad528d0b69fceb295b96d916",
+    "protocol/workspace/SOUL.md": "88b693ccf5c281d736b40af8709528084c5b24567b9aed5c4b3ff83c4bccd50f",
+    "protocol/workspace/deepagent-events.jsonl": "6b9b666bbc2ad963c18f890f074ab350ef9364332019a63e8a18eabec0f2d95a",
+    "protocol/workspace/USER.md": "d343ffd6c33017a3e054ec2ebda98eda9507ab34da81b08c0c0657229afe7533",
+    "protocol/workspace/IDENTITY.md": "1d921e7d51545c1741121d4df7e62eb94a0ba05fef2e423d4643ed85edc65e2b",
+    "protocol/workspace/AGENT.md": "f7d901dc9930a148d403072a896f2d61c02ddf27143dbfc2bc868bd810be079b",
+    "protocol/workspace/HEARTBEAT.md": "565645169418ed6f9276fe705b76befdfaf00fa8064c286966dbada12470d446",
+    "protocol/workspace/messages/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/agents/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/todo/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/context/session_memory.md": "5eb9c8a9421a17bf276131c37a6236ac3df5d6d7b1467b3da1754fc607087809",
+    "protocol/workspace/context/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/coding_memory/MEMORY.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/coding_memory/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/skills/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/memory/MEMORY.md": "ab5bc94587bd9397fbe179971e2b83bb8910024fa3bdb6d18dc4eeabd750b87d",
+    "protocol/workspace/memory/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/skills/banking-mcp/SKILL.md": "7fc5292f8264abc2e8fbfa6d81671e6ad2bb5fdecf49e3946c4aa0a833109dc9",
+    "protocol/workspace/skills/banking-mcp/operations.json": "9411a8a7a02d690cd029ce985d83ea0e1c397b8655d6da4dedbbd1a75c1955ff",
+    "protocol/workspace/skills/banking-mcp/guides/accounts/account-opening.md": "968695db702dd291a1229d59793411941fd2f9cec0c0b64765eea97fb0f7af2a",
+    "protocol/workspace/skills/banking-mcp/guides/accounts/account-changes.md": "78f01d6dace4c57528092449ecfdb20189a5c085fdde908c49a65a00fd665179",
+    "protocol/workspace/skills/banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+    "protocol/workspace/skills/banking-mcp/guides/disputes/transaction-dispute.md": "7183c8b38419d2e7a8a4abf4455d67ed63ef722deeabb805b74054e60ac4bb45",
+    "protocol/workspace/skills/banking-mcp/guides/payments/transfer.md": "7bfec2fa63e0f05c02d1c601a14b1134ad318c74793ea953f499e36ed5b6ada2",
+    "protocol/workspace/skills/banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+    "protocol/workspace/skills/banking-mcp/guides/credit-card/limit-adjustment.md": "32183c8fc9822b19fc79669352f5f1242bc7920297cda107c688e1ea2c327a57",
+    "protocol/workspace/memory/daily_memory/.workspace": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "protocol/workspace/.todo/protocol-fixture/todo.json": "9d6cb08f41d78f492c55f2dc6eed6094e6399c1f565aac74e16dcab384a0615f",
+    "frozen/python/analyze_v2.py": "c4a85e5ab48e289ec8926c701f409c106b74a8911383b5c00b51807638190e3a",
+    "frozen/python/benchmark_mcp.py": "273b5a3c4b171e7b00e35c0b8ccda71fea8f6921c6104400fe4f99e12a87abdf",
+    "frozen/python/skill_assets.py": "f8da52bfe535a340d59fae540708101a50882dab7b271ca561e167016fb11014",
+    "frozen/python/episode.py": "75f5dfe6ca6b950f71f96a4c458439a3d6d0a0f4d05ee2bf5d8f28ab22f202e5",
+    "frozen/python/full_run.py": "ec5b291e623503846f6f2e1aeb804bca31d7698bb9186e785b696257b58b70c5",
+    "frozen/python/java_agent.py": "050365e66ca076ecb2857671af69ced10545d9adca834067bd7fcd2012e741cf",
+    "frozen/python/deepagent_java_agent.py": "54b48f722c760d85b44a8cb2fc0af6474e82064a56011f44e318da6ad2367469",
+    "frozen/python/eval_config.py": "45bab74d5288596df0de1c49387610ad81a6e93f07151fe5fba3e6ef7a8e1ba1",
+    "frozen/.deps/tau2-bench/data/tau2/domains/banking_knowledge/tasks/task_054.json": "3edf9f95e151607ba4c5cd3e6d1794917f3df7f30262e498a2c9a69110cd3495",
+    "frozen/experiments/deepagent-todo-skill-mcp/python/run_deepagent.py": "8881fd1ec57e06831ec118905733ab91a0dda1bb77d1607cf9b27b3549c5ff03",
+    "frozen/experiments/deepagent-todo-skill-mcp/python/check_deepagent_protocol.py": "81b24febe7d280f05ea3574c092e8ed95f5ccdd530dd775b20380d5d6fbd638e",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/catalog.json": "6c137898ba1f26d198e9fb5adce0a671bd6472f7f1e5835aa2ed61ef464858cd",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/release.json": "fd292870afa7bb821c61ab2b8ac04ced9687284985f997ea4cc296d5e3cfdc78",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/banking-mcp/SKILL.md": "7fc5292f8264abc2e8fbfa6d81671e6ad2bb5fdecf49e3946c4aa0a833109dc9",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/banking-mcp/guides/accounts/account-opening.md": "968695db702dd291a1229d59793411941fd2f9cec0c0b64765eea97fb0f7af2a",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/banking-mcp/guides/accounts/account-changes.md": "78f01d6dace4c57528092449ecfdb20189a5c085fdde908c49a65a00fd665179",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/banking-mcp/guides/disputes/transaction-dispute.md": "7183c8b38419d2e7a8a4abf4455d67ed63ef722deeabb805b74054e60ac4bb45",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/banking-mcp/guides/payments/transfer.md": "7bfec2fa63e0f05c02d1c601a14b1134ad318c74793ea953f499e36ed5b6ada2",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/banking-mcp/guides/credit-card/card-application.md": "5314500d5baa3f351adeec9c90e4e4963bdf937f5fe29e80923c1b72f5a585cc",
+    "frozen/experiments/deepagent-todo-skill-mcp/skills/releases/3.2.0/banking-mcp/guides/credit-card/limit-adjustment.md": "32183c8fc9822b19fc79669352f5f1242bc7920297cda107c688e1ea2c327a57",
+    "frozen/experiments/agent-hub-banking/v1.0/tests/run_english_e2e.py": "b4265087efa0c7ff6bfc4758d73c92eb4f401cd92b883556e3b63f9894c279d0",
+    "frozen/experiments/agent-hub-banking/v1.0/plans/english-e2e-task054.json": "65465e42f7bbe0b767d00e50ac07ad75b7e9706cd2c73f0f85afe65c3996a1bd",
+    "frozen/java/src/main/java/eval/DeepAgentAssembly.java": "fd4c09e0403db1b0214c1c19f636ee4e3423543b9ac303c62cce2bbacf6066c5",
+    "frozen/java/src/main/java/eval/ContextSelfTest.java": "cb24ae5a83b67f777772f3ff4004793bd63072e5702aba8b56b588182164d884",
+    "frozen/java/src/main/java/eval/CoreTimeoutSelfTest.java": "9d6090d7cab0e64f16fa60237724c9ea53bec2eb35c17a1e4af64a0b5e27ed14",
+    "frozen/java/src/main/java/eval/DeepAgentBridge.java": "bafcf0ab3cdf899d4d72723a03e90e2fa2e4880ec20f70a075cfeb84f2fb44c0",
+    "frozen/java/src/main/java/eval/ObservedToolContext.java": "79a38ec01fe91c4eb54d83a56dd9dd5f45f540e02d6ee115b4e03a537aa37a0a",
+    "frozen/java/src/main/java/eval/BridgeErrorSelfTest.java": "f858d7222f06815ebbcea06eafa7423dd5e86eefbb6933ce101b41bebc00a709",
+    "frozen/java/src/main/java/eval/Tau2Bridge.java": "ffde4923a66efb1a83ef6bb874dd4e47b16849025cc408fda333b5f12a0299d7"
+  }
+}

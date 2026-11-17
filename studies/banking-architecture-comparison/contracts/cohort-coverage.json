@@ -1,0 +1,187 @@
+{
+  "purpose": "evaluator-only coverage, never routed by task id or exposed to agent",
+  "cases": [
+    {
+      "task_id": "task_003",
+      "capability": "product-and-referral-advice",
+      "lead": "card-application-agent",
+      "collaborators": [
+        "account-opening-agent"
+      ]
+    },
+    {
+      "task_id": "task_016",
+      "capability": "product-and-referral-advice",
+      "lead": "card-application-agent",
+      "collaborators": [
+        "account-opening-agent"
+      ]
+    },
+    {
+      "task_id": "task_098",
+      "capability": "product-and-referral-advice",
+      "lead": "card-application-agent",
+      "collaborators": [
+        "account-opening-agent"
+      ]
+    },
+    {
+      "task_id": "task_100",
+      "capability": "product-and-referral-advice",
+      "lead": "card-application-agent",
+      "collaborators": [
+        "account-opening-agent"
+      ]
+    },
+    {
+      "task_id": "task_017",
+      "capability": "rewards-investigation",
+      "lead": "card-application-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ]
+    },
+    {
+      "task_id": "task_022",
+      "capability": "rewards-investigation",
+      "lead": "card-application-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ]
+    },
+    {
+      "task_id": "task_031",
+      "capability": "transaction-disputes",
+      "lead": "transaction-dispute-agent",
+      "collaborators": [
+        "card-lifecycle-agent"
+      ]
+    },
+    {
+      "task_id": "task_033",
+      "capability": "transaction-disputes",
+      "lead": "transaction-dispute-agent",
+      "collaborators": [
+        "card-lifecycle-agent"
+      ]
+    },
+    {
+      "task_id": "task_036",
+      "capability": "fraud-and-replacement",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ]
+    },
+    {
+      "task_id": "task_041",
+      "capability": "fraud-and-replacement",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ]
+    },
+    {
+      "task_id": "task_043",
+      "capability": "card-closure-retention",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "payments-agent",
+        "transaction-dispute-agent"
+      ]
+    },
+    {
+      "task_id": "task_049",
+      "capability": "card-closure-retention",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "payments-agent",
+        "transaction-dispute-agent"
+      ]
+    },
+    {
+      "task_id": "task_051",
+      "capability": "credit-limit-dependencies",
+      "lead": "credit-limit-agent",
+      "collaborators": [
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ]
+    },
+    {
+      "task_id": "task_054",
+      "capability": "credit-limit-dependencies",
+      "lead": "credit-limit-agent",
+      "collaborators": [
+        "transaction-dispute-agent",
+        "card-lifecycle-agent"
+      ]
+    },
+    {
+      "task_id": "task_060",
+      "capability": "account-migration",
+      "lead": "account-opening-agent",
+      "collaborators": [
+        "payments-agent",
+        "account-closure-agent"
+      ]
+    },
+    {
+      "task_id": "task_062",
+      "capability": "account-migration",
+      "lead": "account-opening-agent",
+      "collaborators": [
+        "payments-agent",
+        "account-closure-agent"
+      ]
+    },
+    {
+      "task_id": "task_076",
+      "capability": "atm-fees-and-account-choice",
+      "lead": "payments-agent",
+      "collaborators": [
+        "account-opening-agent"
+      ]
+    },
+    {
+      "task_id": "task_072",
+      "capability": "atm-fees-and-account-choice",
+      "lead": "payments-agent",
+      "collaborators": [
+        "account-opening-agent"
+      ]
+    },
+    {
+      "task_id": "task_077",
+      "capability": "debit-card-security",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ]
+    },
+    {
+      "task_id": "task_087",
+      "capability": "debit-card-security",
+      "lead": "card-lifecycle-agent",
+      "collaborators": [
+        "transaction-dispute-agent"
+      ]
+    },
+    {
+      "task_id": "task_093",
+      "capability": "savings-interest-servicing",
+      "lead": "account-opening-agent",
+      "collaborators": [
+        "payments-agent"
+      ]
+    },
+    {
+      "task_id": "task_097",
+      "capability": "savings-interest-servicing",
+      "lead": "account-opening-agent",
+      "collaborators": [
+        "payments-agent"
+      ]
+    }
+  ]
+}

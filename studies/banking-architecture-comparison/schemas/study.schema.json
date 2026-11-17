@@ -1,0 +1,605 @@
+{
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "document_type",
+    "status",
+    "executable",
+    "execution_authorized",
+    "language",
+    "benchmark_commit",
+    "cohort",
+    "cohort_sha256",
+    "arms",
+    "tasks_per_arm",
+    "trials_per_task",
+    "total_formal_episodes",
+    "seed",
+    "global_concurrency",
+    "automatic_episode_retries",
+    "automatic_business_write_retries",
+    "system_prompt_for_deepagent_pair",
+    "agent_hub_mode",
+    "episode_timeout_seconds",
+    "batch_timeout_seconds",
+    "max_steps",
+    "max_errors",
+    "cumulative_token_limit",
+    "cohort_exposure",
+    "legacy_hub_148_episode_plan_included",
+    "legacy_moa_chinese_profile_included",
+    "required_gates",
+    "blocking_gaps",
+    "limits",
+    "model_profile",
+    "arm_bindings",
+    "stop_policy",
+    "analysis_policy",
+    "runtime_rules",
+    "profile",
+    "contracts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string"
+    },
+    "document_type": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "executable": {
+      "const": false
+    },
+    "execution_authorized": {
+      "const": false
+    },
+    "language": {
+      "type": "string"
+    },
+    "benchmark_commit": {
+      "type": "string"
+    },
+    "cohort": {
+      "type": "string"
+    },
+    "cohort_sha256": {
+      "type": "string"
+    },
+    "arms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tasks_per_arm": {
+      "const": 22
+    },
+    "trials_per_task": {
+      "const": 1
+    },
+    "total_formal_episodes": {
+      "const": 88
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "global_concurrency": {
+      "const": 1
+    },
+    "automatic_episode_retries": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "automatic_business_write_retries": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "system_prompt_for_deepagent_pair": {
+      "type": "string"
+    },
+    "agent_hub_mode": {
+      "type": "string"
+    },
+    "episode_timeout_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "batch_timeout_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_steps": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_errors": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cumulative_token_limit": {
+      "type": "null"
+    },
+    "cohort_exposure": {
+      "type": "string"
+    },
+    "legacy_hub_148_episode_plan_included": {
+      "const": false
+    },
+    "legacy_moa_chinese_profile_included": {
+      "const": false
+    },
+    "required_gates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocking_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "limits": {
+      "type": "object",
+      "required": [
+        "episode_timeout_seconds",
+        "batch_timeout_seconds",
+        "max_steps",
+        "max_errors",
+        "cumulative_token_limit",
+        "global_concurrency",
+        "automatic_episode_retries",
+        "automatic_business_write_retries",
+        "model_request_timeout_seconds",
+        "model_sdk_retries",
+        "gateway_retries",
+        "core_call_timeout_seconds",
+        "bridge_call_timeout_seconds",
+        "remote_call_timeout_seconds",
+        "hub_rpc_timeout_seconds",
+        "max_internal_model_calls",
+        "max_todos",
+        "max_resumes_per_task",
+        "max_dependency_depth",
+        "max_correction_rounds"
+      ],
+      "properties": {
+        "episode_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "batch_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_steps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_errors": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cumulative_token_limit": {
+          "type": "null"
+        },
+        "global_concurrency": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "automatic_episode_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "automatic_business_write_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "model_request_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "model_sdk_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gateway_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "core_call_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bridge_call_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "remote_call_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hub_rpc_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_internal_model_calls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_todos": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_resumes_per_task": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_dependency_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_correction_rounds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "model_profile": {
+      "type": "object",
+      "required": [
+        "request_model",
+        "temperature",
+        "retrieval",
+        "record_actual_model"
+      ],
+      "properties": {
+        "request_model": {
+          "type": "string"
+        },
+        "temperature": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retrieval": {
+          "type": "string"
+        },
+        "record_actual_model": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "arm_bindings": {
+      "type": "object",
+      "required": [
+        "plan-1-deepagent-original-skills",
+        "plan-2-deepagent-refined-skills",
+        "plan-3-moa-refined-skills",
+        "plan-4-agent-hub-refined-skills"
+      ],
+      "properties": {
+        "plan-1-deepagent-original-skills": {
+          "type": "object",
+          "required": [
+            "display_number",
+            "skill_release",
+            "skill_manifest",
+            "skill_manifest_sha256",
+            "implementation",
+            "mode",
+            "system_prompt_version"
+          ],
+          "properties": {
+            "display_number": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "skill_release": {
+              "type": "string"
+            },
+            "skill_manifest": {
+              "type": "string"
+            },
+            "skill_manifest_sha256": {
+              "type": "string"
+            },
+            "implementation": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "system_prompt_version": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "plan-2-deepagent-refined-skills": {
+          "type": "object",
+          "required": [
+            "display_number",
+            "skill_release",
+            "skill_manifest",
+            "skill_manifest_sha256",
+            "implementation",
+            "mode",
+            "system_prompt_version"
+          ],
+          "properties": {
+            "display_number": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "skill_release": {
+              "type": "string"
+            },
+            "skill_manifest": {
+              "type": "string"
+            },
+            "skill_manifest_sha256": {
+              "type": "string"
+            },
+            "implementation": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "system_prompt_version": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "plan-3-moa-refined-skills": {
+          "type": "object",
+          "required": [
+            "display_number",
+            "skill_release",
+            "skill_manifest",
+            "skill_manifest_sha256",
+            "implementation",
+            "mode",
+            "system_prompt_version"
+          ],
+          "properties": {
+            "display_number": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "skill_release": {
+              "type": "string"
+            },
+            "skill_manifest": {
+              "type": "string"
+            },
+            "skill_manifest_sha256": {
+              "type": "string"
+            },
+            "implementation": {
+              "type": "null"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "system_prompt_version": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "plan-4-agent-hub-refined-skills": {
+          "type": "object",
+          "required": [
+            "display_number",
+            "skill_release",
+            "skill_manifest",
+            "skill_manifest_sha256",
+            "implementation",
+            "mode",
+            "system_prompt_version"
+          ],
+          "properties": {
+            "display_number": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "skill_release": {
+              "type": "string"
+            },
+            "skill_manifest": {
+              "type": "string"
+            },
+            "skill_manifest_sha256": {
+              "type": "string"
+            },
+            "implementation": {
+              "type": "null"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "system_prompt_version": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "stop_policy": {
+      "type": "object",
+      "required": [
+        "ordinary_business_failure",
+        "isolated_framework_violation",
+        "shared_environment_corruption",
+        "freeze_drift",
+        "user_stop",
+        "episode_deadline",
+        "study_active_deadline",
+        "unknown_fault_scope"
+      ],
+      "properties": {
+        "ordinary_business_failure": {
+          "type": "string"
+        },
+        "isolated_framework_violation": {
+          "type": "string"
+        },
+        "shared_environment_corruption": {
+          "type": "string"
+        },
+        "freeze_drift": {
+          "type": "string"
+        },
+        "user_stop": {
+          "type": "string"
+        },
+        "episode_deadline": {
+          "type": "string"
+        },
+        "study_active_deadline": {
+          "type": "string"
+        },
+        "unknown_fault_scope": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "analysis_policy": {
+      "type": "object",
+      "required": [
+        "primary_metric",
+        "comparisons",
+        "secondary_metrics",
+        "promotion_requires",
+        "equal_primary",
+        "censoring",
+        "confidence_claim"
+      ],
+      "properties": {
+        "primary_metric": {
+          "type": "string"
+        },
+        "comparisons": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "secondary_metrics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "promotion_requires": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "equal_primary": {
+          "type": "string"
+        },
+        "censoring": {
+          "type": "string"
+        },
+        "confidence_claim": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "runtime_rules": {
+      "type": "object",
+      "required": [
+        "deadline_clock",
+        "active_study_clock",
+        "inflight_on_pause",
+        "model_attempt_budget",
+        "internal_call_limit_basis",
+        "limits_apply_to",
+        "runtime_enforcement_status",
+        "offline_gate_classifier"
+      ],
+      "properties": {
+        "deadline_clock": {
+          "type": "string"
+        },
+        "active_study_clock": {
+          "type": "string"
+        },
+        "inflight_on_pause": {
+          "type": "string"
+        },
+        "model_attempt_budget": {
+          "type": "string"
+        },
+        "internal_call_limit_basis": {
+          "type": "string"
+        },
+        "limits_apply_to": {
+          "type": "string"
+        },
+        "runtime_enforcement_status": {
+          "type": "string"
+        },
+        "offline_gate_classifier": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "profile": {
+      "const": "single-round-four-arm"
+    },
+    "contracts": {
+      "type": "object",
+      "required": [
+        "contracts/acceptance-matrix.json",
+        "contracts/business-ownership.json",
+        "contracts/cohort-coverage.json",
+        "contracts/oracle-fixtures.json",
+        "execution-contract.md"
+      ],
+      "properties": {
+        "contracts/acceptance-matrix.json": {
+          "type": "string"
+        },
+        "contracts/business-ownership.json": {
+          "type": "string"
+        },
+        "contracts/cohort-coverage.json": {
+          "type": "string"
+        },
+        "contracts/oracle-fixtures.json": {
+          "type": "string"
+        },
+        "execution-contract.md": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

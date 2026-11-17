@@ -1,0 +1,422 @@
+{
+  "summary": {
+    "overall_score": 70,
+    "risk_level": "high",
+    "primary_pattern": "mixed",
+    "secondary_patterns": [
+      "delegation",
+      "coordination"
+    ],
+    "conclusion": "Design completeness provisional score only (28 common + 34 pattern + 8 complexity); reasonable direction but not ready for formal execution. Not a production implementation rating."
+  },
+  "scope": {
+    "repository": "/home/vincent/openjiuwen/tau3",
+    "reviewed_paths": [
+      "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+      "shared/python/benchmark_mcp.py",
+      "experiments/plan-3-moa-refined-skills/test-design.md",
+      "experiments/plan-3-moa-refined-skills/architecture.md",
+      "experiments/plan-4-agent-hub-refined-skills/test-design.md",
+      "studies/banking-architecture-comparison/test-design.md",
+      "shared/python/experiment_plan.py"
+    ],
+    "languages": [
+      "Markdown",
+      "JSON",
+      "Python",
+      "Java"
+    ],
+    "excluded_paths": [
+      "external MOA/Hub runtime execution"
+    ]
+  },
+  "entities": [
+    {
+      "id": "deepagent",
+      "entity_type": "agent",
+      "symbol": "DeepAgentAssembly",
+      "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+      "notes": "Design and partial implementation review; no live verification"
+    },
+    {
+      "id": "mcp",
+      "entity_type": "transport",
+      "symbol": "BenchmarkMcpFacade",
+      "file": "shared/python/benchmark_mcp.py",
+      "notes": "Design and partial implementation review; no live verification"
+    },
+    {
+      "id": "moa",
+      "entity_type": "task_manager",
+      "symbol": "MOA proposed coordinator",
+      "file": "experiments/plan-3-moa-refined-skills/test-design.md",
+      "notes": "Design and partial implementation review; no live verification"
+    },
+    {
+      "id": "business-agent",
+      "entity_type": "agent",
+      "symbol": "Seven proposed domain agents",
+      "file": "experiments/plan-3-moa-refined-skills/architecture.md",
+      "notes": "Design and partial implementation review; no live verification"
+    },
+    {
+      "id": "hub",
+      "entity_type": "controller",
+      "symbol": "Proposed Go effect controller",
+      "file": "experiments/plan-4-agent-hub-refined-skills/test-design.md",
+      "notes": "Design and partial implementation review; no live verification"
+    }
+  ],
+  "interaction_edges": [
+    {
+      "id": "tools",
+      "source": "deepagent",
+      "target": "mcp",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 0.95,
+      "evidence": [
+        {
+          "file": "shared/java/src/main/java/eval/DeepAgentAssembly.java",
+          "symbol": "call chain",
+          "confidence": "direct",
+          "summary": "Protocol/intent classification; not proof of live MOA or Hub execution"
+        }
+      ]
+    },
+    {
+      "id": "delegate",
+      "source": "moa",
+      "target": "business-agent",
+      "classification": "delegation",
+      "classification_confidence": 0.8,
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/test-design.md",
+          "symbol": "call chain",
+          "confidence": "strong_inference",
+          "summary": "Protocol/intent classification; not proof of live MOA or Hub execution"
+        }
+      ]
+    },
+    {
+      "id": "resume",
+      "source": "business-agent",
+      "target": "moa",
+      "classification": "coordination",
+      "classification_confidence": 0.8,
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/test-design.md",
+          "symbol": "call chain",
+          "confidence": "strong_inference",
+          "summary": "Protocol/intent classification; not proof of live MOA or Hub execution"
+        }
+      ]
+    },
+    {
+      "id": "control",
+      "source": "deepagent",
+      "target": "hub",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 0.8,
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/test-design.md",
+          "symbol": "call chain",
+          "confidence": "strong_inference",
+          "summary": "Protocol/intent classification; not proof of live MOA or Hub execution"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "COM-03",
+      "severity": "high",
+      "title": "R1 P1：方案身份与冻结条件没有形成完整校验闭环",
+      "conclusion": "[experiment_plan.validate](../../shared/python/experiment_plan.py:23)分别校验清单hash和`release(skill_release)`，没有核对二者是同一发布；也没有比较plan中的comparison_trials与study.trials_per_task。",
+      "why_it_matters": "P1：方案身份与冻结条件没有形成完整校验闭环",
+      "evidence": [
+        {
+          "file": "shared/python/experiment_plan.py",
+          "symbol": "validate",
+          "line_start": 23,
+          "confidence": "direct",
+          "summary": "P1：方案身份与冻结条件没有形成完整校验闭环"
+        }
+      ],
+      "recommendation": "建立版本化实验规格Schema；绑定plan ID→实现→Skill版本→唯一清单路径/hash，比较题数、次数、语言、seed、提示词、模式、预算。缺字段或冲突直接拒绝，不静默选一方。"
+    },
+    {
+      "rule_id": "DEL-01",
+      "severity": "high",
+      "title": "R2 P1：MOA七个业务Agent未形成覆盖22题的操作归属表",
+      "conclusion": "[Agent职责表](../../experiments/plan-3-moa-refined-skills/architecture.md:45)定义七领域和唯一写归属；[共同题集范围](../../studies/banking-architecture-comparison/test-design.md:38)包含ATM费用、储蓄利息、返现、推荐奖励。当前已查设计未给出这些能力全部对应的具体operation所有者与可用性核验。",
+      "why_it_matters": "某业务可能没有Agent拥有必要操作，或多个Agent都能写。失败可能来自权限分工缺口，不能直接归因于MOA规划差。这里不是断言框架无法处理这些业务。",
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/architecture.md",
+          "symbol": "test design requirement",
+          "line_start": 45,
+          "confidence": "strong_inference",
+          "summary": "P1：MOA七个业务Agent未形成覆盖22题的操作归属表"
+        },
+        {
+          "file": "studies/banking-architecture-comparison/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 38,
+          "confidence": "strong_inference",
+          "summary": "P1：MOA七个业务Agent未形成覆盖22题的操作归属表"
+        }
+      ],
+      "recommendation": "建立“通用业务能力→主责Agent→协作Agent→官方operation→读/写→唯一效果责任方→验证规则”映射；再由评估端记录22题覆盖关系。不能把按task ID路由的表注入模型。"
+    },
+    {
+      "rule_id": "COM-04",
+      "severity": "high",
+      "title": "R3 P1：停止范围不明确，会造成比较样本被连带截断",
+      "conclusion": "[共同停止条款](../../studies/banking-architecture-comparison/test-design.md:64)写“停止启动新位置”，未指定只停本题、本方案还是整项研究；[统计条款](../../studies/banking-architecture-comparison/test-design.md:68)将未开始纳入固定22分母。",
+      "why_it_matters": "方案1某题失败若停止全部四组，其他方案没有机会执行，却在计划完成率中表现为未成功。64小时总上限也需要定义暂停/停机时间是否计入。",
+      "evidence": [
+        {
+          "file": "studies/banking-architecture-comparison/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 64,
+          "confidence": "direct",
+          "summary": "P1：停止范围不明确，会造成比较样本被连带截断"
+        },
+        {
+          "file": "studies/banking-architecture-comparison/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 68,
+          "confidence": "direct",
+          "summary": "P1：停止范围不明确，会造成比较样本被连带截断"
+        }
+      ],
+      "recommendation": "列三级停止矩阵：题内普通业务失败继续下一位置；单方案隔离/严重效果故障冻结该方案；基准污染、共用环境不可信或用户要求停止全部时停全研究。已开始位置不自动重跑，恢复只处理尚未开始位置且需核验冻结条件。"
+    },
+    {
+      "rule_id": "DEL-03",
+      "severity": "high",
+      "title": "R4 P1：预算相同的名义值尚未定义相同的计数边界",
+      "conclusion": "[共同限制](../../studies/banking-architecture-comparison/test-design.md:27)同时有2400秒episode、1200秒Core、200个官方steps；[MOA设计](../../experiments/plan-3-moa-refined-skills/test-design.md:32)另有32Todo、恢复8次和依赖深度4。",
+      "why_it_matters": "一次官方step可包含多次意图/规划/子Agent调用。Core计时是每次调用还是整题累计、恢复是否重置、等客户是否计时、父任务超时能否阻止后续写入均未统一。",
+      "evidence": [
+        {
+          "file": "studies/banking-architecture-comparison/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 27,
+          "confidence": "direct",
+          "summary": "P1：预算相同的名义值尚未定义相同的计数边界"
+        },
+        {
+          "file": "experiments/plan-3-moa-refined-skills/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 32,
+          "confidence": "direct",
+          "summary": "P1：预算相同的名义值尚未定义相同的计数边界"
+        }
+      ],
+      "recommendation": "明确端到端墙钟deadline传播及取消确认，分别定义官方steps、内部模型轮次、控制纠错轮次；不必强制四架构相同内部调用数，但必须有界且完整计量。明确SDK/网关自动重试与模型超时；继续保持用户要求的不设累计Token停止预算。"
+    },
+    {
+      "rule_id": "COM-09",
+      "severity": "high",
+      "title": "R5 P1：离线门禁与待测业务行为仍有文字冲突",
+      "conclusion": "[方案1第35行](../../experiments/plan-1-deepagent-original-skills/test-design.md:35)允许行为性失败计入对照，但[执行步骤](../../experiments/plan-1-deepagent-original-skills/test-design.md:40)仍要求离线契约失败必须修复才能正式运行；[共同D1](../../studies/banking-architecture-comparison/test-design.md:49)也概括要求各方案正反例通过。",
+      "why_it_matters": "团队可能为了放行不断优化原始方案，或筛掉表现差的方案，破坏对照。脚本模型能证明协议通畅，不能证明真实模型会按Skill行动。",
+      "evidence": [
+        {
+          "file": "experiments/plan-1-deepagent-original-skills/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 35,
+          "confidence": "direct",
+          "summary": "P1：离线门禁与待测业务行为仍有文字冲突"
+        },
+        {
+          "file": "experiments/plan-1-deepagent-original-skills/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 40,
+          "confidence": "direct",
+          "summary": "P1：离线门禁与待测业务行为仍有文字冲突"
+        },
+        {
+          "file": "studies/banking-architecture-comparison/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 49,
+          "confidence": "direct",
+          "summary": "P1：离线门禁与待测业务行为仍有文字冲突"
+        }
+      ],
+      "recommendation": "每个检查增加blocking、stage、oracle、fixture及适用方案。资产/隔离/接线是门禁；政策到Todo、推荐覆盖、顺序质量是观察指标；严重效果安全问题按R3处理。原始Skill不得因未达优化行为目标而修改。"
+    },
+    {
+      "rule_id": "COM-10",
+      "severity": "medium",
+      "title": "R6 P2：主比较指标、改善判据和缺失数据解释尚未预先锁定",
+      "conclusion": "[分析方法](../../studies/banking-architecture-comparison/test-design.md:68)同时定义pass/scored、pass/22、已评分交集及成本，但未指定主要判断指标、同分取舍和何时允许说“更好”。",
+      "why_it_matters": "P2：主比较指标、改善判据和缺失数据解释尚未预先锁定",
+      "evidence": [
+        {
+          "file": "studies/banking-architecture-comparison/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 68,
+          "confidence": "direct",
+          "summary": "P2：主比较指标、改善判据和缺失数据解释尚未预先锁定"
+        }
+      ],
+      "recommendation": "预先指定主要指标和三个对照（2−1、3−2、4−2），其余作为辅助；为未评分/截断设解释规则，禁止事后选最好看的分母。记录每个模拟客户实际分支，用于解释动态对话导致的结果差异，不要求改造成固定客户脚本。"
+    },
+    {
+      "rule_id": "DEL-07",
+      "severity": "medium",
+      "title": "R7 P2：框架验收的独立判定器与夹具清单还未闭合",
+      "conclusion": "[MOA结构矩阵](../../experiments/plan-3-moa-refined-skills/test-design.md:34)和[Hub矩阵](../../experiments/plan-4-agent-hub-refined-skills/test-design.md:35)写明预期与证据，Hub原CT规格要求independent_oracle，但当前检查范围未发现每项绑定的可执行夹具和独立判定器完整清单。",
+      "why_it_matters": "P2：框架验收的独立判定器与夹具清单还未闭合",
+      "evidence": [
+        {
+          "file": "experiments/plan-3-moa-refined-skills/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 34,
+          "confidence": "strong_inference",
+          "summary": "P2：框架验收的独立判定器与夹具清单还未闭合"
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 35,
+          "confidence": "strong_inference",
+          "summary": "P2：框架验收的独立判定器与夹具清单还未闭合"
+        }
+      ],
+      "recommendation": "每项断言绑定fixture、触发步骤、预期状态、证据字段和判定程序；“路由正确”“合法请求被误拒”“恢复同一任务”必须能由独立依据核验。合成夹具可用已知oracle，真实任务判定器不能偷读隐藏答案给控制器。"
+    },
+    {
+      "rule_id": "COM-02",
+      "severity": "medium",
+      "title": "R8 P2：方案4的上线前门禁范围偏大，应明确核心与后续能力",
+      "conclusion": "[方案4第51行](../../experiments/plan-4-agent-hub-refined-skills/test-design.md:51)把CT01–23全设为实施门禁，包含知识改进发布生命周期，而本轮禁止跨题在线学习且只测一次enforce。",
+      "why_it_matters": "P2：方案4的上线前门禁范围偏大，应明确核心与后续能力",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/test-design.md",
+          "symbol": "test design requirement",
+          "line_start": 51,
+          "confidence": "direct",
+          "summary": "P2：方案4的上线前门禁范围偏大，应明确核心与后续能力"
+        }
+      ],
+      "recommendation": "不能删除效果边界、权限、幂等、未知结果和真实Go接线检查；但应给发布/学习等不在本轮启用的能力标注禁用证明与独立专项。若本轮确实启用，则保留完整门禁并写出必要性。避免把四方案比较无限扩展成平台全功能验收。"
+    }
+  ],
+  "hard_failures": [],
+  "simplification_opportunities": [
+    {
+      "target": "Hub control and MOA ready-task selection",
+      "current_design": "Control/validation services",
+      "recommended_design": "retain_current",
+      "reason": "Do not create extra agents for deterministic validation or scheduling.",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/test-design.md",
+          "symbol": "call chain",
+          "confidence": "strong_inference",
+          "summary": "Protocol/intent classification; not proof of live MOA or Hub execution"
+        }
+      ]
+    }
+  ],
+  "remediation_plan": [
+    {
+      "priority": "P1",
+      "action": "建立版本化实验规格Schema；绑定plan ID→实现→Skill版本→唯一清单路径/hash，比较题数、次数、语言、seed、提示词、模式、预算。缺字段或冲突直接拒绝，不静默选一方。",
+      "addresses_rules": [
+        "COM-03"
+      ],
+      "acceptance_criteria": [
+        "See corresponding R1 in the Markdown review for acceptance criteria."
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "建立“通用业务能力→主责Agent→协作Agent→官方operation→读/写→唯一效果责任方→验证规则”映射；再由评估端记录22题覆盖关系。不能把按task ID路由的表注入模型。",
+      "addresses_rules": [
+        "DEL-01"
+      ],
+      "acceptance_criteria": [
+        "See corresponding R2 in the Markdown review for acceptance criteria."
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "列三级停止矩阵：题内普通业务失败继续下一位置；单方案隔离/严重效果故障冻结该方案；基准污染、共用环境不可信或用户要求停止全部时停全研究。已开始位置不自动重跑，恢复只处理尚未开始位置且需核验冻结条件。",
+      "addresses_rules": [
+        "COM-04"
+      ],
+      "acceptance_criteria": [
+        "See corresponding R3 in the Markdown review for acceptance criteria."
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "明确端到端墙钟deadline传播及取消确认，分别定义官方steps、内部模型轮次、控制纠错轮次；不必强制四架构相同内部调用数，但必须有界且完整计量。明确SDK/网关自动重试与模型超时；继续保持用户要求的不设累计Token停止预算。",
+      "addresses_rules": [
+        "DEL-03"
+      ],
+      "acceptance_criteria": [
+        "See corresponding R4 in the Markdown review for acceptance criteria."
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "每个检查增加blocking、stage、oracle、fixture及适用方案。资产/隔离/接线是门禁；政策到Todo、推荐覆盖、顺序质量是观察指标；严重效果安全问题按R3处理。原始Skill不得因未达优化行为目标而修改。",
+      "addresses_rules": [
+        "COM-09"
+      ],
+      "acceptance_criteria": [
+        "See corresponding R5 in the Markdown review for acceptance criteria."
+      ]
+    },
+    {
+      "priority": "P2",
+      "action": "预先指定主要指标和三个对照（2−1、3−2、4−2），其余作为辅助；为未评分/截断设解释规则，禁止事后选最好看的分母。记录每个模拟客户实际分支，用于解释动态对话导致的结果差异，不要求改造成固定客户脚本。",
+      "addresses_rules": [
+        "COM-10"
+      ],
+      "acceptance_criteria": [
+        "See corresponding R6 in the Markdown review for acceptance criteria."
+      ]
+    },
+    {
+      "priority": "P2",
+      "action": "每项断言绑定fixture、触发步骤、预期状态、证据字段和判定程序；“路由正确”“合法请求被误拒”“恢复同一任务”必须能由独立依据核验。合成夹具可用已知oracle，真实任务判定器不能偷读隐藏答案给控制器。",
+      "addresses_rules": [
+        "DEL-07"
+      ],
+      "acceptance_criteria": [
+        "See corresponding R7 in the Markdown review for acceptance criteria."
+      ]
+    },
+    {
+      "priority": "P2",
+      "action": "不能删除效果边界、权限、幂等、未知结果和真实Go接线检查；但应给发布/学习等不在本轮启用的能力标注禁用证明与独立专项。若本轮确实启用，则保留完整门禁并写出必要性。避免把四方案比较无限扩展成平台全功能验收。",
+      "addresses_rules": [
+        "COM-02"
+      ],
+      "acceptance_criteria": [
+        "See corresponding R8 in the Markdown review for acceptance criteria."
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "unknown": "Full MOA/Hub runtime behavior and hard-failure compliance",
+      "impact": "No production capability conclusion; required behavior remains unverified.",
+      "needed_evidence": "Real component wiring and fault fixtures before business runs."
+    },
+    {
+      "unknown": "Generalization and repeated-run stability",
+      "impact": "Single-run exposed diagnostic cohort cannot establish either."
+    }
+  ]
+}

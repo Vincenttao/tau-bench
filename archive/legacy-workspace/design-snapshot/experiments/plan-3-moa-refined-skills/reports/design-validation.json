@@ -1,0 +1,62 @@
+{
+  "status": "static_checks_passed",
+  "scope": "documents and contract fixtures only",
+  "schema_examples": [
+    {
+      "case": "valid-resume",
+      "expected_valid": true,
+      "observed_valid": true,
+      "passed": true
+    },
+    {
+      "case": "valid-suspend",
+      "expected_valid": true,
+      "observed_valid": true,
+      "passed": true
+    },
+    {
+      "case": "missing-checkpoint",
+      "expected_valid": false,
+      "observed_valid": false,
+      "passed": true
+    },
+    {
+      "case": "missing-tenant",
+      "expected_valid": false,
+      "observed_valid": false,
+      "passed": true
+    },
+    {
+      "case": "empty-evidence",
+      "expected_valid": false,
+      "observed_valid": false,
+      "passed": true
+    },
+    {
+      "case": "resume-is-not-event",
+      "expected_valid": false,
+      "observed_valid": false,
+      "passed": true
+    },
+    {
+      "case": "valid-completed",
+      "expected_valid": true,
+      "observed_valid": true,
+      "passed": true
+    },
+    {
+      "case": "negative-revision",
+      "expected_valid": false,
+      "observed_valid": false,
+      "passed": true
+    }
+  ],
+  "json_parse": "passed",
+  "local_links": "passed",
+  "cohort_unique_count": 22,
+  "java_build": "not_run",
+  "runtime_a2a": "not_run",
+  "database": "not_run",
+  "live_model": "not_run",
+  "mermaid_rendering": "not_run"
+}

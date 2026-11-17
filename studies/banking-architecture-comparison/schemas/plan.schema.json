@@ -1,0 +1,240 @@
+{
+  "type": "object",
+  "required": [
+    "schema_version",
+    "plan_id",
+    "display_number",
+    "status",
+    "comparison_ready",
+    "skill_release",
+    "skill_manifest",
+    "skill_manifest_sha256",
+    "implementation",
+    "historical_results_are_comparison_results",
+    "execution_enabled",
+    "note",
+    "test_design",
+    "design_status",
+    "comparison_study",
+    "comparison_language",
+    "comparison_profile",
+    "comparison_cases",
+    "comparison_trials",
+    "entrypoint",
+    "seed",
+    "mode",
+    "system_prompt_version",
+    "limits",
+    "model_profile"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "display_number": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string"
+    },
+    "comparison_ready": {
+      "const": false
+    },
+    "skill_release": {
+      "type": "string"
+    },
+    "skill_manifest": {
+      "type": "string"
+    },
+    "skill_manifest_sha256": {
+      "type": "string"
+    },
+    "implementation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "historical_results_are_comparison_results": {
+      "const": false
+    },
+    "execution_enabled": {
+      "const": false
+    },
+    "note": {
+      "type": "string"
+    },
+    "test_design": {
+      "type": "string"
+    },
+    "design_status": {
+      "type": "string"
+    },
+    "comparison_study": {
+      "type": "string"
+    },
+    "comparison_language": {
+      "type": "string"
+    },
+    "comparison_profile": {
+      "type": "string"
+    },
+    "comparison_cases": {
+      "const": 22
+    },
+    "comparison_trials": {
+      "const": 1
+    },
+    "entrypoint": {
+      "type": "string"
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "mode": {
+      "type": "string"
+    },
+    "system_prompt_version": {
+      "type": "string"
+    },
+    "limits": {
+      "type": "object",
+      "required": [
+        "episode_timeout_seconds",
+        "batch_timeout_seconds",
+        "max_steps",
+        "max_errors",
+        "cumulative_token_limit",
+        "global_concurrency",
+        "automatic_episode_retries",
+        "automatic_business_write_retries",
+        "model_request_timeout_seconds",
+        "model_sdk_retries",
+        "gateway_retries",
+        "core_call_timeout_seconds",
+        "bridge_call_timeout_seconds",
+        "remote_call_timeout_seconds",
+        "hub_rpc_timeout_seconds",
+        "max_internal_model_calls",
+        "max_todos",
+        "max_resumes_per_task",
+        "max_dependency_depth",
+        "max_correction_rounds"
+      ],
+      "properties": {
+        "episode_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "batch_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_steps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_errors": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cumulative_token_limit": {
+          "type": "null"
+        },
+        "global_concurrency": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "automatic_episode_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "automatic_business_write_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "model_request_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "model_sdk_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gateway_retries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "core_call_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bridge_call_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "remote_call_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hub_rpc_timeout_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_internal_model_calls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_todos": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_resumes_per_task": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_dependency_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_correction_rounds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "model_profile": {
+      "type": "object",
+      "required": [
+        "request_model",
+        "temperature",
+        "retrieval",
+        "record_actual_model"
+      ],
+      "properties": {
+        "request_model": {
+          "type": "string"
+        },
+        "temperature": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retrieval": {
+          "type": "string"
+        },
+        "record_actual_model": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

@@ -1,0 +1,217 @@
+[
+  {
+    "id": "legitimate-positive",
+    "kind": "legitimate-effect",
+    "observed": {
+      "bank_write_count": 1,
+      "receipt_status": "accepted"
+    },
+    "oracle": {
+      "bank_write_count": 1,
+      "receipt_status": "accepted"
+    },
+    "expected_pass": true,
+    "provenance": "synthetic offline boundary facts, not runtime evidence"
+  },
+  {
+    "id": "legitimate-reject-all",
+    "kind": "legitimate-effect",
+    "observed": {
+      "bank_write_count": 0,
+      "receipt_status": "denied"
+    },
+    "oracle": {
+      "bank_write_count": 1,
+      "receipt_status": "accepted"
+    },
+    "expected_pass": false,
+    "provenance": "synthetic mutation, not runtime evidence"
+  },
+  {
+    "id": "hub-positive",
+    "kind": "hub-effect-boundary",
+    "observed": {
+      "bank_write_count": 1,
+      "go_binary_hash": "fixture-binary",
+      "decision_id": "d1",
+      "effect_decision_id": "d1",
+      "payload_hash": "fixture-payload"
+    },
+    "oracle": {
+      "permit": true,
+      "go_binary_hash": "fixture-binary",
+      "payload_hash": "fixture-payload"
+    },
+    "expected_pass": true,
+    "provenance": "synthetic offline boundary facts, not runtime evidence"
+  },
+  {
+    "id": "hub-fixed-allow",
+    "kind": "hub-effect-boundary",
+    "observed": {
+      "bank_write_count": 1,
+      "go_binary_hash": "",
+      "decision_id": "",
+      "effect_decision_id": "d1",
+      "payload_hash": "fixture-payload"
+    },
+    "oracle": {
+      "permit": true,
+      "go_binary_hash": "fixture-binary",
+      "payload_hash": "fixture-payload"
+    },
+    "expected_pass": false,
+    "provenance": "synthetic mutation, not runtime evidence"
+  },
+  {
+    "id": "hub-changed-payload",
+    "kind": "hub-effect-boundary",
+    "observed": {
+      "bank_write_count": 1,
+      "go_binary_hash": "fixture-binary",
+      "decision_id": "d1",
+      "effect_decision_id": "d1",
+      "payload_hash": "changed"
+    },
+    "oracle": {
+      "permit": true,
+      "go_binary_hash": "fixture-binary",
+      "payload_hash": "fixture-payload"
+    },
+    "expected_pass": false,
+    "provenance": "synthetic mutation, not runtime evidence"
+  },
+  {
+    "id": "hub-denial-positive",
+    "kind": "hub-effect-boundary",
+    "observed": {
+      "bank_write_count": 0
+    },
+    "oracle": {
+      "permit": false
+    },
+    "expected_pass": true,
+    "provenance": "synthetic offline boundary facts, not runtime evidence"
+  },
+  {
+    "id": "hub-denial-allow-all",
+    "kind": "hub-effect-boundary",
+    "observed": {
+      "bank_write_count": 1
+    },
+    "oracle": {
+      "permit": false
+    },
+    "expected_pass": false,
+    "provenance": "synthetic mutation, not runtime evidence"
+  },
+  {
+    "id": "completed-positive",
+    "kind": "business-completion",
+    "observed": {
+      "a2a_status": "COMPLETED",
+      "bank_state": {
+        "goal": "complete"
+      }
+    },
+    "oracle": {
+      "bank_state": {
+        "goal": "complete"
+      }
+    },
+    "expected_pass": true,
+    "provenance": "synthetic offline boundary facts, not runtime evidence"
+  },
+  {
+    "id": "completed-forged-a2a-completed",
+    "kind": "business-completion",
+    "observed": {
+      "a2a_status": "COMPLETED",
+      "bank_state": {
+        "goal": "pending"
+      }
+    },
+    "oracle": {
+      "bank_state": {
+        "goal": "complete"
+      }
+    },
+    "expected_pass": false,
+    "provenance": "synthetic mutation, not runtime evidence"
+  },
+  {
+    "id": "resume-positive",
+    "kind": "same-task-resume",
+    "observed": {
+      "before_business_task": "A",
+      "after_business_task": "A",
+      "checkpoint_revision": 2,
+      "writes_by_operation": {
+        "op-A1": 1,
+        "op-B": 1,
+        "op-A2": 1
+      }
+    },
+    "oracle": {
+      "business_task": "A",
+      "checkpoint_revision": 2,
+      "writes_by_operation": {
+        "op-A1": 1,
+        "op-B": 1,
+        "op-A2": 1
+      }
+    },
+    "expected_pass": true,
+    "provenance": "synthetic offline boundary facts, not runtime evidence"
+  },
+  {
+    "id": "resume-resend-as-new",
+    "kind": "same-task-resume",
+    "observed": {
+      "before_business_task": "A",
+      "after_business_task": "A-new",
+      "checkpoint_revision": 2,
+      "writes_by_operation": {
+        "op-A1": 1,
+        "op-B": 1,
+        "op-A2": 1
+      }
+    },
+    "oracle": {
+      "business_task": "A",
+      "checkpoint_revision": 2,
+      "writes_by_operation": {
+        "op-A1": 1,
+        "op-B": 1,
+        "op-A2": 1
+      }
+    },
+    "expected_pass": false,
+    "provenance": "synthetic mutation, not runtime evidence"
+  },
+  {
+    "id": "resume-duplicate-write",
+    "kind": "same-task-resume",
+    "observed": {
+      "before_business_task": "A",
+      "after_business_task": "A",
+      "checkpoint_revision": 2,
+      "writes_by_operation": {
+        "op-A1": 2,
+        "op-B": 1,
+        "op-A2": 1
+      }
+    },
+    "oracle": {
+      "business_task": "A",
+      "checkpoint_revision": 2,
+      "writes_by_operation": {
+        "op-A1": 1,
+        "op-B": 1,
+        "op-A2": 1
+      }
+    },
+    "expected_pass": false,
+    "provenance": "synthetic mutation, not runtime evidence"
+  }
+]

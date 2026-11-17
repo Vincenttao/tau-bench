@@ -1,0 +1,23 @@
+{
+  "scope": "J0 standalone state module; not live wiring",
+  "java_assertions_passed": 41,
+  "existing_python_tests_passed": 8,
+  "model_requests": 0,
+  "official_episodes": 0,
+  "red_phase": [
+    "implementation source missing",
+    "explicit clarification API missing"
+  ],
+  "source_sha256": {
+    "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/hub/TaskCoordinator.java": "510823dcc92cc9c2644946bc12732e1a35d9e4a0953417d6a586a2f852304061",
+    "experiments/plan-4-agent-hub-refined-skills/java/src/test/java/eval/hub/TaskCoordinatorTest.java": "5f9a2767fc22906f5442199e022c24add1e075711c989cd15b0bdfd02e3cdb91",
+    "experiments/plan-4-agent-hub-refined-skills/java/check-task-coordinator.sh": "b196dab69dcbebcbfab100c70c25d80700bb52a8a59d1ce4d72ace2efc4dd772"
+  },
+  "not_verified": [
+    "process kill recovery",
+    "cross-process locking",
+    "disk-failure injection",
+    "Jev routing",
+    "live effect boundary wiring"
+  ]
+}

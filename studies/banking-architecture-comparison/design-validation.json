@@ -1,0 +1,10 @@
+{
+  "validation_type": "current-layout-and-input-bindings-only",
+  "passed": true,
+  "detail": "../../docs/root-layout-validation.json",
+  "task_count": 22,
+  "formal_episode_count": 88,
+  "model_calls": 0,
+  "business_e2e_performed": false,
+  "implementation_ready": false
+}

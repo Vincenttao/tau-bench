@@ -1,0 +1,77 @@
+{
+  "status": "planned-not-run",
+  "cases": [
+    {
+      "id": "slow-single",
+      "description": "单业务仍慢路径",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "slow-explicit-handoff",
+      "description": "显式意图与 TARGET 不走 FAST",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "multi-domain",
+      "description": "七类边界与多业务 Todo",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "dependency-resume",
+      "description": "A 已执行部分步骤，等待 B 后接续 A",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "nested-dependency",
+      "description": "A→B→C→A，最多4层",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "user-input",
+      "description": "问答等待与依赖等待分离",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "duplicate-resume",
+      "description": "重复恢复及回调不重复写入",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "stale-foreign-checkpoint",
+      "description": "旧版本和跨会话恢复拒绝",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "unknown-write",
+      "description": "写入超时先核验，不重放",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "unsatisfied-dependency",
+      "description": "B 完成但资格仍不满足不得批准",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "cycle-limit",
+      "description": "依赖环与次数时限停止",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    },
+    {
+      "id": "pause-restart",
+      "description": "安全暂停与双端重启持久化恢复",
+      "kind": "synthetic-contract",
+      "expected_status": "not_run"
+    }
+  ]
+}

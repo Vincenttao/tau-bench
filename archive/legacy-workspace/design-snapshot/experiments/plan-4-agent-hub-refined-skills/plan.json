@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "plan_id": "plan-4-agent-hub-refined-skills",
+  "display_number": 4,
+  "status": "design-only",
+  "comparison_ready": false,
+  "skill_release": "banking-evidence-guides",
+  "skill_manifest": "implementations/deepagent/skills/releases/banking-evidence-guides/release.json",
+  "skill_manifest_sha256": "949ea01d2b231fb986a0ee936b5cf8e57e0e9f978233e04ef749c29daf2d064c",
+  "implementation": null,
+  "historical_results_are_comparison_results": false,
+  "execution_enabled": false,
+  "note": "Detailed comparison design only; existing legacy runners do not consume this registration. Execution remains disabled pending implementation and freeze.",
+  "test_design": "test-design.md",
+  "design_status": "detailed-design-reviewed",
+  "comparison_study": "studies/banking-architecture-comparison/study.json",
+  "comparison_language": "en",
+  "comparison_profile": "single-round-four-arm",
+  "comparison_cases": 22,
+  "comparison_trials": 1
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "name": "English task_054 single-attempt baseline E2E",
+  "scope": "Existing DeepAgent + Todo + Skill + MCP integration in the official English banking environment",
+  "agent_hub_enforcement": false,
+  "benchmark_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
+  "domain": "banking_knowledge",
+  "task_ids": [
+    "task_054"
+  ],
+  "trials": 1,
+  "concurrency": 1,
+  "seed": 300,
+  "language": "en",
+  "skill_version": "3.2.0",
+  "system_prompt_version": "evidence-todo-v1",
+  "model": "deepseek-v4-flash",
+  "retrieval": "bm25",
+  "token_limit": null,
+  "steps": [
+    "Build the Java bridge",
+    "Run deterministic real-Java/MCP protocol fixture with a synthetic local model",
+    "Probe the configured model gateway once",
+    "Run one official banking episode with the existing supervisor and evaluator",
+    "Inspect official reward, both actors, tool receipts, language and evidence hashes"
+  ],
+  "expected_business_checks": [
+    "Verify the customer",
+    "Explain the conflict among credit limit increase, dispute and replacement",
+    "Obtain consent for the operation order and reduce the requested increase to 2500",
+    "Submit the credit limit increase before dispute and replacement effects",
+    "Preserve the official user-side tool interactions",
+    "Record the official reward without altering grading"
+  ],
+  "retry_policy": "No automatic episode retry; preserve business failures and unscored infrastructure errors",
+  "acceptance": "Protocol fixture passes and one official episode produces a scored result; business success requires reward 1. Neither result proves agent-hub control enforcement or general benchmark performance."
+}
