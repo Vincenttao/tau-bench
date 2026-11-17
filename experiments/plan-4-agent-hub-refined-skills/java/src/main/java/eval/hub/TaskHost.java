@@ -44,6 +44,7 @@ public final class TaskHost {
                         case "record_condition" -> task.recordCondition(text(request,"goal"),number(request,"revision"),text(request,"condition"),text(request,"value"),text(request,"evidence_ref"));
                         case "accept_goal" -> task.acceptGoal(text(request,"goal"),number(request,"revision"));
                         case "wait_goal" -> task.waitGoal(text(request,"goal"),number(request,"revision"),text(request,"question"));
+                        case "wait_dependency" -> task.waitDependency(text(request,"goal"),number(request,"revision"));
                         case "start_node" -> task.startNode(text(request,"node_id"),text(request,"goal"),number(request,"revision"),text(request,"kind"),text(request,"version"),text(request,"decision_ref"),number(request,"now"));
                         case "observe_node" -> task.observeNode(text(request,"node_id"),text(request,"status"));
                         case "apply" -> {

@@ -19,11 +19,11 @@ class BusinessJudge:
             raise ValueError('Published rule contract and scoped action required')
         refs = {}
         for item in evidence:
-            if (not isinstance(item, dict) or set(item) != {'ref', 'episode_id', 'goal_id', 'content'}
+            if (not isinstance(item, dict) or set(item) - {'source'} != {'ref', 'episode_id', 'goal_id', 'content'}
                     or item['episode_id'] != episode or item['goal_id'] != goal or not item['content']
                     or item['ref'] in refs):
                 raise ValueError('Invalid evidence scope or duplicate reference')
-            refs[item['ref']] = item['content']
+            refs[item['ref']] = {'source': item.get('source', 'unspecified'), 'content': item['content']}
         ids = set()
         for condition in conditions:
             if (not isinstance(condition, dict) or set(condition) != {'id', 'statement', 'evidence_refs'}
@@ -43,7 +43,8 @@ class BusinessJudge:
             for suffix, question in [('supported', 'Does this evidence establish that the stated condition holds for the proposed operation?'),
                                      ('violated', 'Does this evidence establish that the stated condition is violated for the proposed operation?')]:
                 questions[f'c{i}_{suffix}'] = {'type': 'noul', 'instructions': {
-                    'question': question, 'condition': condition['statement'], 'evidence': selected}}
+                    'question': question, 'condition': condition['statement'], 'evidence': selected,
+                    'source_rules': 'Customer text establishes supplied details or requests, not bank policy or bank outcomes. Assistant questions establish no consent by themselves. Controller context is not a bank receipt; compare the actual customer reply and official facts.'}}
         request = {'model': self.policy.request_model, 'state': {'proposed_operation': copy.deepcopy(payload)}, 'questions': questions}
         result['request'] = request
         response = self.client.ask(copy.deepcopy(request))

@@ -36,6 +36,19 @@ class ScriptedClient:
 
 
 class InputRouterTests(unittest.TestCase):
+    def test_uncertain_restatement_does_not_require_a_business_state_change(self):
+        snapshot = self.snapshot('I still need the card replacement.')
+        snapshot['goals'][0].update(state='active', waiting_for='')
+        snapshot['new_goal_proposals'] = []
+        router, _ = self.router({'g0_reaffirm': .69})
+        result = router.interpret(snapshot)
+        self.assertEqual(result['status'], 'ready')
+        self.assertTrue(result['context_only'])
+        self.assertEqual(result['targets'], [])
+        # An uncertain modification can never use the non-mutating context route.
+        router, _ = self.router({'g0_reaffirm': .69, 'g0_modify': .5})
+        self.assertEqual(router.interpret(snapshot)['status'], 'clarify')
+
     def test_restatement_of_active_goal_is_not_a_duplicate_new_goal(self):
         snapshot = self.snapshot('I still need the card replacement.')
         snapshot['goals'][0].update(state='active', waiting_for='')

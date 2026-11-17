@@ -1,5 +1,7 @@
 # 方案 4：plan-4-agent-hub-refined-skills
 
+本轮交付见[完整控制链实现与验收记录](reports/full-control-runtime-acceptance-20261117.md)：80项 Python 测试、完整原生重启夹具及官方单题接线检查通过；真实业务分数仍为0，完整发布验收尚未通过。正式比较保持关闭。
+
 当前已增加独立的完整控制链运行器：见[运行说明](python/RUNTIME.md)。`FullHubAgent` 已连接 Java 持久任务、S2、Jev、原生 DeepAgent/Skill/Todo、Go Hub 和官方工具环境；完整本机重启夹具通过，真实用例仍在开发验收，尚不能宣称 39 条契约全部通过。下面的阶段报告保留其历史范围。
 
 最新接线与验收：[Java/Jev/Go控制链阶段报告](reports/controlled-chain-acceptance-20261117.md)。真实Jev＋隔离官方工具实现的单项提交链通过，多意图恢复仍进入未决；DeepAgent正式driver、完整政策及目标验收尚未接齐，完整方案未通过验收。历史报告保持各自证据范围。

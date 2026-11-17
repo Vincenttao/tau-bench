@@ -35,6 +35,10 @@ def prepare(task, output, model=None):
     manifest = build_manifest(task, model)
     output = Path(output).resolve(); manifest['output'] = str(output)
     files = [*ARM.joinpath('python').glob('*.py'), *ARM.joinpath('java/src').rglob('*.java'),
+             *ARM.joinpath('java').glob('*.sh'), ARM/'go/go.mod', ARM/'go/go.sum',
+             ARM/'plan.json', ARM/'plans/llm-evidence-control/test-spec.json',
+             ROOT/'studies/banking-architecture-comparison/contracts/business-ownership.json',
+             ROOT/'shared/java/classpath.txt',
              *ARM.joinpath('java/target').rglob('*.class'), *ARM.joinpath('go').rglob('*.go'),
              ARM/'go/target/banking-gate', ARM/'go/source-pin.json',
              *ROOT.joinpath('shared/python').glob('*.py'), *ROOT.joinpath('shared/java/target/classes').rglob('*.class')]
@@ -71,7 +75,7 @@ def inspect(manifest):
         receipts = {msg['id'] for msg in official if msg.get('role') == 'tool'}
         ledger = [json.loads(line) for line in (control/'ledger.jsonl').read_text().splitlines()]
         dispatched = {event['identity']['operation_id'] for event in ledger if event['outcome']['status'] == 'dispatched'}
-        checks['actual_go_dispatch'] = bool(dispatched)
+        checks['actual_go_dispatch'] = bool(dispatched) and bool(calls)
         checks['no_official_tool_bypass'] = set(calls) == set(bindings)
         checks['official_receipts_bound'] = set(calls) <= receipts
         checks['go_and_final_payload_binding'] = all(

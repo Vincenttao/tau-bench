@@ -12,6 +12,21 @@ from task_session import JavaTask, TaskSession
 
 
 class TaskSessionTests(unittest.TestCase):
+    def test_context_only_reply_preserves_goal_and_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            router = self.router()
+            with JavaTask(Path(directory), 'episode', 1000, 8) as task:
+                session = TaskSession(task, router, Path(directory)/'audit')
+                session.handle('m1', 'check balance', [{'description': 'check balance', 'quote': 'check balance'}], now=900)
+                original = task.call('status', now=900)['goals']
+                router.client.values = {'covered': .99, 'g0_reaffirm': .69}
+                result = session.handle('m2', 'I still need that balance.', [], now=900)
+                self.assertTrue(result['context_only'])
+                self.assertEqual(task.call('status', now=900)['goals'], original)
+                session.handle('m2', 'I still need that balance.', [], now=900)
+                self.assertEqual(len(router.client.calls), 2)
+                self.assertTrue(task.call('status', now=900)['can_dispatch'])
+
     def router(self):
         client = ScriptedClient({'covered': .99, 'has_new': .99, 'new0_supported': .99})
         return InputRouter(client, RoutingPolicy('synthetic-only', .3, .7, 'jev-latest', 'jev-1.14.0'))

@@ -90,6 +90,9 @@ class TaskSession:
                         'description': proposal['input_snapshot']['content'] if item['action'] == 'modify' else ''}
                        for item in proposal['targets']]
             actions += [{'kind': 'new_goal', 'description': item['description']} for item in proposal['new_goal_proposals']]
+            if proposal.get('context_only'):
+                if actions: raise ValueError('Context route cannot carry business actions')
+                actions = [{'kind': 'context'}]
             self.task.call('apply', **common, actions=actions, resolved=proposal.get('resolved_messages', []))
         else:
             raise ValueError('Unknown proposal status')

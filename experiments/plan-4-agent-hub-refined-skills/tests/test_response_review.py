@@ -19,6 +19,14 @@ class Judge:
 
 
 class ResponseReviewTests(unittest.TestCase):
+    def test_plain_question_needs_no_unused_numeric_extraction_judgment(self):
+        class QuestionJudge(Judge):
+            def ask(self, state, questions, now=None):
+                return {key: {'comparison_needed': .01, 'completion_declarations_complete': .99,
+                              'extraction_faithful': .5}[key] for key in questions}, 'synthetic-observation'
+        review = ResponseReview(Planner({'completed_goal_ids': [], 'comparison': None}), QuestionJudge())
+        self.assertEqual(review.check('What is your name?', {'task': {'goals': []}}, now=900)['status'], 'allow')
+
     def proposal(self):
         return {'completed_goal_ids': [], 'comparison': {
             'candidates': [{'id': 'A', 'values': {'limit': 100000, 'fee': 0}, 'units': {'limit': 'USD', 'fee': 'USD/year'}},

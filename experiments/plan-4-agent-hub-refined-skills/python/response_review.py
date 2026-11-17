@@ -21,7 +21,8 @@ SCHEMA = {'type': 'object', 'properties': {'completed_goal_ids': {'type': 'array
 
 
 class ResponseReview:
-    def __init__(self, planner, judgments): self.planner, self.judgments = planner, judgments
+    def __init__(self, planner, judgments, workflow=None):
+        self.planner, self.judgments, self.workflow = planner, judgments, workflow
 
     def extract(self, content, state):
         return self.planner.complete('response-review', {'candidate_response': content, 'visible_state': state}, SCHEMA)
@@ -40,12 +41,21 @@ class ResponseReview:
                 'Does completed_goal_ids account for every business goal that candidate_response claims is complete? A question or explicit unfinished status claims no goal completion.'}}
         values, ref = self.judgments.ask({'candidate_response': content, 'visible_state': state, 'proposal': proposal}, questions, now=now)
         policy = self.judgments.policy
-        if values['extraction_faithful'] <= policy.high or values['completion_declarations_complete'] <= policy.high:
+        if values['completion_declarations_complete'] <= policy.high:
             return {'status': 'unknown', 'reason': 'unverified-extraction', 'observation_ref': ref, 'proposal': proposal}
         comparison = proposal['comparison']
         if comparison is None:
             status = 'allow' if values['comparison_needed'] < policy.low else 'unknown'
             return {'status': status, 'reason': 'no-verified-numeric-comparison', 'proposal': proposal, 'observation_ref': ref}
+        if values['extraction_faithful'] <= policy.high:
+            return {'status': 'unknown', 'reason': 'unverified-extraction', 'observation_ref': ref, 'proposal': proposal}
+        compute = lambda: self._compare(comparison, proposal, ref)
+        if self.workflow is not None:
+            return self.workflow(comparison, {'status': 'allow', 'model': policy.expected_model,
+                'observation_ref': ref}, compute, now=now)
+        return compute()
+
+    def _compare(self, comparison, proposal, ref):
         try:
             for rule in comparison['requirements']:
                 for candidate in comparison['candidates']:

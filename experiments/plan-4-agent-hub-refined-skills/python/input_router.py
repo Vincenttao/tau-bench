@@ -183,7 +183,8 @@ class InputRouter:
                 raise JevError('Malformed lifecycle Choice answer')
             choices[name] = answer
         # Boundaries belong to the unresolved band; never round into permission.
-        if any(self.policy.low <= value <= self.policy.high for value in values.values()):
+        if any(self.policy.low <= value <= self.policy.high for name, value in values.items()
+               if not name.endswith('_reaffirm')):
             result['reason'] = 'uncertain_observation'; return result
         yes = {name for name, value in values.items() if value > self.policy.high}
         if 'ambiguous' in yes:
@@ -218,6 +219,11 @@ class InputRouter:
                 result['reason'] = 'conflicting_social_classification'; return result
             result.update(status='no_business_action', reason='social_only'); return result
         if not targets and not proposals:
+            if any(goal['state'] == 'active' for goal in snapshot['goals']) and 'has_new' not in yes:
+                # No requested state transition. Preserve supplied facts without
+                # manufacturing a confirmation, mutation or new business identity.
+                result.update(status='ready', reason='context_only', context_only=True)
+                return result
             result['reason'] = 'no_reliable_route'; return result
         result.update(status='ready', reason='observations_resolved', targets=targets, new_goal_proposals=proposals)
         return result

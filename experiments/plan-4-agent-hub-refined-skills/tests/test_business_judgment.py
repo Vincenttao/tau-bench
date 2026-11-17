@@ -9,6 +9,19 @@ from input_router import RoutingPolicy
 
 
 class BusinessJudgmentTests(unittest.TestCase):
+    def test_source_labels_reach_semantic_judgment_without_becoming_policy(self):
+        class Client:
+            def ask(self, request):
+                self.request = request
+                return {'model': 'jev-1.14.0', 'answers': {q: {'type': 'noul', 'noul': .99 if q.endswith('_supported') else .01}
+                        for q in request['questions']}, 'usage': {'input_tokens': 1, 'output_tokens': 1}}
+        client = Client()
+        judge = BusinessJudge(client, RoutingPolicy('fixture', .3, .7, 'jev-latest', 'jev-1.14.0'))
+        judge.judge('episode', 'goal', {'episode': 'episode'}, 'rule',
+            [{'id': 'request', 'statement': 'The customer asked for a dispute.', 'evidence_refs': ['user']}],
+            [{'ref': 'user', 'episode_id': 'episode', 'goal_id': 'goal', 'source': 'official-user', 'content': 'Please dispute this charge.'}])
+        self.assertEqual(client.request['questions']['c0_supported']['instructions']['evidence']['user']['source'], 'official-user')
+
     def test_supported_condition_allows_missing_evidence_is_unknown(self):
         class Client:
             def ask(self, request):

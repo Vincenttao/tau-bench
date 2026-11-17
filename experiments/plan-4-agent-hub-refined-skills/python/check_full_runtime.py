@@ -126,9 +126,9 @@ try:
  assert final.content=='Synthetic operation completed.',final
  final_task=agent.task.call('status',now=int(__import__('time').time()))
  assert final_task['outcome']=='success',final_task
- assert len(final_task['nodes'])==(2 if args.read_before_wait else 1) and all(n['status']=='completed' for n in final_task['nodes']),final_task
+ assert len(final_task['nodes'])==(4 if args.read_before_wait else 3) and all(n['status']=='completed' for n in final_task['nodes']),final_task
  ledger=[json.loads(line) for line in (agent.control_root/'ledger.jsonl').read_text().splitlines()]
- assert sum(row['outcome']['status']=='dispatched' for row in ledger)==(2 if args.read_before_wait else 1)
+ assert sum(row['outcome']['status']=='dispatched' for row in ledger)==(4 if args.read_before_wait else 3)
  assert list((agent.workspace/'checkpoints').parent.glob('checkpoints*'))
  result={'status':'passed','scope':'real native Java DeepAgent + persistent task + real MCP + real Go; scripted S2 proposals/Jev + synthetic effect',
   'external_model_calls':0,'native_fixture_calls':len(requests),'official_business_score':None,

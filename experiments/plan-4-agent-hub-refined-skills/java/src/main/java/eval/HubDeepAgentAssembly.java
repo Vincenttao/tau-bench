@@ -175,6 +175,7 @@ public final class HubDeepAgentAssembly implements AutoCloseable {
         @Override public void beforeToolCall(AgentCallbackContext ctx) {
             if(ctx.getInputs() instanceof ToolCallInputs input) {
                 if(!ALLOWED.contains(input.getToolName())) throw new IllegalArgumentException("Tool outside Skill/Todo boundary: "+input.getToolName());
+                TodoLimit.check(input.getToolName(), input.getToolArgs()==null ? Map.of() : Json.object(input.getToolArgs()));
                 log("tool_start",Map.of("name",input.getToolName(),"arguments",input.getToolArgs()==null?Map.of():input.getToolArgs()));
             }
         }

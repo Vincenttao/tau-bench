@@ -1,0 +1,119 @@
+{
+  "implementation": "full-control-path-integrated; release-not-accepted",
+  "formal_comparison": false,
+  "all_39_contracts_passed": false,
+  "python_tests": {
+    "passed": 80,
+    "source": "observed unittest run; retained log"
+  },
+  "java_task_assertions": 47,
+  "java_other_checks": [
+    "InvocationSequenceTest",
+    "TodoLimitTest"
+  ],
+  "go_tests": 2,
+  "mutation_checks": {
+    "status": "passed",
+    "scope": "isolated mutation checks; actual code unchanged",
+    "results": [
+      {
+        "mutation": "controlled_effects",
+        "baseline_passed": true,
+        "mutant_detected": true,
+        "oracle": "test_controlled_effects.ControlledEffectsTests.test_stable_step_cannot_silently_reuse_a_different_payload"
+      },
+      {
+        "mutation": "runtime_guards",
+        "baseline_passed": true,
+        "mutant_detected": true,
+        "oracle": "test_runtime_guards.RuntimeGuardsTests.test_output_cannot_bypass_independent_judgment"
+      },
+      {
+        "mutation": "Go-current-grants-replaced-with-fixed-grant",
+        "baseline_passed": true,
+        "mutant_detected": true,
+        "oracle": "TestDispatchBindingAndUnknownRecovery"
+      }
+    ]
+  },
+  "native_fixture": {
+    "path": "logs/full-native-current-20261117-b00",
+    "status": "passed",
+    "external_model_calls": 0,
+    "node_kinds": [
+      "await-user",
+      "evidence-investigation",
+      "guarded-operation",
+      "receipt-reconciliation"
+    ]
+  },
+  "official_diagnostics": [
+    {
+      "path": "archive/local-artifacts-20261117/logs/full-official-task003-20261117-b02",
+      "status": "scored",
+      "domain": "banking_knowledge",
+      "task_id": "task_003",
+      "trial": 0,
+      "reward": 0.0,
+      "termination_reason": "user_stop",
+      "duration": 186.8567929080018,
+      "architecture_acceptance": "passed",
+      "all_39_contracts_passed": false,
+      "formal_comparison": false,
+      "manifest_sha256": "687757442daa826e562d217e63d0a53ad7b83fcc684bffb4722a90773b05e871"
+    },
+    {
+      "path": "logs/full-official-task054-20261117-b02",
+      "status": "scored",
+      "domain": "banking_knowledge",
+      "task_id": "task_054",
+      "trial": 0,
+      "reward": 0.0,
+      "termination_reason": "user_stop",
+      "duration": 198.28011430699553,
+      "architecture_acceptance": "passed",
+      "all_39_contracts_passed": false,
+      "formal_comparison": false,
+      "manifest_sha256": "4aaa8979479de2fe28887d6928b7f747f12041bfe39472480177f46eb1872700"
+    },
+    {
+      "path": "logs/full-official-task054-20261117-b03",
+      "status": "scored",
+      "domain": "banking_knowledge",
+      "task_id": "task_054",
+      "trial": 0,
+      "reward": 0.0,
+      "termination_reason": "user_stop",
+      "duration": 365.65612639200117,
+      "architecture_acceptance": "passed",
+      "all_39_contracts_passed": false,
+      "formal_comparison": false,
+      "manifest_sha256": "1d8764088853d8a306c34b8b7a2c46397bf8722a6fe8e7c3685f90fd275def2c"
+    },
+    {
+      "path": "logs/full-official-task054-20261117-b04",
+      "status": "scored",
+      "domain": "banking_knowledge",
+      "task_id": "task_054",
+      "trial": 0,
+      "reward": 0.0,
+      "termination_reason": "user_stop",
+      "duration": 169.20564373799425,
+      "architecture_acceptance": "passed",
+      "all_39_contracts_passed": false,
+      "formal_comparison": false,
+      "manifest_sha256": "c5e72284b5727014d37c08b621f74e1a0f8c95d4c6b63dd6adeca7810f85b3cf"
+    }
+  ],
+  "credentials_scan": {
+    "scanned_files": 485,
+    "matches": 0
+  },
+  "remaining": [
+    "semantic input/output qualification on independent positive and negative cases",
+    "whole-control-chain offline replay; input segment replay only so far",
+    "all blocking contract acceptance including full official legal write plus denied write",
+    "common frozen actual model route across four formal arms"
+  ],
+  "post_live_change": "manifest capture expanded to launchers, module metadata and authority contract; covered by unit tests; no further inference"
+}

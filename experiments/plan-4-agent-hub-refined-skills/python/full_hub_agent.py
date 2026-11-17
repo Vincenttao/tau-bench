@@ -191,9 +191,9 @@ class FullHubAgent(DeepAgentJavaAgent):
         if self.closed: return
         self.closed = True
         try:
+            self.task.call('stop', reason='official-episode-ended')
             state = self.task.call('status', now=int(time.time()))
             durable_json(self.control_root/'final-task.json', state)
-            self.task.call('stop', reason='official-episode-ended')
         finally:
             self.hub.close(); self.task.close()
             if self.model_proxy is not None: self.model_proxy.close()

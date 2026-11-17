@@ -39,19 +39,25 @@ class ControlledEffects:
     def status(self, operation):
         return json.loads(self._path(operation).read_text())
 
-    def _task(self, goal, now):
+    def _task(self, goal, now, *, require_dependencies=False):
         state = self.task.call('status', now=now)
         if not state['can_dispatch'] or not any(g['goal_id'] == goal and g['state'] == 'active' for g in state['goals']):
             raise PermissionError('Task does not allow this goal to dispatch')
+        target = next(g for g in state['goals'] if g['goal_id'] == goal)
+        if require_dependencies:
+            outcomes = {g['goal_id']: g.get('outcome') for g in state['goals']}
+            if any(outcomes.get(parent) != 'success' for parent in target.get('dependencies', [])):
+                self.task.call('wait_dependency', goal=goal, revision=state['revision'])
+                raise PermissionError('Goal waits for unfinished prerequisites; complete the prerequisite work first')
         return state
 
     def adopt(self, goal, step, tool, arguments, judgment, *, now):
         with self.locked():
-            state = self._task(goal, now)
             # Import locally to avoid a cycle: runtime_guards also uses the canonical digest.
             from runtime_guards import resolve_operation
             resolved = resolve_operation(tool, arguments, self.catalog)
             effective = resolved['name']
+            state = self._task(goal, now, require_dependencies=resolved['access'] != 'read')
             if not isinstance(step, str) or not step.strip() or not self.live_permission(effective):
                 raise PermissionError('Unregistered step/tool or permission unavailable')
             if resolved.get('access') not in ('read', 'write', 'control'):
@@ -97,7 +103,8 @@ class ControlledEffects:
     def dispatch(self, operation, call_id, official_queue, *, now):
         with self.locked():
             record = self.status(operation)
-            state = self._task(record['goal_id'], now)
+            state = self._task(record['goal_id'], now,
+                require_dependencies=self.catalog[record.get('effective_tool', record['tool'])]['access'] != 'read')
             if (record['phase'] != 'adopted' or state['revision'] != record['task_revision']
                     or not isinstance(call_id, str) or not call_id or not self.live_permission(record.get('effective_tool', record['tool']))):
                 raise PermissionError('Duplicate, stale or unauthorized dispatch')

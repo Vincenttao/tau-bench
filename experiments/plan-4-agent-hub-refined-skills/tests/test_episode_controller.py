@@ -94,13 +94,12 @@ class EpisodeControllerTests(unittest.TestCase):
                 self.assertNotEqual(result['status'], 'allow')
                 self.assertEqual(task.call('status', now=900)['outcome'], 'undetermined')
 
-    def test_unknown_read_target_never_dispatches(self):
-        class UnknownPlanner(Planner):
-            def complete(self, purpose, state, schema):
-                if purpose == 'read-goal-selection':
-                    return {'goal_id': state['task']['goals'][0]['goal_id'], 'status': 'unknown',
-                            'policy_refs': [], 'conditions': []}
-                return super().complete(purpose, state, schema)
+    def test_unknown_customer_scope_never_dispatches(self):
+        class UnknownSubject(AllSupported):
+            def ask(self, request):
+                result = super().ask(request)
+                if 'customer_scope' in result['answers']: result['answers']['customer_scope']['noul'] = .5
+                return result
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             with JavaTask(root/'task', 'episode', 1000, 64) as task:
@@ -108,7 +107,7 @@ class EpisodeControllerTests(unittest.TestCase):
                 task.call('apply', message='m', revision=task.call('status', now=900)['revision'],
                     actions=[{'kind': 'new_goal', 'goal_id': None, 'description': text}
                              for text in ('balance', 'rates')], resolved_messages=[])
-                controller = EpisodeController(task, None, UnknownPlanner(), AllSupported(),
+                controller = EpisodeController(task, None, Planner(), UnknownSubject(),
                     RoutingPolicy('fixture', .3, .7, 'jev-latest', 'jev-1.14.0'), root/'control',
                     {'read_balance': {'access': 'read', 'principal': 'shared-read'}}, 'policy')
                 output = queue.Queue()

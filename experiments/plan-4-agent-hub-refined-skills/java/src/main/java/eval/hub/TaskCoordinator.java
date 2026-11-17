@@ -133,7 +133,10 @@ public final class TaskCoordinator implements AutoCloseable {
         var next = copy(); var touched = new HashSet<String>();
         for (Action action : actions) {
             if (action == null || action.kind() == null) throw new IllegalArgumentException("Invalid action");
-            if ("new_goal".equals(action.kind())) {
+            if ("context".equals(action.kind())) {
+                if (actions.size() != 1 || action.goalId() != null || goalIds().stream().noneMatch(id -> "active".equals(goalState(id))))
+                    throw new IllegalArgumentException("Context update requires an active task and no business action");
+            } else if ("new_goal".equals(action.kind())) {
                 if (action.goalId() != null) throw new IllegalArgumentException("Model cannot allocate goal IDs");
                 requireText(action.description());
                 int count = Integer.parseInt(next.getProperty("goals"));
@@ -155,7 +158,11 @@ public final class TaskCoordinator implements AutoCloseable {
                     next.setProperty("goal."+id+".state", "closed");
                     next.setProperty("goal."+id+".outcome", "cancelled");
                 }
-                if ("pause".equals(action.kind())) next.setProperty("goal."+id+".state", "waiting");
+                if ("pause".equals(action.kind())) {
+                    next.setProperty("goal."+id+".state", "waiting");
+                    next.setProperty("goal."+id+".waitingKind", "paused");
+                    next.remove("goal."+id+".waiting");
+                }
                 if ("respond".equals(action.kind()) && !state.getProperty("goal."+id+".waiting", "").isEmpty()) {
                     resumeGoal(next, id);
                 }
@@ -165,6 +172,8 @@ public final class TaskCoordinator implements AutoCloseable {
                 }
                 if ("modify".equals(action.kind())) {
                     requireText(action.description());
+                    next.remove("goal."+id+".waitingKind");
+                    next.remove("goal."+id+".dependencies");
                     if ("waiting".equals(goalState(id))) resumeGoal(next, id);
                     next.setProperty("goal."+id+".description", action.description());
                     next.setProperty("goal."+id+".source", message);
@@ -182,6 +191,10 @@ public final class TaskCoordinator implements AutoCloseable {
     }
     public synchronized long revision() { open(); return number("revision"); }
     private void resumeGoal(Properties next, String id) {
+        if ("dependency".equals(next.getProperty("goal."+id+".waitingKind")))
+            for (String dependency : dependencies(id))
+                if (!"success".equals(next.getProperty("goal."+dependency+".outcome")))
+                    throw new IllegalStateException("Dependency remains unfinished");
         if ("waiting".equals(next.getProperty("goal."+id+".state"))) {
             long resumes = Long.parseLong(next.getProperty("resumes", "0"));
             if (resumes >= 8) throw new IllegalStateException("Task resume bound reached");
@@ -189,6 +202,7 @@ public final class TaskCoordinator implements AutoCloseable {
         }
         next.setProperty("goal."+id+".state", "active");
         next.remove("goal."+id+".waiting");
+        next.remove("goal."+id+".waitingKind");
     }
     public synchronized long deadline() { open(); return number("deadline"); }
     public synchronized long modelCalls() { open(); return number("calls"); }
@@ -236,12 +250,28 @@ public final class TaskCoordinator implements AutoCloseable {
         for (String parent : dependencies(goal))
             if (!"success".equals(state.getProperty("goal."+parent+".outcome"))) throw new IllegalStateException("Dependency not completed");
         var next = copy(); next.setProperty("goal."+goal+".state", "closed");
-        next.setProperty("goal."+goal+".outcome", "success"); revise(next);
+        next.setProperty("goal."+goal+".outcome", "success");
+        for (String candidate : goalIds()) {
+            if ("waiting".equals(next.getProperty("goal."+candidate+".state"))
+                    && "dependency".equals(next.getProperty("goal."+candidate+".waitingKind"))
+                    && dependencies(candidate).stream().allMatch(id -> "success".equals(next.getProperty("goal."+id+".outcome")))
+                    && Long.parseLong(next.getProperty("resumes", "0")) < 8)
+                resumeGoal(next, candidate);
+        }
+        revise(next);
     }
     public synchronized void waitGoal(String goal, long expected, String question) {
         goalRevision(goal, expected); requireText(question);
         var next=copy();next.setProperty("goal."+goal+".waiting",question);
+        next.setProperty("goal."+goal+".waitingKind","user");
         next.setProperty("goal."+goal+".state","waiting");revise(next);
+    }
+    public synchronized void waitDependency(String goal, long expected) {
+        goalRevision(goal, expected);
+        if (dependencies(goal).isEmpty() || dependencies(goal).stream().allMatch(id -> "success".equals(state.getProperty("goal."+id+".outcome"))))
+            throw new IllegalStateException("No unfinished dependency");
+        var next=copy();next.setProperty("goal."+goal+".state","waiting");
+        next.setProperty("goal."+goal+".waitingKind","dependency");next.remove("goal."+goal+".waiting");revise(next);
     }
     public synchronized void startNode(String id, String goal, long expected, String kind, String version, String decision, long now) {
         goalRevision(goal, expected);
@@ -276,12 +306,17 @@ public final class TaskCoordinator implements AutoCloseable {
         result.put("model_calls_by_layer", Map.of("judgment",Long.parseLong(state.getProperty("calls.judgment","0")),
             "execution",Long.parseLong(state.getProperty("calls.execution","0")),"user",Long.parseLong(state.getProperty("calls.user","0"))));
         result.put("deadline", deadline()); result.put("can_dispatch", canDispatch(now));
+        boolean stopped = Boolean.parseBoolean(state.getProperty("stopped"));
+        result.put("episode_status", stopped ? "stopped" : "running");
+        result.put("stop_reason", state.getProperty("stopReason", ""));
+        result.put("resumes", Long.parseLong(state.getProperty("resumes", "0")));
         result.put("latest", state.getProperty("latest", ""));
         result.put("input_status", state.getProperty("inputStatus", "none"));
         var goals = new ArrayList<Map<String,Object>>();
         for (String id : goalIds()) goals.add(Map.of("goal_id",id,"episode_id",state.getProperty("episode"),
             "description",state.getProperty("goal."+id+".description"),"state",goalState(id),
             "waiting_for",state.getProperty("goal."+id+".waiting", ""),
+            "waiting_kind",state.getProperty("goal."+id+".waitingKind", ""),
             "outcome",state.getProperty("goal."+id+".outcome", "undetermined"),
             "requirements",state.getProperty("goal."+id+".requirements", ""),
             "dependencies",dependencies(id)));
@@ -293,6 +328,8 @@ public final class TaskCoordinator implements AutoCloseable {
             else if (goals.stream().allMatch(g -> "cancelled".equals(g.get("outcome")))) outcome = "cancelled";
             else outcome = "failed";
         }
+        if (stopped && "undetermined".equals(outcome))
+            outcome = goals.stream().anyMatch(g -> "success".equals(g.get("outcome"))) ? "partial" : "unknown";
         result.put("outcome", outcome);
         var nodes=new ArrayList<Map<String,String>>();
         for(String key:new TreeSet<>(state.stringPropertyNames())) {

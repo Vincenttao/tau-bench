@@ -36,6 +36,8 @@ class PlannerClient:
                         'For goal-completion, specify completion_boundary: information for delivering requested information, '
                         'submission only when the original goal asks to submit/file a request, final_effect for an eventual bank outcome. '
                         'An accepted submission is not approval. '
+                        'dependencies may list existing goal IDs that must be fully completed before this action. '
+                        'Use an empty list for mere priority or when no whole-goal prerequisite is established; never invent dependencies. '
                         'For read-goal-selection, proposed means the read has a unique target among existing goals; '
                         'this is attribution only and requires no business eligibility or policy conditions. '
                         'For new-goals, propose only independently requested business services not already represented by an existing goal. '
@@ -82,6 +84,7 @@ GOAL_SCHEMA = {'type': 'object', 'properties': {'goals': {'type': 'array', 'maxI
 STEP_SCHEMA = {'type': 'object', 'properties': {
     'goal_id': {'type': 'string'}, 'status': {'enum': ['proposed', 'unknown']},
     'completion_boundary': {'enum': ['information', 'submission', 'final_effect']},
+    'dependencies': {'type': 'array', 'uniqueItems': True, 'maxItems': 32, 'items': {'type': 'string'}},
     'policy_refs': {'type': 'array', 'items': {'type': 'string'}},
     'conditions': {'type': 'array', 'maxItems': 32, 'items': {'type': 'object', 'properties': {
         'id': {'type': 'string', 'pattern': '^[a-z][a-z0-9_-]{0,99}$'}, 'statement': {'type': 'string', 'minLength': 1},
