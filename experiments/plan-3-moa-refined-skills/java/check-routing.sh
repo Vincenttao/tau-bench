@@ -36,3 +36,4 @@ java -cp "$experiment_java/target/classes:$(cat "$repo_root/shared/java/classpat
 java -cp "$experiment_java/target/classes:$(cat "$repo_root/shared/java/classpath.txt")" eval.EnglishConfirmationTest
 java -cp "$experiment_java/target/classes:$(cat "$repo_root/shared/java/classpath.txt")" eval.MainModelEvidenceTest
 java -cp "$experiment_java/target/classes:$(cat "$repo_root/shared/java/classpath.txt")" eval.TodoTransitionTest
+java -cp "$experiment_java/target/classes:$repo_root/shared/java/target/classes:$repo_root/shared/java/target/test-classes:$(cat "$repo_root/shared/java/classpath.txt")" eval.TodoBoundaryValidationTest

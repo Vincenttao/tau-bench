@@ -22,7 +22,7 @@ ARMS = {
 }
 
 
-def build_manifest(arm, task_id, runtime_pilot=False):
+def build_manifest(arm, task_id, runtime_pilot=False, model_override=None, api_base_override=None):
     if arm not in ARMS:
         raise ValueError('Unknown arm')
     directory = ROOT / 'experiments' / ARMS[arm]
@@ -36,22 +36,34 @@ def build_manifest(arm, task_id, runtime_pilot=False):
         raise ValueError('Runtime pilots are available only for partial MOA/Hub integrations')
     if arm in (3, 4) and not runtime_pilot:
         raise NotImplementedError('Required architecture runtime is not integrated: ' + ARMS[arm])
-    return {
+    model = model_override or plan['model_profile']['request_model']
+    api_base = (api_base_override or GATEWAY).rstrip('/')
+    if api_base.endswith(('/responses', '/chat/completions', '/compatible')):
+        raise ValueError('Use an API base URL, not a completion endpoint')
+    manifest = {
         'schema_version': 1, 'purpose': 'development-diagnostic', 'formal_comparison': False,
         'arm_id': ARMS[arm], 'driver': {3: 'moa-pilot', 4: 'hub-read-pilot'}[arm] if runtime_pilot else 'deepagent',
         'full_architecture_ready': False,
-        'model': plan['model_profile']['request_model'],
-        'api_base': GATEWAY, 'language': plan['comparison_language'],
+        'model': model,
+        'api_base': api_base, 'language': plan['comparison_language'],
         'system_prompt_version': plan['system_prompt_version'],
         'limits': plan['limits'], 'skill_release': skill_release_identity(plan['skill_release']),
         'preparation': preparation, 'benchmark_commit': cohort['benchmark_commit'],
         'episodes': [{'key': task_id, 'domain': 'banking_knowledge', 'task_id': task_id,
                       'task_sha256': selected['task_file_sha256'], 'trial': 0, 'seed': selected['seed']}],
     }
+    if model_override or api_base_override:
+        manifest['diagnostic_overrides'] = {
+            'model': model,
+            'api_base': api_base,
+            'baseline_model': plan['model_profile']['request_model'],
+            'baseline_api_base': GATEWAY,
+        }
+    return manifest
 
 
-def prepare(arm, task_id, output, runtime_pilot=False):
-    manifest = build_manifest(arm, task_id, runtime_pilot)
+def prepare(arm, task_id, output, runtime_pilot=False, model_override=None, api_base_override=None):
+    manifest = build_manifest(arm, task_id, runtime_pilot, model_override, api_base_override)
     output = Path(output).resolve()
     manifest['output'] = str(output)
     # Capture source and class identities; never capture environment variables.
@@ -154,8 +166,10 @@ def main():
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--prompt-key', action='store_true', help='Read secret without terminal echo')
     parser.add_argument('--runtime-pilot', action='store_true', help='Partial MOA/Hub integration diagnostic; cannot pass full architecture acceptance')
+    parser.add_argument('--model', help='Diagnostic-only requested model override; recorded in manifest')
+    parser.add_argument('--api-base', help='Diagnostic-only API base override; recorded in manifest')
     args = parser.parse_args()
-    manifest = prepare(args.arm, args.task, args.output, args.runtime_pilot)
+    manifest = prepare(args.arm, args.task, args.output, args.runtime_pilot, args.model, args.api_base)
     if not args.execute:
         print(json.dumps({'output': manifest['output'], 'execution_started': False}))
         return

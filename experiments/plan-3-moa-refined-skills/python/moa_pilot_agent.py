@@ -52,7 +52,7 @@ class MoaPilotAgent(JavaMoaAgent):
         cp = ':'.join([str(ARM / 'java/target/classes'), str(ROOT / 'shared/java/target/classes'),
                        (ROOT / 'shared/java/classpath.txt').read_text().strip()])
         with (self.directory / (identity + '.stderr.log')).open('w') as log:
-            proc = subprocess.Popen(['java', '-Xmx384m', '-cp', cp, 'eval.BankingRuntimeHost'],
+            proc = subprocess.Popen(['java', '-Xmx256m', '-cp', cp, 'eval.BankingRuntimeHost'],
                                     stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=log,
                                     text=True, bufsize=1, cwd=init['workspace'])
         PROCESSES.append(proc)

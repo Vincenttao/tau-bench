@@ -35,6 +35,21 @@ class DiagnosticRunTests(unittest.TestCase):
         self.assertFalse(hub['full_architecture_ready'])
         self.assertFalse(hub['formal_comparison'])
 
+    def test_diagnostic_model_route_override_is_explicit_and_scoped(self):
+        manifest = build_manifest(3, 'task_060', runtime_pilot=True,
+                                  model_override='deepseek-flash',
+                                  api_base_override='https://api.deepseek.com/')
+        self.assertEqual(manifest['model'], 'deepseek-flash')
+        self.assertEqual(manifest['api_base'], 'https://api.deepseek.com')
+        self.assertEqual(manifest['diagnostic_overrides']['baseline_model'], 'deepseek-v4-flash')
+        self.assertNotEqual(manifest['diagnostic_overrides']['baseline_api_base'], manifest['api_base'])
+        self.assertFalse(manifest['formal_comparison'])
+
+    def test_diagnostic_override_rejects_completion_endpoint(self):
+        with self.assertRaisesRegex(ValueError, 'base URL'):
+            build_manifest(3, 'task_060', runtime_pilot=True,
+                           api_base_override='https://api.deepseek.com/chat/completions')
+
     def test_rejects_unknown_arm_and_unselected_case(self):
         for arm, case in ((0, 'task_003'), (1, '../task_003'), (1, 'task_999')):
             with self.subTest(arm=arm, case=case), self.assertRaises(ValueError):

@@ -20,6 +20,36 @@ from process_tree import terminate_tree
 
 
 class RuntimeHostsTest(unittest.TestCase):
+    def test_main_prompt_requires_skill_evidence_before_cross_domain_writes(self):
+        prompt = (ARM / 'java/src/eval/BankingPrompts.java').read_text()
+        self.assertIn('moa-banking-v6-linked-outcome-plan', prompt)
+        self.assertIn('domain Skill evidence, whole-request planning, then execution', prompt)
+        self.assertIn('current stage_plan must contain read-only assessment tasks only', prompt)
+        self.assertIn('use its own loaded Skill and authoritative policy sources', prompt)
+        self.assertIn('Do not place assessment tasks and affected business writes in the same frozen plan', prompt)
+        self.assertIn('Use a subsequent customer request through the existing native planning flow', prompt)
+        self.assertIn('execute the frozen tasks in dependency order', prompt)
+
+    def test_prompts_preserve_linked_customer_outcomes_across_domain_writes(self):
+        prompt = (ARM / 'java/src/eval/BankingPrompts.java').read_text()
+        self.assertIn('shared business invariants', prompt)
+        self.assertIn("customer's intended business outcome", prompt)
+        self.assertIn('avoidance of duplicate writes', prompt)
+        self.assertIn('incompatible customer outcomes', prompt)
+        self.assertIn('reconcile returned business parameters as well as receipts', prompt)
+        self.assertIn('without performing the downstream task or duplicating its write', prompt)
+        self.assertIn("Never describe a value as the customer's instruction", prompt)
+        self.assertNotIn('cancel_and_reissue', prompt)
+        self.assertNotIn('task_054', prompt)
+
+    def test_pilot_uses_bounded_heap_and_domains_do_not_discover_peers(self):
+        pilot = (ARM / 'python/moa_pilot_agent.py').read_text()
+        host = (ARM / 'java/src/eval/BankingRuntimeHost.java').read_text()
+        self.assertIn("['java', '-Xmx256m'", pilot)
+        self.assertIn('if (role.equals("main")) {', host)
+        self.assertLess(host.index('if (role.equals("main")) {', host.index('int index = 0') - 80),
+                        host.index('int index = 0'))
+
     def test_main_and_seven_domains_are_independent_actual_runtimes(self):
         # These tool-managed mounts can change while the test runs; they are not Runtime output.
         managed_mounts = {'.agents', '.codex', '.aws'}

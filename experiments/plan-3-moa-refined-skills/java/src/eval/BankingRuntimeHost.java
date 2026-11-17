@@ -102,15 +102,17 @@ public class BankingRuntimeHost {
                         "model_evidence", "main-model-events.jsonl", "capture", "read-only ModelCallInputs boundary")));
                 defaults.put("moa.prompts.orchestration", prompt.toUri().toString());
             }
-            int index = 0;
-            for (Object raw : (List<?>) init.get("candidates")) {
-                var item = Json.object(raw);
-                String prefix = "openjiuwen.service.a2a.remote-agents[" + index++ + "].";
-                defaults.put(prefix + "name", item.get("id"));
-                defaults.put(prefix + "url", item.get("url"));
-                defaults.put(prefix + "streaming", true);
-                // Non-streaming A2A waits for a whole domain turn, not one model call.
-                defaults.put(prefix + "timeout-seconds", init.getOrDefault("remote_timeout_seconds", 1260));
+            if (role.equals("main")) {
+                int index = 0;
+                for (Object raw : (List<?>) init.get("candidates")) {
+                    var item = Json.object(raw);
+                    String prefix = "openjiuwen.service.a2a.remote-agents[" + index++ + "].";
+                    defaults.put(prefix + "name", item.get("id"));
+                    defaults.put(prefix + "url", item.get("url"));
+                    defaults.put(prefix + "streaming", true);
+                    // Non-streaming A2A waits for a whole domain turn, not one model call.
+                    defaults.put(prefix + "timeout-seconds", init.getOrDefault("remote_timeout_seconds", 1260));
+                }
             }
             var app = new SpringApplication(BankingRuntimeHost.class);
             app.addInitializers(context -> context.getEnvironment().getPropertySources().addFirst(
