@@ -2,6 +2,16 @@
 import copy
 
 
+def moa_ownership_rules(entries, domain_ids):
+    """Grant shared identity logging to MOA domains without changing the frozen study contract."""
+    rules = {entry['operation']: copy.deepcopy(entry) for entry in entries}
+    verification = rules['log_verification']
+    if verification['access'] != 'write' or verification['discoverable']:
+        raise ValueError('Unexpected identity verification tool contract')
+    verification['allowed_requesters'] = list(domain_ids)
+    return rules
+
+
 class DomainBoundary:
     def __init__(self, actor, rules, events, receipts, deliver, wrapper='call_discoverable_agent_tool'):
         self.actor, self.rules, self.events = actor, rules, events
