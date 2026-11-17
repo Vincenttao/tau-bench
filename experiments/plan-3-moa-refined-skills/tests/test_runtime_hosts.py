@@ -22,7 +22,7 @@ from process_tree import terminate_tree
 class RuntimeHostsTest(unittest.TestCase):
     def test_main_prompt_requires_skill_evidence_before_cross_domain_writes(self):
         prompt = (ARM / 'java/src/eval/BankingPrompts.java').read_text()
-        self.assertIn('moa-banking-v7-feasibility-preserving-plan', prompt)
+        self.assertIn('moa-banking-v8-plan-consistency-check', prompt)
         self.assertIn('domain Skill evidence, whole-request planning, then execution', prompt)
         self.assertIn('current stage_plan must contain read-only assessment tasks only', prompt)
         self.assertIn('use its own loaded Skill and authoritative policy sources', prompt)
@@ -41,8 +41,10 @@ class RuntimeHostsTest(unittest.TestCase):
         self.assertIn("Never describe a value as the customer's instruction", prompt)
         self.assertIn('distinguish stated urgency or narrative priority', prompt)
         self.assertIn('Preserve the feasibility of every requested outcome', prompt)
-        self.assertIn('performing an already-eligible B before A', prompt)
-        self.assertIn('is not informed acceptance of blocking B', prompt)
+        self.assertIn('Before stage_finalize for related business writes', prompt)
+        self.assertIn('performing B before A preserves both', prompt)
+        self.assertIn("customer's latest explicit instructions", prompt)
+        self.assertIn('do not assume delay is safe', prompt)
         self.assertNotIn('cancel_and_reissue', prompt)
         self.assertNotIn('task_054', prompt)
 
