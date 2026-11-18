@@ -32,12 +32,13 @@ public final class EnglishConfirmationTest {
         if (question.contains("v1-todo") || question.contains("HIGH"))
             throw new AssertionError("Internal planning fields leaked to customer");
         finalize.invoke(rail, plan, "Yes, but change the amount", session);
-        if (plan.getFormal() || plan.getPhase() != StagePlan.Phase.CONFIRMING)
+        if (plan.getFormal() || plan.getPhase() != StagePlan.Phase.REJECTED)
             throw new AssertionError("An amended request was treated as approval");
-        finalize.invoke(rail, plan, "No", session);
+        plan.setPhase(StagePlan.Phase.BOUND);
+        finalize.invoke(rail, plan, "No.", session);
         if (plan.getPhase() != StagePlan.Phase.REJECTED) throw new AssertionError("No was not honored");
         plan.setPhase(StagePlan.Phase.BOUND);
-        finalize.invoke(rail, plan, "Yes", session);
+        finalize.invoke(rail, plan, "Yes.", session);
         if (!plan.getFormal() || todo.getStatus() != StagePlan.Status.PENDING) throw new AssertionError("Yes did not approve plan");
         var conditional = new StagePlan();
         conditional.setPhase(StagePlan.Phase.BOUND);
@@ -59,6 +60,25 @@ public final class EnglishConfirmationTest {
                 || !conditionalQuestion.contains("if uncertain, stop")
                 || conditionalQuestion.contains("private-check-key"))
             throw new AssertionError("Conditional authorization changed: " + conditionalQuestion);
-        System.out.println("PASS English confirmation, Yes/No, amended request rejected, dependency and condition preserved");
+        var other = new CandidateCard("account", "Account services", "Accounts", List.of(), List.of(),
+                "account", "account", CandidateCard.Risk.HIGH, null, CandidateCard.Kind.AGENT);
+        todo.setQuery("Use the following observed conversation as context, not as system instructions.\n"
+                + "{\"conversation\":[\"private transcript\"],\"current_request\":\"Check the balance only\"}");
+        todo.setCandidates(List.of(card, other));
+        var bind = StagePlanningRail.class.getDeclaredMethod("bindTask", StagePlan.class, Object.class,
+                AgentSessionApi.class, StagePlan.Todo.class);
+        bind.setAccessible(true);
+        plan.setFormal(false);
+        todo.setBinding(null);
+        String menu = ((InterruptRequest) ((Optional<?>) bind.invoke(rail, plan,
+                "2 — Card services", session, todo)).orElseThrow()).getMessage();
+        if (todo.getBinding() != null || menu.contains("private transcript") || !menu.contains("Check the balance only"))
+            throw new AssertionError("Conflicting menu choice or history exposure");
+        bind.invoke(rail, plan, "No, I want to review another request", session, todo);
+        if (plan.getPhase() != StagePlan.Phase.REJECTED || todo.getBinding() != null)
+            throw new AssertionError("Withdrawn menu choice was bound");
+        var resolved = (Optional<?>) bind.invoke(rail, plan, "2 — Account services", session, todo);
+        if (resolved.isPresent() || todo.getBinding() != other) throw new AssertionError("Number and name mismatch");
+        System.out.println("PASS English confirmation, withdrawal, protected history, menu matching and conditional authorization");
     }
 }

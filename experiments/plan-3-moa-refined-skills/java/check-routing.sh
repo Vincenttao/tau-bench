@@ -18,11 +18,18 @@ for name in ('source.json', 'model-client-source.json', 'assembly-source.json',
 PY
 python - "$repo_root/../agent-runtime-java" <<'PY'
 import hashlib, pathlib, sys
+import json
+pin = json.loads(pathlib.Path('patches/orchestrator-source.json').read_text())
+orchestrator = pathlib.Path(sys.argv[1]) / pin['source']
+if hashlib.sha256(orchestrator.read_bytes()).hexdigest() != pin['sha256']:
+    raise SystemExit('Runtime source differs from reviewed bounded wait base')
+(pathlib.Path('target/patched') / orchestrator.name).write_bytes(orchestrator.read_bytes())
 source = pathlib.Path(sys.argv[1]) / 'service/agent-service-app/src/main/java/com/openjiuwen/service/app/controller/a2a/client/A2ARemoteAgentClient.java'
 if hashlib.sha256(source.read_bytes()).hexdigest() != 'f7bc6dd3588e20935f6189db541e02e8b2fce0b8f26afbe5da3d0dff2746e982':
     raise SystemExit('Runtime source differs from reviewed no-replay patch base')
 (pathlib.Path('target/patched') / source.name).write_bytes(source.read_bytes())
 PY
+patch --silent target/patched/A2AEnabledServeOrchestrator.java patches/bounded-batch-wait.patch
 patch --silent target/patched/A2ARemoteAgentClient.java patches/remote-no-replay.patch
 patch --silent target/patched/IntentRouter.java patches/slow-only-router.patch
 patch --silent target/patched/MoaModelFactory.java patches/model-client.patch

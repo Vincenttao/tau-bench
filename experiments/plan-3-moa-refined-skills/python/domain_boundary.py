@@ -25,8 +25,10 @@ def candidate_description(actor, summary, rules):
 
 
 class DomainBoundary:
-    def __init__(self, actor, rules, events, receipts, deliver, wrapper='call_discoverable_agent_tool'):
+    def __init__(self, actor, rules, events, receipts, deliver, wrapper='call_discoverable_agent_tool',
+                 context=None):
         self.actor, self.rules, self.events = actor, rules, events
+        self.context = context
         self.receipts, self.deliver, self.wrapper = receipts, deliver, wrapper
 
     def put(self, event):
@@ -39,14 +41,19 @@ class DomainBoundary:
             operations.append(call['arguments'].get('agent_tool_name'))
         for operation in operations:
             if self.actor not in self.rules.get(operation, {}).get('allowed_requesters', []):
-                raise OperationNotAuthorized(self.rules.get(operation, {}).get('allowed_requesters', []))
+                owners = self.rules.get(operation, {}).get('allowed_requesters', [])
+                if self.context is not None:
+                    self.context.refused(self.actor + '-' + call['id'], self.actor, operation, owners)
+                raise OperationNotAuthorized(owners)
         local_id = call['id']
         call['id'] = self.actor + '-' + local_id
         if call['id'] in self.receipts:
             raise ValueError('Duplicate official call identity')
-        deliver = self.deliver
-        if call['name'] == 'list_discoverable_agent_tools':
-            deliver = self.deliver_history
+        actual = operations[-1]
+        if (self.context is not None and call['name'] != 'unlock_discoverable_agent_tool'
+                and self.rules[actual]['access'] in ('write', 'control')):
+            self.context.start(call['id'], self.actor, actual)
+        deliver = self.deliver_history if call['name'] == 'list_discoverable_agent_tools' else self.deliver
         self.receipts[call['id']] = (deliver, local_id)
         self.events.put(snapshot)
 

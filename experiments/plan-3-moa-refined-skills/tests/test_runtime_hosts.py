@@ -22,7 +22,7 @@ from process_tree import terminate_tree
 class RuntimeHostsTest(unittest.TestCase):
     def test_main_prompt_requires_skill_evidence_before_cross_domain_writes(self):
         prompt = (ARM / 'java/src/eval/BankingPrompts.java').read_text()
-        self.assertIn('moa-banking-v9-delegation-context', prompt)
+        self.assertIn('moa-banking-v10-operation-evidence', prompt)
         self.assertIn('domain Skill evidence, whole-request planning, then execution', prompt)
         self.assertIn('current stage_plan must contain read-only assessment tasks only', prompt)
         self.assertIn('use its own loaded Skill and authoritative policy sources', prompt)

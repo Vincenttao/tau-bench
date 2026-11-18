@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "version": "moa-evidence-guides-v2",
+  "origin": "MOA diagnostic revision of banking-evidence-guides. Scope, evidence and receipt guidance.",
+  "files": {
+    "banking-mcp/SKILL.md": "a933a1a1dbda0de71190ada2666c729641d14ad6f111e20c88feab8921bcd1d9",
+    "banking-mcp/guides/accounts/account-changes.md": "78f01d6dace4c57528092449ecfdb20189a5c085fdde908c49a65a00fd665179",
+    "banking-mcp/guides/accounts/account-closure.md": "c600f212293333457656d8bdc68488c1c37533f0c1f451e6c3e01d5ce2f8309b",
+    "banking-mcp/guides/accounts/account-opening.md": "e7b7cca6a3816b9b399284e940feb398f89f4199937a65ae945ce10eea2e0319",
+    "banking-mcp/guides/credit-card/card-application.md": "a7a33967ca612e87d7e4048d8e23656f69c2d3bff040bbc08428b36713310384",
+    "banking-mcp/guides/credit-card/limit-adjustment.md": "32183c8fc9822b19fc79669352f5f1242bc7920297cda107c688e1ea2c327a57",
+    "banking-mcp/guides/disputes/transaction-dispute.md": "daf51cb78eea96d8cf873693596b8669f96278affc20a031bfd59eb2ba20a9aa",
+    "banking-mcp/guides/payments/transfer.md": "f823739eec57eace33f474c6b1ecc5fbb59b9fa7665b437a03c48d06dcc0f834",
+    "catalog.json": "6c137898ba1f26d198e9fb5adce0a671bd6472f7f1e5835aa2ed61ef464858cd"
+  },
+  "language": "en"
+}

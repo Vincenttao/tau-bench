@@ -14,6 +14,7 @@ from deepagent_java_agent import FACADES
 from benchmark_mcp import BenchmarkMcpFacade
 from skill_assets import skill_init_payload
 from domain_boundary import DomainBoundary, candidate_description, moa_ownership_rules
+from receipt_context import ReceiptContext
 from runtime_protocol import customer_reply
 from conversation_input import task_input
 
@@ -38,6 +39,7 @@ class MoaPilotAgent(JavaMoaAgent):
         self.language = benchmark_language
         self.prompt_version = 'evidence-todo-v1'
         self.receipts = {}
+        self.completed_calls = set()
         self.waiting_task = None
         self.worker = None
         self.evidence_lock = threading.Lock()
@@ -74,11 +76,13 @@ class MoaPilotAgent(JavaMoaAgent):
     def _start(self, state):
         self.directory = Path(os.environ['JAVA_LOG_DIR']).parent / 'moa'
         self.directory.mkdir(parents=True, exist_ok=False)
+        self.receipt_context = ReceiptContext(self.directory)
         rules = json.loads((ROOT / 'studies/banking-architecture-comparison/contracts/business-ownership.json').read_text())
         rules = moa_ownership_rules(rules['operations'], DOMAINS)
         schemas = [tool.openai_schema for tool in self.tools]
         candidates = [{'id': name, 'description': candidate_description(name, description, rules), 'url': 'http://127.0.0.1:1'}
                       for name, description in DOMAINS.items()]
+        runtime = json.loads((ARM / 'config/diagnostic-runtime.json').read_text())
         for candidate in candidates:
             name = candidate['id']
             namespace = self.session_id + '-' + name
@@ -86,8 +90,9 @@ class MoaPilotAgent(JavaMoaAgent):
                          if name in rules.get(schema['function']['name'], {}).get('allowed_requesters', [])]
             facade = BenchmarkMcpFacade(permitted, namespace, self.events, self.directory / name / 'mcp')
             FACADES.append(facade)
-            facade.events = DomainBoundary(name, rules, self.events, self.receipts, facade.deliver)
-            init = {'role': 'domain', 'agent_id': name, 'session_id': namespace,
+            facade.events = DomainBoundary(name, rules, self.events, self.receipts, facade.deliver_if_waiting,
+                                          context=self.receipt_context)
+            init = {**runtime, 'role': 'domain', 'agent_id': name, 'session_id': namespace,
                     'workspace': str(self.directory / name / 'workspace'), 'model': os.environ['OPENAI_MODEL'],
                     'domain_policy': self.domain_policy + '\nYour assigned business responsibility: '
                                      + candidate['description'] + '. Do not perform another domain\'s writes.',
@@ -95,15 +100,26 @@ class MoaPilotAgent(JavaMoaAgent):
                     'language': self.language, 'system_prompt_version': self.prompt_version, **skill_init_payload()}
             _, descriptor = self._host(init)
             candidate['url'] = descriptor['url']
-        self.proc, descriptor = self._host({'role': 'main', 'agent_id': 'banking-moa',
+        self.proc, descriptor = self._host({**runtime, 'role': 'main', 'agent_id': 'banking-moa',
             'session_id': self.session_id, 'workspace': str(self.directory / 'main'),
-            'model': os.environ['OPENAI_MODEL'], 'domain_policy': self.domain_policy, 'candidates': candidates})
+            'model': os.environ['OPENAI_MODEL'], 'domain_policy': self.domain_policy, 'candidates': candidates,
+            'receipt_context': str(self.receipt_context.path)})
         self.main_url = descriptor['url']
         self._record('pilot_scope', {'full_continuation_acceptance': False, 'formal_comparison': False})
 
     def _send(self, value):
         if value['type'] == 'tool_result':
-            deliver, local_id = self.receipts.pop(value['tool_call_id'])
+            call_id = value['tool_call_id']
+            if call_id in self.completed_calls:
+                self._record('duplicate_official_reply', {'call_id': call_id})
+                return
+            if call_id not in self.receipts:
+                self._record('unmatched_official_reply', {'call_id': call_id})
+                return
+            deliver, local_id = self.receipts[call_id]
+            self.receipt_context.reply(call_id, value['content'], value['error'])
+            self.completed_calls.add(call_id)
+            del self.receipts[call_id]
             self._record('official_receipt', {'call_id': value['tool_call_id'], 'error': value['error']})
             deliver(local_id, value['content'], value['error'])
         elif value['type'] == 'user':

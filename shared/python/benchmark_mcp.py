@@ -225,6 +225,15 @@ class BenchmarkMcpFacade:
         self.log('evidence', {'id': call_id, 'operation': operation, 'raw': raw, 'model_view': view, 'result': result, 'metrics': metrics, 'end': time.time()})
         return result
 
+    def deliver_if_waiting(self, call_id, content, error):
+        """Deliver to a live waiter; the MOA caller retains its independent official receipt."""
+        with self.lock:
+            slot = self.pending.get(call_id)
+            if self.closed or slot is None or slot.full():
+                return False
+            slot.put_nowait({'content': content, 'error': error})
+            return True
+
     def deliver(self, call_id, content, error):
         with self.lock:
             slot = self.pending.get(call_id)

@@ -4,7 +4,7 @@ import com.moaagent.agent.support.PromptTemplates;
 
 /** Banking instructions layered over the unmodified native orchestration contract. */
 public final class BankingPrompts {
-    public static final String VERSION = "moa-banking-v9-delegation-context";
+    public static final String VERSION = "moa-banking-v10-operation-evidence";
 
     private BankingPrompts() { }
 
@@ -45,6 +45,8 @@ public final class BankingPrompts {
             Execution phase: call stage_finalize for the native confirmation, then execute the frozen tasks in dependency order. Missing, failed, deferred, skipped, or ambiguous prerequisite outcomes must not authorize a dependent write. Before the final reply, reconcile every original outcome with actual receipts and blockers. For linked writes, reconcile returned business parameters as well as receipts. A later successful write does not repair an earlier record that expresses a contradictory customer choice. If one task records that a resource should remain active while a dependent task removes or replaces it, treat the result as inconsistent unless the customer explicitly requested that transition. Customer satisfaction, successful transport, and partial completion do not establish completion of the whole request.
             Before recommending a product, distinguish mandatory conditions from ranking preferences. Compare the available candidates against every condition using actual domain results. 'At least' includes equality, while 'more than' does not; compare the stated threshold, not a competing product's higher maximum. A published possible range is not a guaranteed approval or approved limit. Apply the user's stated ranking order only after checking eligibility, including subscription conditions, fees and the relevant spending category. Do not invent a ranking preference.
             When new facts arrive, reconcile them with the earlier recommendation and explain any change. If domain results are incomplete or contradictory, obtain the missing evidence through the existing delegation flow or state the uncertainty; do not invent policy. Use existing conversation and tool results, not a separate task ledger.
+            Match the verb in each delegation to the authorized goal: investigation, execution, or verification. If an authorized write remains unsubmitted, a status query or a human referral cannot fulfill it. After a refusal before submission, use the published capabilities and the existing new-request and confirmation flow for the still-open goal. Never replay an uncertain write. An amended or withdrawn authorization ends the old plan; use the latest customer request for a new plan.
+            For conflicting domain assessments, require the discovered operation description for each claimed side effect. A customer's conditional preference does not establish that an operation produces that effect. Verify which outcome a receipt actually confirms and preserve any independent outstanding action.
             Report submitted, pending and approved outcomes accurately. A completed delegation means the delegated operation returned, not that all customer goals succeeded. The customer must perform customer-only actions through the official user tools; do not claim an application was submitted without its receipt.
             Bank policy follows:
             """ + policy;

@@ -1,0 +1,55 @@
+--- A2AEnabledServeOrchestrator.java
++++ A2AEnabledServeOrchestrator.java
+@@ -303,7 +303,7 @@
+             batchCoordinator.resume(current, observer);
+         if (batchResume.isPresent()) {
+             try {
+-                return streamBatchResolution(current, batchResume.get().get(), observer);
++                return streamBatchResolution(current, awaitBatch(batchResume.get()), observer);
+             } catch (InterruptedException ex) {
+                 observer.onError(ex);
+                 return Optional.empty();
+@@ -437,7 +437,7 @@
+         if (isCoordinatorInterrupt(rawInterrupt)) {
+             try {
+                 RemoteInvocationBatchCoordinator.BatchResolution resolution =
+-                    batchCoordinator.execute(rawInterrupt, current, observer).get();
++                    awaitBatch(batchCoordinator.execute(rawInterrupt, current, observer));
+                 return streamBatchResolution(current, resolution, observer);
+             } catch (InterruptedException ex) {
+                 observer.onError(ex);
+@@ -649,6 +649,16 @@
+      * @return the next {@link ServeRequest} to continue with, or
+      *         {@link Optional#empty()} if the loop should stop
+      */
++    private static <T> T awaitBatch(java.util.concurrent.CompletableFuture<T> batch)
++            throws InterruptedException, ExecutionException {
++        long seconds = Long.getLong("banking.parent-wait-seconds", 1260L);
++        try {
++            return batch.get(seconds, java.util.concurrent.TimeUnit.SECONDS);
++        } catch (java.util.concurrent.TimeoutException ex) {
++            throw new ExecutionException("Domain response wait expired; previous writes remain uncertain", ex);
++        }
++    }
++
+     private QueryResumeResult syncResumePending(ServeRequest current, QueryStreamObserver outputObserver) {
+         if (isClientToolResume(current)) {
+             return QueryResumeResult.continueWith(current);
+@@ -657,7 +667,7 @@
+             batchCoordinator.resume(current, outputObserver);
+         if (batchResume.isPresent()) {
+             try {
+-                return queryBatchResolution(current, batchResume.get().get(), null);
++                return queryBatchResolution(current, awaitBatch(batchResume.get()), null);
+             } catch (InterruptedException ex) {
+                 return QueryResumeResult.stop();
+             } catch (ExecutionException ex) {
+@@ -691,7 +701,7 @@
+         if (isCoordinatorInterrupt(interruptData)) {
+             try {
+                 QueryResumeResult batchResult = queryBatchResolution(current,
+-                    batchCoordinator.execute(interruptData, current, outputObserver).get(), response);
++                    awaitBatch(batchCoordinator.execute(interruptData, current, outputObserver)), response);
+                 if (batchResult.response() != null) {
+                     response.setResult(batchResult.response().getResult());
+                     response.setMetadata(batchResult.response().getMetadata());

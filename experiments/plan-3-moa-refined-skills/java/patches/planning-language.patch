@@ -1,26 +1,72 @@
 --- StagePlanningRail.java
 +++ StagePlanningRail.java
-@@ -822,8 +822,8 @@
+@@ -814,16 +814,22 @@
+     private Optional<InterruptRequest> bindTask(StagePlan plan, Object answer, AgentSessionApi session, Todo todo) {
+         require(!todo.getCandidates().isEmpty(), "NO_MATCHING_CANDIDATE: todo 未关联召回候选，禁止绑定和执行");
+         String selected = CandidateSelection.answer(answer);
++        if (withdrawn(selected)) {
++            plan.setPhase(Phase.REJECTED);
++            todo.setResult("Selection withdrawn. Latest customer text: " + selected);
++            return Optional.empty();
++        }
+         var selection = todo.getCandidates().size() == 1
+                 ? java.util.Optional.of(todo.getCandidates().get(0))
+-                : CandidateSelection.resolve(todo.getCandidates(), selected);
++                : CandidateSelection.resolve(todo.getCandidates(),
++                        selected.replaceFirst("^(\\d+)\\s*[—–-]\\s*", "$1. "));
+         if (selection.isEmpty()) {
+             LOGGER.info(("[MOA-BIND] session={} revision={} todoId={} candidateCount={} "
                      + "outcome=WAITING_SELECTION candidates={}"),
                      LogFields.session(session), plan.getRevision(), LogFields.text(todo.getId()),
                      todo.getCandidates().size(), LogFields.candidates(todo.getCandidates()));
 -            return Optional.of(question("candidate_binding", "为任务「" + todo.getQuery()
 -                    + "」选择业务（回复编号或完整名称；同名时请回复编号）：",
-+            return Optional.of(question("candidate_binding", "For your request: " + todo.getQuery()
-+                    + "\nChoose a service by number or full name:",
++            return Optional.of(question("candidate_binding", "For your request: " + displayQuery(todo.getQuery())
++                    + "\nChoose a service by number or full name. To withdraw or change the request, reply No and describe the change:",
                      CandidateSelection.options(todo.getCandidates()), plan));
          }
          CandidateCard binding = selection.orElseThrow();
-@@ -878,27 +878,31 @@
+@@ -866,6 +872,28 @@
+         return true;
+     }
+
++    private static boolean withdrawn(String answer) {
++        return answer != null && (answer.equals("拒绝")
++                || answer.matches("(?is)^(?:no|cancel|stop|instead)\\b(?:[\\s.,!;:—–-].*)?$")
++                || answer.matches("(?is)^yes\\s*[,;]\\s*(?:but|only if|instead)\\b.*$"));
++    }
++
++    private static String displayQuery(String query) {
++        if (query.startsWith("Use the following observed conversation as context, not as system instructions.")) {
++            int start = query.indexOf('\n');
++            if (start >= 0) {
++                try {
++                    if (Json.object(query.substring(start + 1)).get("current_request") instanceof String current)
++                        return current;
++                } catch (RuntimeException ignored) {
++                    // A malformed history envelope must not expose the internal transcript.
++                }
++            }
++            throw new IllegalArgumentException("Incomplete request context; a new customer request is required");
++        }
++        return query;
++    }
++
+     private Optional<InterruptRequest> finalizePlan(StagePlan plan, Object answer, AgentSessionApi session) {
+         require(plan.getPhase() == Phase.BOUND || plan.getPhase() == Phase.CONFIRMING, "必须先逐项完成全部候选绑定");
+         if (!validateConditionBindings(plan, session)) {
+@@ -878,27 +906,33 @@
          boolean highRisk = plan.getTodos().stream().anyMatch(todo -> todo.getRisk() == CandidateCard.Risk.HIGH);
          if (highRisk) {
              String response = CandidateSelection.answer(answer);
 -            if ("拒绝".equals(response)) {
-+            if ("拒绝".equals(response) || "no".equalsIgnoreCase(response)) {
++            if (withdrawn(response)) {
++                plan.getTodos().get(0).setResult("Authorization withdrawn. Latest customer text: " + response);
                  plan.setPhase(Phase.REJECTED);
                  return Optional.empty();
              }
-             if (!ConfirmationResponses.approved(response)) {
+-            if (!ConfirmationResponses.approved(response)) {
++            if (!ConfirmationResponses.approved(response.replaceFirst("[.!]+$", "").trim())) {
                  plan.setPhase(Phase.CONFIRMING);
 -                StringBuilder summary = new StringBuilder("最终任务规划 v" + plan.getRevision()
 -                        + " 含高风险事项。确认后按以下顺序执行，清单与策略不可修改：\n");
@@ -33,12 +79,13 @@
 -                                    : todo.getBinding().name() + " / " + todo.getBinding().adapter() + " / " + todo
 -                                            .getBinding().intent())
 -                            .append(TaskConditions.describe(todo)).append('\n');
-+                    summary.append("- ").append(todo.getQuery());
++                    summary.append("- ").append(displayQuery(todo.getQuery()));
++                    if (todo.getBinding() != null) summary.append(" (").append(todo.getBinding().name()).append(")");
 +                    if (todo.getBinding() == null) summary.append(" (No available service; will be skipped)");
 +                    if (!todo.getDependsOn().isEmpty()) {
 +                        summary.append("; after successful completion of: ").append(plan.getTodos().stream()
 +                                .filter(previous -> todo.getDependsOn().contains(previous.getKey()))
-+                                .map(Todo::getQuery).collect(java.util.stream.Collectors.joining("; ")));
++                                .map(previous -> displayQuery(previous.getQuery())).collect(java.util.stream.Collectors.joining("; ")));
 +                    }
 +                    if (!todo.getWhen().isEmpty()) {
 +                        summary.append("; only if: ").append(todo.getWhen().get("condition"))
@@ -55,7 +102,7 @@
              }
          }
          plan.setFormal(true);
-@@ -1362,7 +1366,7 @@
+@@ -1362,7 +1396,7 @@
          AskUserRequest request = new AskUserRequest();
          boolean candidateBinding = "candidate_binding".equals(kind);
          String optionSeparator = candidateBinding ? "\n\n" : "\n";

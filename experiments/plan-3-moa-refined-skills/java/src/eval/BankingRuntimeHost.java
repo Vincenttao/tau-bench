@@ -25,12 +25,22 @@ import java.util.*;
 public class BankingRuntimeHost {
     static Map<String,Object> init;
 
+    private static int seconds(String setting, int fallback) {
+        int value = Integer.parseInt(String.valueOf(init.getOrDefault(setting, fallback)));
+        if (value < 1) throw new IllegalArgumentException("Invalid timeout: " + setting);
+        return value;
+    }
+
     @Bean
     @ConditionalOnProperty(name="banking.role", havingValue="main")
     MoaAgentRailProvider mainModelEvidence() {
         Path workspace = Path.of(String.valueOf(init.get("workspace")));
-        return role -> role == MoaAgentRailProvider.Role.MAIN
-                ? List.of(new MainModelEvidenceRail(workspace)) : List.of();
+        return role -> {
+            if (role != MoaAgentRailProvider.Role.MAIN) return List.of();
+            var observer = new MainModelEvidenceRail(workspace);
+            return init.get("receipt_context") instanceof String path
+                    ? List.of(new MainReceiptRail(Path.of(path)), observer) : List.of(observer);
+        };
     }
 
     @Bean
@@ -48,13 +58,15 @@ public class BankingRuntimeHost {
     @Bean(destroyMethod="close")
     @ConditionalOnProperty(name="banking.role", havingValue="domain")
     DeepAgentAssembly bankingDomainAssembly() throws Exception {
-        var model = new Model(DeepAgentBridge.modelClientConfig(System.getenv("OPENAI_API_KEY"),
-                System.getenv("OPENAI_BASE_URL"), 120), ModelRequestConfig.builder()
+        var client = DeepAgentBridge.modelClientConfig(System.getenv("OPENAI_API_KEY"),
+                System.getenv("OPENAI_BASE_URL"), seconds("model_request_seconds", 120));
+        client.setStreamIdleSeconds((double) seconds("domain_stream_idle_seconds", 600));
+        var model = new Model(client, ModelRequestConfig.builder()
                 .temperature(0.0).topP(1.0).modelName(String.valueOf(init.get("model"))).build());
         var domainInit = new java.util.HashMap<String, Object>(init);
         domainInit.put("domain_policy", BankingPrompts.domainPolicy(String.valueOf(init.get("domain_policy"))));
         var assembly = new DeepAgentAssembly(domainInit, model);
-        assembly.agent.deepConfig().setCompletionTimeout(1200.0);
+        assembly.agent.deepConfig().setCompletionTimeout((double) seconds("domain_completion_seconds", 1200));
         return assembly;
     }
 
@@ -69,6 +81,8 @@ public class BankingRuntimeHost {
         System.setOut(System.err);
         try {
             init = DeepAgentBridge.read();
+            int waitSeconds = seconds("parent_wait_seconds", 1260);
+            System.setProperty("banking.parent-wait-seconds", String.valueOf(waitSeconds));
             String role = String.valueOf(init.get("role"));
             if (!Set.of("main", "domain").contains(role)) throw new IllegalArgumentException("Unknown Runtime role");
             String id = String.valueOf(init.get("agent_id"));
@@ -86,11 +100,11 @@ public class BankingRuntimeHost {
             defaults.put("openjiuwen.service.llm.api-base", System.getenv().getOrDefault("OPENAI_BASE_URL", "https://example.invalid/v1"));
             defaults.put("openjiuwen.service.llm.model-name", init.get("model"));
             defaults.put("openjiuwen.service.llm.temperature", 0.0);
-            defaults.put("openjiuwen.service.llm.timeout", "120s");
+            defaults.put("openjiuwen.service.llm.timeout", seconds("model_request_seconds", 120) + "s");
             defaults.put("moa.skill-agent.enabled", false);
             defaults.put("moa.orchestration.workspace", workspace.toString());
-            defaults.put("moa.orchestration.analysis-timeout", "120s");
-            defaults.put("moa.orchestration.arbitration-timeout", "120s");
+            defaults.put("moa.orchestration.analysis-timeout", seconds("model_request_seconds", 120) + "s");
+            defaults.put("moa.orchestration.arbitration-timeout", seconds("model_request_seconds", 120) + "s");
             if (role.equals("domain")) {
                 defaults.put("spring.autoconfigure.exclude", "com.moaagent.runtime.orchestration.MoaRuntimeAutoConfiguration");
             } else {
@@ -111,7 +125,7 @@ public class BankingRuntimeHost {
                     defaults.put(prefix + "url", item.get("url"));
                     defaults.put(prefix + "streaming", true);
                     // Non-streaming A2A waits for a whole domain turn, not one model call.
-                    defaults.put(prefix + "timeout-seconds", init.getOrDefault("remote_timeout_seconds", 1260));
+                    defaults.put(prefix + "timeout-seconds", seconds("remote_timeout_seconds", 1260));
                 }
             }
             var app = new SpringApplication(BankingRuntimeHost.class);

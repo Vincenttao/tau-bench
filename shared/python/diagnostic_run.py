@@ -59,6 +59,10 @@ def build_manifest(arm, task_id, runtime_pilot=False, model_override=None, api_b
             'baseline_model': plan['model_profile']['request_model'],
             'baseline_api_base': GATEWAY,
         }
+    if arm == 3 and runtime_pilot:
+        runtime = read(directory / 'config/diagnostic-runtime.json')
+        manifest['moa_runtime'] = runtime
+        manifest['skill_release'] = skill_release_identity(runtime['skill_release'])
     return manifest
 
 
@@ -73,6 +77,10 @@ def prepare(arm, task_id, output, runtime_pilot=False, model_override=None, api_
     files += [ROOT / 'shared/java/run-deepagent.sh', ROOT / 'shared/java/pom.xml', ROOT / 'shared/java/classpath.txt']
     if runtime_pilot:
         directory = ROOT / 'experiments' / ARMS[arm]
+        if arm == 3:
+            files.append(directory / 'config/diagnostic-runtime.json')
+            release = ROOT / 'shared/skills/releases' / manifest['skill_release']['version']
+            files += [release / name for name in ['release.json', *manifest['skill_release']['files']]]
         files += list((directory / 'python').glob('*.py'))
         files += list((directory / 'java/src').rglob('*.java'))
         files += list((directory / 'java/patches').glob('*'))
@@ -115,7 +123,7 @@ def verify_inputs(manifest, root=ROOT):
             raise ValueError('Prepared dependency changed: ' + name)
 
 
-def execute(manifest, key):
+def execute(manifest, key, *, batch_lock_fd=None):
     if not key:
         raise ValueError('OPENAI_API_KEY is required')
     verify_inputs(manifest)
@@ -130,7 +138,8 @@ def execute(manifest, key):
     with (output / 'supervisor.log').open('w') as log:
         proc = subprocess.Popen([str(python), str(ROOT / 'shared/python/run_episode.py'),
                                  '--manifest', str(output / 'manifest.json')],
-                                env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+                                env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True,
+                                pass_fds=() if batch_lock_fd is None else (batch_lock_fd,))
         try:
             proc.wait(timeout=manifest['limits']['episode_timeout_seconds'])
         except subprocess.TimeoutExpired:

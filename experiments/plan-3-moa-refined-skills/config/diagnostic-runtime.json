@@ -1,0 +1,9 @@
+{
+  "skill_release": "moa-evidence-guides-v2",
+  "main_prompt_version": "moa-banking-v10-operation-evidence",
+  "parent_wait_seconds": 1260,
+  "model_request_seconds": 120,
+  "domain_stream_idle_seconds": 600,
+  "domain_completion_seconds": 1200,
+  "remote_timeout_seconds": 1260
+}
