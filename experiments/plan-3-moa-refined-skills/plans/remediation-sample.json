@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "task_ids": ["task_043", "task_054", "task_031"],
+  "trial": 0,
+  "seed": 300,
+  "max_starts_per_task": 1
+}
