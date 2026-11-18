@@ -105,7 +105,7 @@ class TaskSession:
         else:
             raise ValueError('Unknown proposal status')
 
-    def handle(self, message, content, proposals, *, now, last_question='', context_complete=True, route_proposals=None, last_assistant_message='', context_quote=None):
+    def handle(self, message, content, proposals, *, now, last_question='', context_complete=True, route_proposals=None, last_assistant_message='', context_quote=None, format_failure=False):
         with self.lock:
             self.task.call('receive', episode=self.task.episode, message=message, content=content)
             stem = hashlib.sha256(message.encode()).hexdigest()
@@ -116,10 +116,11 @@ class TaskSession:
                 status = self.task.call('message_status', message=message)['status']
                 if status == 'pending': self.commit(proposal)
                 return proposal
-            if attempt_path.exists():
+            if attempt_path.exists() and not format_failure:
                 raise RuntimeError('Prior inference outcome unknown or failed; no blind retry')
             # Input was persisted and blocks dispatch before any model request.
-            self.task.call('charge', now=now)
+            if not format_failure:
+                self.task.call('charge', now=now)
             state = self.task.call('status', now=now)
             snapshot = {'episode_id': self.task.episode, 'message_id': message,
                         'based_on_revision': state['revision'], 'source': 'official-user',
@@ -141,7 +142,12 @@ class TaskSession:
                     'message_id': message, 'based_on_revision': state['revision'],
                     'input_snapshot': snapshot, 'targets': [], 'new_goal_proposals': []}
             else:
-                proposal = self.router.interpret(snapshot)
+                if format_failure:
+                    proposal = {'status': 'clarify', 'reason': 'input_format_unresolved',
+                                'message_id': message, 'based_on_revision': state['revision'],
+                                'input_snapshot': snapshot, 'targets': [], 'new_goal_proposals': []}
+                else:
+                    proposal = self.router.interpret(snapshot)
             durable_json(result_path, proposal)
             self.commit(proposal)
             return proposal

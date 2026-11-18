@@ -12,6 +12,7 @@ import functools
 
 import jsonschema
 from controlled_effects import digest
+from planner_client import ProposalFormatError
 from task_session import durable_json, ARM, ROOT
 
 
@@ -65,6 +66,7 @@ class CallTape:
             return result
         except Exception as error:
             row.update(status='error', error_type=type(error).__name__)
+            if isinstance(error, ProposalFormatError): row['format_feedback'] = str(error)
             raise
         finally:
             after = budget.call('status', now=int(time.time()))['calls'] if budget is not None else 0
@@ -99,6 +101,7 @@ class ReplayTape:
     def finish(self, row):
         if self.clock is not None: self.clock.set(row['after'])
         if row['status'] != 'completed':
+            if row['error_type'] == 'ProposalFormatError': raise ProposalFormatError(row['format_feedback'])
             if row['error_type'] == 'ValueError': raise ValueError('Captured provider failure; no external request')
             raise RuntimeError('Captured provider failure; no external request')
         return copy.deepcopy(row['result'])

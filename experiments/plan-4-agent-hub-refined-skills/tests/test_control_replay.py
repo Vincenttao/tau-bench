@@ -28,10 +28,19 @@ class Planner:
             return {'completed_goal_ids': [g['goal_id'] for g in state['visible_state']['task']['goals']],
                 'comparison': None, 'claims': [{'quote': state['candidate_response'], 'kind': 'operation',
                     'evidence_refs': [r for r, v in state['visible_state']['evidence'].items() if v['source'] == 'official-tool']}]}
+        if purpose == 'dispatch-policy':
+            doc = next(doc for doc in state['documents'].values() if doc['source'] == 'official-policy')
+            return {'fragment_numbers': [doc['fragments'][-1]['number']]}
+        dispatch_fields = {}
+        if purpose == 'tool-step':
+            ref, text = next((r,v['content']) for r,v in state['evidence'].items()
+                             if v['source'] == 'official-user' and '8' in v['content'])
+            dispatch_fields['argument_bindings'] = [{'parameter': 'amount', 'mode': 'literal',
+                                                     'sources': [{'ref': ref, 'quote': text}]}]
         goal = state.get('goal') or state['task']['goals'][0]
-        return {'goal_id': goal['goal_id'], 'status': 'proposed',
+        return {'goal_id': goal['goal_id'], 'status': 'proposed', **dispatch_fields, **({'goal_relation':'direct_action', 'goal_basis':'The customer requested the synthetic update.', 'expected_effect':'The value changes.'} if purpose=='tool-step' else {}),
             'policy_refs': [r for r, v in state['evidence'].items() if v['source'] == 'official-policy'],
-            'conditions': [{'id': 'requested', 'statement': 'Customer requested writing synthetic value 8.',
+            'conditions': [{**({'clause_ids':list(state['dispatch_clauses'])} if purpose=='tool-step' else {}), 'id': 'requested', 'statement': 'Customer requested writing synthetic value 8.',
                 'evidence_refs': list(state['evidence'])}]}
 
 

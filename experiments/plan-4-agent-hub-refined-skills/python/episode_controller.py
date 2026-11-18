@@ -11,16 +11,22 @@ from control_recording import recorded, logical_task, CallTape, AuditPlanner, Au
 from business_judgment import BusinessJudge, parse_credit_dispute_receipt
 from controlled_effects import ControlledEffects, digest
 from input_router import InputRouter
-from planner_client import GOAL_SCHEMA, STEP_SCHEMA
+from dispatch_policy import (CLAUSE_SCHEMA, SCOPE_VERSION, POLICY, partition_fragments, split_later_clauses, review_scope_exclusions, check_bindings,
+                             policy_fragments, numbered_documents, resolve_numbers, material_plan, review_contract)
+from planner_client import ProposalFormatError, GOAL_SCHEMA, STEP_SCHEMA, TOOL_STEP_SCHEMA
 from runtime_guards import EvidenceStore, JudgmentService, OutputGate, resolve_operation
 from task_session import TaskSession, durable_json
-from response_review import ResponseReview
+from response_review import ResponseReview, QUESTION_REVISION
 from receipt_registry import ReceiptInterpreter
 from completion_policy import permits_completion
 from controlled_nodes import ControlledNodes
 from output_claims import ClaimGate
 from quote_binding import bind_proposal
 from input_proposals import normalize_context_routes
+
+
+class StepPlanRefused(PermissionError):
+    """The proposal failed validation before adoption or dispatch."""
 
 
 class EpisodeController:
@@ -86,8 +92,12 @@ class EpisodeController:
         self.nodes.hub = hub
 
     def visible(self, now):
-        return {'task': self.state(now), 'evidence': self.evidence.visible(), 'last_question': self.last_question,
-                'last_assistant_message': self.last_assistant_message}
+        state = {'task': self.state(now), 'evidence': self.evidence.visible(), 'last_question': self.last_question,
+                 'last_assistant_message': self.last_assistant_message}
+        duties = self._goal_obligations()
+        if duties:
+            state['operation_obligations'] = duties
+        return state
 
     def pending_user_questions(self, *, now):
         return list(dict.fromkeys(goal['waiting_for'] for goal in self.state(now)['goals']
@@ -125,25 +135,65 @@ class EpisodeController:
         durable_json(self.directory/'last-assistant-message.json', {'content': content})
         self.evidence.add('controller', json.dumps({'type': kind, 'content': content}, ensure_ascii=False))
 
+    def _input_proposal(self, message, content, now):
+        path = self.directory/('goals-'+digest(message)+'.json')
+        if path.exists():
+            return json.loads(path.read_text())
+        attempt = path.with_suffix('.attempt.json')
+        if attempt.exists():
+            record = json.loads(attempt.read_text())
+            if record.get('status') == 'repair_started':
+                # A lost response to a tool-free formatting call cannot authorize a route.
+                # Preserve its spent reservation and hand the original message to durable clarification.
+                durable_json(path, None)
+                return None
+            if record.get('status') != 'repairable':
+                raise RuntimeError('Previous S2 proposal outcome unknown; no replay')
+            if self.state(now)['revision'] != record['repair_revision']:
+                raise PermissionError('Input revision changed before format repair')
+            state = record['state']
+        else:
+            state = {'content': content, 'task': self.state(now), 'last_question': self.last_question,
+                     'last_assistant_message': self.last_assistant_message}
+            durable_json(attempt, {'status': 'started'})
+            try:
+                proposal = self.planner.complete('new-goals', state, GOAL_SCHEMA)
+            except ProposalFormatError as error:
+                state = {**state, 'format_feedback': str(error)}
+                durable_json(attempt, {'status': 'repairable', 'state': state,
+                                       'repair_revision': self.state(now)['revision']})
+            else:
+                durable_json(path, proposal)
+                return proposal
+
+        # The retry uses the original planning snapshot. Its separate budget charge
+        # advances the Java revision; input commit still checks the current revision.
+        durable_json(attempt, {'status': 'repair_started'})
+        try:
+            proposal = self.planner.complete('new-goals', state, GOAL_SCHEMA)
+        except ProposalFormatError:
+            proposal = None
+        except Exception:
+            durable_json(attempt, {'status': 'repair_failed'})
+            raise
+        durable_json(path, proposal)
+        return proposal
+
     @recorded
     def user(self, message, content, *, now):
-        # Receive before even tool-free S2 planning: new input blocks old dispatch immediately.
         self.task.call('receive', episode=self.task.episode, message=message, content=content)
         self.evidence.add('official-user', content)
-        plan_path = self.directory/('goals-'+digest(message)+'.json')
-        if plan_path.exists(): proposal = json.loads(plan_path.read_text())
-        else:
-            attempt = plan_path.with_suffix('.attempt.json')
-            if attempt.exists(): raise RuntimeError('Previous S2 proposal outcome unknown; no replay')
-            durable_json(attempt, {'attempted': True})
-            proposal = self.planner.complete('new-goals', {'content': content,
-                'task': self.state(now), 'last_question': self.last_question,
-                'last_assistant_message': self.last_assistant_message}, GOAL_SCHEMA)
-            durable_json(plan_path, proposal)
+        proposal = self._input_proposal(message, content, now)
+        if proposal is None:
+            result = self.inputs.handle(message, content, [], now=now, last_question=self.last_question,
+                                        format_failure=True)
+            durable_json(self.directory/'latest-input.json', result)
+            return result
         original = proposal
         proposal = normalize_context_routes(content, bind_proposal(content, proposal))
         if proposal != original:
-            durable_json(plan_path.with_suffix('.input-normalization.json'), {'original': original, 'bound': proposal,
+            normalization = self.directory/('goals-'+digest(message)+'.input-normalization.json')
+            durable_json(normalization, {'original': original, 'bound': proposal,
                 'rules': ['unique-exact-visible-text; paired-markdown-emphasis-only',
                           'coalesce-compatible-context-spans-only; preserve-conflicting-actions']})
         result = self.inputs.handle(message, content, proposal['goals'], now=now, last_question=self.last_question,
@@ -170,35 +220,265 @@ class EpisodeController:
         self.nodes.finish(node)
         return result
 
+    def _policy_inventory(self, state, now):
+        records = state['evidence']
+        fragments = policy_fragments(records)
+        operation = state['effective_operation']
+        documents, addresses = numbered_documents(fragments, records)
+        scope = {'operation': operation, 'stage': 'before_dispatch', 'documents': documents}
+        path = self.directory/('policy-inventory-'+digest([SCOPE_VERSION, scope, asdict(self.policy)])+'.json')
+        if path.exists():
+            cached = json.loads(path.read_text())
+        else:
+            selection = self.planner.complete('dispatch-policy', scope, CLAUSE_SCHEMA)
+            candidates = resolve_numbers(selection['fragment_numbers'], addresses, fragments)
+            # S2 can nominate references; the fixed S1 question determines scope.
+            source_refs = sorted({row['ref'] for row in candidates.values()})
+            evidence = {'operation': operation, 'stage': 'before_dispatch', 'candidates': candidates,
+                        'source_documents': {ref: {'source': records[ref]['source'], 'text': records[ref]['content']}
+                                             for ref in source_refs}}
+            questions = {key: {'type': 'noul', 'instructions':
+                f'Does candidate {key}, read in its original context, govern the proposed operation at the '
+                'pre-dispatch stage or prescribe handling its receipt or closing its selected goal? A rule solely '
+                'for another business operation does not. '
+                'A conditional prerequisite of this operation remains relevant even if its factual trigger '
+                'has yet to be checked. Judge applicability, not whether the customer meets the requirement. '
+                'A Skill cannot override official policy.'} for key in candidates}
+            values, observation = self.judgments.ask(evidence, questions, now=now)
+            cached = {'spec': SCOPE_VERSION, 'candidates': candidates, 'values': values, 'observation': observation}
+            durable_json(path, cached)
+        required, unresolved = partition_fragments(cached['candidates'], cached['values'], self.policy.low, self.policy.high)
+        display = {f'P{i}': {**fragment, 'fragment_id': key}
+                   for i, (key, fragment) in enumerate({**required, **unresolved}.items(), start=1)}
+        return display, {'spec': SCOPE_VERSION, 'observation': cached['observation'], 'scope_digest': digest(scope),
+                         'unresolved': [alias for alias, row in display.items() if row['fragment_id'] in unresolved],
+                         'residual_fragment_count': len(fragments) - len(display)}
+
     def _plan(self, purpose, state, *, now):
-        plan = self.planner.complete(purpose, state, STEP_SCHEMA)
-        original = copy.deepcopy(plan)
+        if purpose != 'tool-step':
+            proposal = self.planner.complete(purpose, state, STEP_SCHEMA)
+            return self._validate_plan(purpose, state, proposal, now=now)
+
+        operation = state.get('effective_operation', {})
+        feedback_path = self.directory/('step-refusal-'+digest(operation)+'.json')
+        state = {**state, 'prior_receipts': self._prior_receipts()}
+        visible_refs = sorted(ref for ref, record in state.get('evidence', {}).items()
+                              if record['source'] in POLICY | {'official-user', 'official-tool', 'published-tool-contract'})
+        context = digest([visible_refs, state.get('task', {}).get('goals', []),
+                          state['prior_receipts'], state['dispatch_clauses']])
+        prior = json.loads(feedback_path.read_text()) if feedback_path.exists() else None
+        scope_revision = bool(state.get('policy_scope', {}).get('unresolved'))
+        if scope_revision:
+            # Reserve the single revision before calling S2, including across restarts or new tool-call IDs.
+            attempt = self.directory/('scope-revision-'+digest([operation, context, state['policy_scope']])+'.json')
+            if attempt.exists():
+                reason = prior['reason'] if prior and prior['context'] == context else 'revision already attempted'
+                raise PermissionError('Same scope and evidence: '+reason)
+            durable_json(attempt, {'policy_scope': state['policy_scope'], 'clauses': state['dispatch_clauses']})
+        planner_state = {**state, 'previous_refusal': prior} if prior else state
+        proposal = self.planner.complete(purpose, planner_state, TOOL_STEP_SCHEMA)
+        if prior and material_plan(prior['proposal']) == material_plan(proposal) and prior['context'] == context:
+            raise PermissionError('Rejected proposal unchanged with the same evidence: '+prior['reason'])
+        try:
+            return self._validate_plan(purpose, state, proposal, now=now)
+        except PermissionError as error:
+            durable_json(feedback_path, {'proposal': proposal, 'reason': str(error), 'context': context})
+            if proposal['status'] == 'proposed' and not scope_revision:
+                raise StepPlanRefused(str(error)) from error
+            raise
+
+    def _prior_receipts(self):
+        receipts = {}
+        for call_id, binding in self.bindings.items():
+            if binding['effective']['access'] == 'read':
+                continue
+            path = self.directory/('receipt-'+digest(call_id)+'.json')
+            if path.exists():
+                record = json.loads(path.read_text())
+                receipts[call_id] = {'operation': binding['effective'], 'receipt': record['receipt'],
+                                      'evidence_ref': record['evidence_ref']}
+        return receipts
+
+    def _goal_obligations(self, goal_id=None):
+        duties = []
+        for call_id, binding in self.bindings.items():
+            if not binding.get('later_obligations') or goal_id and binding['goal'] != goal_id:
+                continue
+            path = self.directory/('receipt-'+digest(call_id)+'.json')
+            receipt = json.loads(path.read_text()) if path.exists() else None
+            for key, clause in binding['later_obligations'].items():
+                duties.append({'goal_id': binding['goal'], 'operation': binding['effective'],
+                               'call_id': call_id, 'clause_id': key, 'clause': clause, 'receipt': receipt})
+        return duties
+
+    def _validate_plan(self, purpose, state, original, *, now):
+        plan = copy.deepcopy(original)
         if plan['status'] != 'proposed' or not plan['conditions']:
             raise PermissionError('S2 has not established a bounded plan')
+        if purpose == 'tool-step' and 'policy_refs' not in plan:
+            linked = set(plan.get('goal_basis_clause_ids', []))
+            for condition in plan['conditions']:
+                linked.update(condition.get('clause_ids', []))
+            clauses = state['dispatch_clauses']
+            if linked - clauses.keys():
+                raise PermissionError('Unobserved policy clause in step')
+            plan['policy_refs'] = sorted({clauses[key]['ref'] for key in linked})
         plan['policy_refs'] = self.evidence.resolve_refs(plan['policy_refs'])
         for condition in plan['conditions']:
-            condition['evidence_refs'] = self.evidence.resolve_refs(condition['evidence_refs'])
+            if not condition['evidence_refs']:
+                raise PermissionError(f"Condition {condition['id']}: empty evidence references")
+            try:
+                condition['evidence_refs'] = self.evidence.resolve_refs(condition['evidence_refs'])
+            except PermissionError as error:
+                if str(error) != 'Unobserved evidence reference':
+                    raise
+                raise PermissionError(f"Condition {condition['id']}: unobserved evidence reference") from error
+            if purpose == 'tool-step' and 'prior_receipt_call_id' in condition:
+                prior = state['prior_receipts'].get(condition.pop('prior_receipt_call_id'))
+                if (prior is None or prior['evidence_ref'] not in condition['evidence_refs']
+                        or prior['receipt']['status'] not in ('succeeded', 'accepted')):
+                    raise PermissionError(f"Condition {condition['id']}: correlated prior receipt missing or unresolved")
+                previous_args = prior['operation']['arguments']
+                current_args = state['effective_operation']['arguments']
+                if any(previous_args[k] != current_args[k] for k in previous_args.keys() & current_args.keys()
+                       if k.endswith('_id')):
+                    raise PermissionError(f"Condition {condition['id']}: prior receipt subject mismatch")
         known = self.evidence.visible()
         if not plan['policy_refs'] or any(ref not in known or known[ref]['source'] not in
                                          ('official-policy', 'published-skill') for ref in plan['policy_refs']):
             raise PermissionError('Plan has missing or fabricated policy references')
-        for condition in plan['conditions']:
-            if not condition['evidence_refs'] or any(ref not in known for ref in condition['evidence_refs']):
-                raise PermissionError('Condition evidence is missing or fabricated')
         snapshot = {'proposal': plan, **state}
         questions = {
             'goal_link': {'type': 'noul', 'instructions': 'Does the proposal concern the stated customer goal and the actual proposed action or completion result?'},
             'conditions_grounded': {'type': 'noul', 'instructions': 'Are the proposed conditions grounded in the original customer requirements and applicable visible policy, without inventing or weakening requirements?'},
             'conditions_complete': {'type': 'noul', 'instructions': 'Do the proposed conditions cover all applicable requirements for this proposed action or goal completion, including prerequisites, ordering and confirmation where required by visible policy?'}}
+        if purpose == 'tool-step':
+            stage_current, later, stage_checks = split_later_clauses(state['dispatch_clauses'], plan.get('later_clauses', []))
+            clauses, scope_checks = review_scope_exclusions(stage_current, state.get('policy_scope', {}),
+                                                          plan.get('scope_exclusions', []), known)
+            questions.update(scope_checks)
+            questions.update(stage_checks)
+            if later:
+                plan['later_obligations'] = later
+            check_bindings(plan.get('argument_bindings', []), state['effective_operation'].get('arguments', {}), known)
+            review_contract(plan, clauses, known)
+            plan['dispatch_clauses'] = clauses
+            if 'policy_scope' in state:
+                plan['policy_scope'] = state['policy_scope']
+            for key, clause in clauses.items():
+                mapped = [c for c in plan['conditions'] if key in c['clause_ids']]
+                if key in plan.get('goal_basis_clause_ids', []):
+                    questions['basis_'+key] = {'type': 'noul', 'instructions': {
+                        'clause': clause['quote'], 'question': 'Does this clause in its source context prescribe '
+                        'or permit performing this specific effective_operation for the selected goal and object?'}}
+                    questions['clause_'+key] = {'type': 'noul', 'instructions': {
+                        'clause': clause['quote'], 'mapped_conditions': mapped,
+                        'question': 'Are all prerequisites or restrictions in this clause covered by the mapped '
+                        'conditions and proven by their cited facts for this object? If it solely directs the '
+                        'current action, there are no prior facts to prove for this clause. Any unmet trigger, '
+                        'missing prior approval, exception or prohibition fails this check.'}}
+                    continue
+                questions['clause_'+key] = {'type': 'noul', 'instructions': {
+                    'clause': clause['quote'], 'mapped_conditions': [
+                        {'statement': c['statement'], 'fact_refs': c['evidence_refs']} for c in mapped],
+                    'question': 'For this subject and final operation, do these conditions faithfully implement '
+                                'the applicable clause AND do their cited observations establish the required '
+                                'facts before dispatch, including every applicable qualification, exception or '
+                                'conflicting constraint? A policy quote alone cannot prove consent or an outcome.'}}
+            for index, binding in enumerate(plan['argument_bindings']):
+                name = binding['parameter']
+                questions[f'arg_{index}'] = {'type': 'noul', 'instructions': {
+                    'parameter': name, 'final_value': state['effective_operation']['arguments'][name],
+                    'sources': binding['sources'], 'question': 'Do these quoted sources in their original records '
+                    'support this exact final value for the correct subject, intended action and field, '
+                    'including any necessary derivation? A different customer or unrelated occurrence is insufficient.'}}
+            questions['goal_link']['instructions'] = (
+                'Does the selected active goal authorize the proposed action directly or require this step '
+                'under cited policy for this same customer and object? A shared prerequisite can advance a '
+                'single selected goal without completing it. Check the proposed goal_basis independently.')
+            for condition in plan['conditions']:
+                questions['pre_'+condition['id']] = {'type': 'noul', 'instructions': {
+                    'condition': condition['statement'],
+                    'question': 'Is this a genuine pre-dispatch requirement for this precise action under the cited policy? '
+                                'Reject a restatement of the proposed effect as already accomplished. If this requires a prior '
+                                'operation outcome, check the original condition cites a correlated receipt in prior_receipts '
+                                'for the correct subject and required status. Accepted alone cannot prove a final effect.'}}
+            # Include competing policy and observed facts for coverage and subject checks;
+            # keep dialogue internals, drafts and rejection history outside the S1 snapshot.
+            snapshot = {'proposal': plan, 'proposed_conditions': original['conditions'],
+                        'effective_operation': state['effective_operation'], 'stage': 'before_dispatch',
+                        'active_goals': [{k: goal.get(k) for k in ('goal_id', 'description', 'dependencies')}
+                                         for goal in state.get('task', {}).get('goals', [])
+                                         if goal.get('state') == 'active'],
+                        'prior_receipts': state.get('prior_receipts', {}),
+                        'dispatch_clauses': clauses, 'evidence': {
+                            ref: record for ref, record in known.items()
+                            if record['source'] in POLICY | {'official-user', 'official-tool', 'published-tool-contract'}}}
+            questions['conditions_grounded']['instructions'] = (
+                'Is every listed condition an applicable prerequisite for this exact effective_operation '
+                'with its final arguments under the visible policy and customer instructions? '
+                'A future receipt or a requirement only for a later action is not a prerequisite.')
+            questions['conditions_complete']['instructions'] = (
+                'Independently check ALL visible policy and Skill records, including those the proposal did not cite. '
+                'Do the clauses retained for pre-dispatch cover every pre-dispatch prerequisite for this operation? '
+                'The proposal separately tracks later_obligations; an obligation entirely due after dispatch is not missing. '
+                'Parameter provenance is checked separately. An applicable uncited restriction means coverage fails.')
+            # Only the omission-of-source-text check is decidable by set membership.
+            # Every clause still needs its full semantic and evidence review above.
+            # Tracked later clauses have their own mandatory stage checks and remain bound
+            # through acceptance. Only excluded or unexamined text needs an omission scan.
+            if not scope_checks and state.get('policy_scope', {}).get('residual_fragment_count') == 0:
+                del questions['conditions_complete']
+            else:
+                questions['later_coverage'] = {'type': 'noul', 'instructions': 'Do the tracked later_obligations '
+                    'cover the specific receipt or closing duties imposed by the visible source documents on this '
+                    'operation or its goal? If there are none, an empty list is complete. Duties solely for other '
+                    'operations or goals are outside this check.'}
         if purpose == 'goal-completion':
+            duties = self._goal_obligations(plan['goal_id'])
+            if duties:
+                snapshot['operation_obligations'] = duties
+                for index, duty in enumerate(duties):
+                    if not duty['receipt']:
+                        raise PermissionError('Missing correlated receipt for later policy obligation')
+                    receipt_record = duty['receipt']
+                    if duty['clause']['stage'] == 'receipt':
+                        observed = receipt_record.get('receipt_obligations', {}).get('conditions', {})
+                        if observed.get(duty['clause_id']) != 'satisfied':
+                            fresh = {ref for ref, record in known.items() if record['source'] == 'official-tool'}
+                            if not fresh.difference(receipt_record.get('official_facts_at_receipt', fresh)):
+                                raise PermissionError('Outstanding receipt obligation lacks a new official observation')
+                    questions[f'obligation_{index}'] = {'type': 'noul', 'instructions': {
+                        'obligation': duty, 'question': 'Does the evidence establish this duty for the bound operation '
+                        'and customer at goal close? Check its correlated receipt and any required readback. '
+                        'The proposed response may fulfill a reporting duty, but cannot prove a bank effect.'}}
             questions['completion_boundary_grounded'] = {'type': 'noul', 'instructions':
                 'Does completion_boundary faithfully describe the original customer goal? submission means the customer requested filing or submitting a request, not receiving approval or the eventual effect. information means providing requested information; final_effect requires the actual bank outcome.'}
         if plan.get('dependencies'):
             questions['dependencies_grounded'] = {'type': 'noul', 'instructions':
                 'Does every proposed dependency represent a whole customer goal that must finish before this action under visible policy or explicit user instructions? Priority alone does not create a dependency; do not defer a service until unrelated eventual bank processing is finished.'}
         check = self.judgments.requirements(snapshot, questions, now=now)
+        if purpose == 'tool-step' and state.get('policy_scope', {}).get('unresolved'):
+            plan['scope_review'] = {'observation': check['observation_ref'],
+                                    'candidates': {key: state['dispatch_clauses'][key]
+                                                   for key in state['policy_scope']['unresolved']}}
         durable_json(self.directory/('plan-'+uuid.uuid4().hex+'.json'), {'original_proposal': original, 'proposal': plan, 'validation': check})
-        if check['status'] != 'allow': raise PermissionError('Plan evidence/coverage not established')
+        if check['status'] != 'allow':
+            failed = ', '.join(f'{name}={value}' for name, value in check['conditions'].items()
+                               if value != 'satisfied')
+            details = []
+            if purpose == 'tool-step':
+                for key, value in check['conditions'].items():
+                    if value == 'satisfied':
+                        continue
+                    if key.startswith('clause_'):
+                        details.append(state['dispatch_clauses'][key[7:]]['quote'])
+                    elif key.startswith('scope_'):
+                        details.append(state['dispatch_clauses'][key[6:]]['quote'])
+                    elif key.startswith('arg_'):
+                        details.append('argument '+plan['argument_bindings'][int(key[4:])]['parameter'])
+            raise PermissionError(f'Plan evidence/coverage not established ({failed})' +
+                                  ('; '+ ' | '.join(details) if details else ''))
         if plan.get('dependencies'):
             current = self.state(now)
             goals = {goal['goal_id']: goal for goal in current['goals']}
@@ -213,11 +493,16 @@ class EpisodeController:
     def _judge(self, plan, payload, *, now):
         records = self.evidence.visible()
         selected = set(plan['policy_refs']) | {ref for c in plan['conditions'] for ref in c['evidence_refs']}
+        for binding in plan.get('argument_bindings', []):
+            selected.update(src['ref'] for src in binding['sources'])
+        selected.update(row['ref'] for row in plan.get('dispatch_clauses', {}).values())
+        selected.update(row['ref'] for row in plan.get('scope_review', {}).get('candidates', {}).values())
         evidence = [{'ref': ref, 'episode_id': self.task.episode, 'goal_id': plan['goal_id'],
                      'source': records[ref]['source'], 'content': records[ref]['content']} for ref in sorted(selected)]
         self.task.call('charge', now=now, kind='judgment')
+        business_conditions = [{k: c[k] for k in ('id', 'statement', 'evidence_refs')} for c in plan['conditions']]
         result = BusinessJudge(self.jev, self.policy).judge(self.task.episode, plan['goal_id'], payload,
-                    digest({'policy_refs': plan['policy_refs'], 'conditions': plan['conditions']}), plan['conditions'], evidence)
+                    digest(plan), business_conditions, evidence)
         durable_json(self.directory/('business-'+uuid.uuid4().hex+'.json'), result)
         return result
 
@@ -264,10 +549,26 @@ class EpisodeController:
                 'evidence_refs': [self.policy_ref], 'model': 'deterministic-read-boundary',
                 'conditions': {'registered_read_and_subject_scope': 'satisfied'}}
         else:
-            plan = self._plan('tool-step', {**state, 'actual_call': call, 'effective_operation': operation}, now=now)
+            planning_state = {**state, 'actual_call': call, 'effective_operation': operation}
+            planning_state['dispatch_clauses'], planning_state['policy_scope'] = self._policy_inventory(planning_state, now)
+            try:
+                plan = self._plan('tool-step', planning_state, now=now)
+            except StepPlanRefused:
+                # A revision uses the existing model budget and can never resend a dispatched operation.
+                if request_deadline is not None and time.monotonic() >= request_deadline:
+                    raise
+                plan = self._plan('tool-step', planning_state, now=now)
+            if any(binding['effective'] == operation and
+                   'required_prerequisite' in (binding.get('goal_relation'), plan.get('goal_relation'))
+                   for binding in self.bindings.values()):
+                raise PermissionError('Shared prerequisite already adopted; consult its bound receipt before proceeding')
             judgment = self._judge(plan, payload, now=now)
         if plan['goal_id'] not in {g['goal_id'] for g in active}: raise PermissionError('Wrong or inactive goal')
-        if judgment['status'] != 'allow': raise PermissionError('Business conditions are unresolved or denied')
+        if judgment['status'] != 'allow':
+            missing = [condition['id']+' ('+', '.join(condition.get('clause_ids', []))+')'
+                       for condition in plan['conditions']
+                       if judgment['conditions'].get(condition['id']) != 'satisfied']
+            raise PermissionError('Business evidence unresolved or denied: '+', '.join(missing))
         identifiers = {k: v for k, v in operation['arguments'].items()
                        if k.endswith('_id') or 'last_4' in k or k in ('agent_tool_name', 'discoverable_tool_name')}
         step = (operation['name']+':'+digest(identifiers)) if operation['access'] != 'read' else ('read:'+call['id'])
@@ -276,6 +577,10 @@ class EpisodeController:
         final_now = int(time.time()) if request_deadline is not None else now
         adopted = self.effects.adopt(plan['goal_id'], step, call['name'], call['arguments'], judgment, now=final_now)
         self.bindings[call['id']] = {'operation': adopted, 'effective': operation, 'goal': plan['goal_id']}
+        if plan.get('later_obligations'):
+            self.bindings[call['id']]['later_obligations'] = plan['later_obligations']
+        if plan.get('goal_relation'):
+            self.bindings[call['id']]['goal_relation'] = plan['goal_relation']
         durable_json(self.bindings_path, self.bindings)
         node = 'evidence-investigation' if operation['access'] == 'read' else 'guarded-operation'
         self.task.call('start_node', node_id=adopted, goal=plan['goal_id'], revision=self.state(now)['revision'],
@@ -320,8 +625,68 @@ class EpisodeController:
         node_status = {'succeeded': 'completed', 'rejected': 'failed', 'accepted': 'waiting',
                        'pending': 'waiting', 'unknown': 'unknown'}[receipt['status']]
         self.task.call('observe_node', node_id=binding['operation'], status=node_status)
-        durable_json(receipt_path, {'call_id': call_id, 'receipt': receipt, 'evidence_ref': ref, 'raw_error': error})
+        record = {'call_id': call_id, 'receipt': receipt, 'evidence_ref': ref, 'raw_error': error}
+        duties = {key: row for key, row in binding.get('later_obligations', {}).items() if row['stage'] == 'receipt'}
+        if duties:
+            record['official_facts_at_receipt'] = sorted(k for k, v in self.evidence.visible().items()
+                                                        if v['source'] == 'official-tool')
+        durable_json(receipt_path, record)
+        if duties:
+            check = self.judgments.requirements({'operation': binding['effective'],
+                'persisted_operation_binding': {'call_id': call_id, 'operation_id': binding['operation'],
+                                                'effective_operation': binding['effective']},
+                'persisted_receipt_record': record, 'official_result': content}, {
+                key: {'type': 'noul', 'instructions': {'clause': row['quote'],
+                      'question': 'Do the durable host records and the returned official result establish this clause for this operation? '
+                                  'A separate required readback still outstanding is not satisfied.'}}
+                for key, row in duties.items()}, now=now)
+            durable_json(receipt_path, {**record, 'receipt_obligations': check})
         return receipt
+
+    def _wait_for_question(self, goal_id, question, proof, *, now):
+        node = self.nodes.start('await-user', goal_id, {'question': question}, proof, now=now)
+        self.task.call('wait_goal', goal=goal_id, revision=self.state(now)['revision'], question=question)
+        self.nodes.wait(node)
+
+    @recorded
+    def repair_question(self, draft, *, now):
+        state = self.visible(now)
+        active = {g['goal_id']: g for g in state['task']['goals'] if g['state'] == 'active'}
+        if not active:
+            return None
+        proposal = self.planner.complete('question-revision', {'draft': draft,
+            'active_goals': {key: g['description'] for key, g in active.items()},
+            'customer_messages': [r['content'] for r in state['evidence'].values() if r['source'] == 'official-user']},
+            QUESTION_REVISION)
+        candidate = proposal['clarification']
+        if candidate is None:
+            return None
+        question = candidate['question'].strip()
+        goal = active.get(candidate['goal_id'])
+        if (not goal or not candidate['source_quote'].strip() or candidate['source_quote'] not in draft
+                or not question or len(question) > 300):
+            return None
+        proof = self.judgments.requirements({'draft_request': candidate['source_quote'], 'question': question,
+            'goal': goal['description'], 'evidence': state['evidence']}, {
+            'needed_fact': {'type': 'noul', 'instructions': 'Does this question request one specific fact or choice '
+                'still needed from this customer for the selected goal under the visible rules, and raised in draft_request? '
+                'A fact established in the available evidence or available only from bank records does not qualify.'},
+            'neutral_question': {'type': 'noul', 'instructions': 'Is the text solely a neutral request for that '
+                'information without asserting verification, completion, terms, prices or a preferred answer?'}}, now=now)
+        if proof['status'] != 'allow':
+            return None
+        proposal = self.review.extract(question, state)
+        if proposal['completed_goal_ids'] or 'claims' not in proposal:
+            return None
+        review = self.review.check(question, state, proposal=proposal, now=now)
+        if review['status'] != 'allow' or self.claims.check(question, proposal['claims'], state, now=now)['status'] != 'allow':
+            return None
+        self._wait_for_question(goal['goal_id'], question, proof, now=now)
+        self.last_question = question
+        durable_json(self.directory/'last-question.json', {'question': question})
+        self.evidence.add('controller', json.dumps({'type': 'assistant_question', 'content': question}, ensure_ascii=False))
+        self.remember_assistant(question)
+        return question
 
     @recorded
     def response(self, content, *, waiting, now):
@@ -381,8 +746,6 @@ class EpisodeController:
                 values, ref = self.judgments.ask({'question': content}, questions, now=now)
                 for i, goal in enumerate(goals):
                     if values[f'goal{i}_wait'] > self.policy.high:
-                        node = self.nodes.start('await-user', goal['goal_id'], {'question': content},
+                        self._wait_for_question(goal['goal_id'], content,
                             {'status': 'allow', 'model': self.policy.expected_model, 'observation_ref': ref}, now=now)
-                        self.task.call('wait_goal', goal=goal['goal_id'], revision=self.state(now)['revision'], question=content)
-                        self.nodes.wait(node)
         return result

@@ -77,9 +77,18 @@ class FakePlanner:
   if purpose=='new-goals':
    return {'goals':[] if state['task']['goals'] else [{'description':'write synthetic value 8 after confirmation','quote':state['content']}],
      'existing_routes':[{'goal_id':goal['goal_id'],'action':'respond' if goal['waiting_for'] else 'context','quote':state['content']} for goal in state['task']['goals']]}
+  if purpose == 'dispatch-policy':
+      doc = next(doc for doc in state['documents'].values() if doc['source'] == 'official-policy')
+      return {'fragment_numbers': [doc['fragments'][-1]['number']]}
+  dispatch_fields = {}
+  if purpose == 'tool-step':
+      ref, text = next((r,v['content']) for r,v in state['evidence'].items()
+                       if v['source'] == 'official-user' and '8' in v['content'])
+      dispatch_fields['argument_bindings'] = [{'parameter': 'amount', 'mode': 'literal',
+                                               'sources': [{'ref': ref, 'quote': text}]}]
   goal=state.get('goal') or next(g for g in state['task']['goals'] if g['state']=='active')
-  return {'goal_id':goal['goal_id'],'status':'proposed','policy_refs':[ref for ref, record in state['evidence'].items() if record['source'] in ('official-policy','published-skill')],
-          'conditions':[{'id':'fixture_result' if purpose=='goal-completion' else 'fixture_consent',
+  return {'goal_id':goal['goal_id'],'status':'proposed', **dispatch_fields, **({'goal_relation':'direct_action', 'goal_basis':'The customer requested the synthetic update.', 'expected_effect':'The value changes.'} if purpose=='tool-step' else {}),'policy_refs':[ref for ref, record in state['evidence'].items() if record['source'] in ('official-policy','published-skill')],
+          'conditions':[{**({'clause_ids':list(state['dispatch_clauses'])} if purpose=='tool-step' else {}), 'id':'fixture_result' if purpose=='goal-completion' else 'fixture_consent',
            'statement':'Synthetic value 8 was written.' if purpose=='goal-completion' else 'Customer confirmed synthetic value 8.',
            'evidence_refs':list(state['evidence'])}]}
 

@@ -8,6 +8,7 @@ import subprocess
 import sys
 import shutil
 
+from dispatch_policy import SCOPE_VERSION
 from task_session import ARM, ROOT, durable_json
 sys.path.insert(0, str(ROOT/'shared/python'))
 from diagnostic_run import build_manifest as baseline_manifest
@@ -70,11 +71,13 @@ def prepare(task, output, model=None, *, api_base=None, skill_manifest=None):
                                    'input_policy': 'banking-proposed-evidence-policy', 'node_version': 'banking-evidence-control',
                                    'proposal_thinking': 'disabled', 'proposal_max_tokens': 4096,
                                    'response_review_max_tokens': 8192,
-                                   'input_protocol': 's2-proposed-actions-and-shared-context',
+                                   'input_protocol': 'bounded-input-format-repair',
+                                   'step_policy_binding': 'action-basis-and-factual-prerequisites',
                                    'output_protocol': 'atomic-factual-claims-with-coverage-check',
                                    'actual_model_identity': 'pin-first-response-per-layer; reject-drift',
                                    'native_transport': 'private-loopback-buffered-sse',
                                    'native_ttft_comparable': False}
+    manifest['runtime_bindings']['dispatch_policy_scope_spec'] = SCOPE_VERSION
     manifest['runtime_bindings']['jev_context_policy'] = 'long-context-header-at-65536-json-bytes; no-truncation-or-retry'
     output.mkdir(parents=True, exist_ok=False)
     if 'frozen_skill_source' in manifest:

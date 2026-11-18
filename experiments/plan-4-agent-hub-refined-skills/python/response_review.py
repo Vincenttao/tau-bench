@@ -24,6 +24,14 @@ SCHEMA['properties']['claims'] = {'type': 'array', 'maxItems': 64, 'items': {
         'evidence_refs': {'type': 'array', 'items': {'type': 'string'}}},
     'required': ['quote', 'kind', 'evidence_refs'], 'additionalProperties': False}}
 SCHEMA['required'].append('claims')
+QUESTION = {'type': 'object', 'additionalProperties': False,
+    'required': ['source_quote', 'question', 'goal_id'], 'properties': {
+        'source_quote': {'type': 'string', 'minLength': 1},
+        'question': {'type': 'string', 'minLength': 1, 'maxLength': 300},
+        'goal_id': {'type': 'string', 'minLength': 1}}}
+
+QUESTION_REVISION = {'type': 'object', 'additionalProperties': False, 'required': ['clarification'],
+                     'properties': {'clarification': {'anyOf': [QUESTION, {'type': 'null'}]}}}
 
 
 class ResponseReview:

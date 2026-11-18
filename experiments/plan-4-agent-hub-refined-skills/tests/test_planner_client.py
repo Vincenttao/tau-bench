@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'python'))
-from planner_client import PlannerClient
+from planner_client import PlannerClient, ProposalFormatError
 
 class PlannerTests(unittest.TestCase):
     def test_validates_output_and_reserves_before_send(self):
@@ -28,4 +28,9 @@ class PlannerTests(unittest.TestCase):
                 self.assertEqual(result,{'value':1})
             response['choices'][0]['message']['content']='{"value":"bad"}'
             with patch.object(client.opener,'open',side_effect=sent):
-                with self.assertRaises(ValueError): client.complete('fixture',{}, {'type':'object','properties':{'value':{'type':'integer'}}})
+                with self.assertRaises(ProposalFormatError): client.complete('fixture',{}, {'type':'object','properties':{'value':{'type':'integer'}}})
+            response['model'] = 'unexpected-version'
+            with patch.object(client.opener, 'open', side_effect=sent):
+                with self.assertRaises(ValueError) as drift:
+                    client.complete('fixture', {}, {'type':'object'})
+                self.assertNotIsInstance(drift.exception, ProposalFormatError)

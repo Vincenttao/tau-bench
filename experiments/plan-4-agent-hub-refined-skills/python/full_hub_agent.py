@@ -24,7 +24,7 @@ from episode_controller import EpisodeController
 from hub_gate import HubGate
 from input_router import RoutingPolicy
 from jev_provider import JevClient
-from planner_client import PlannerClient
+from planner_client import PlannerClient, ProposalFormatError
 from task_session import JavaTask, durable_json, ARM, ROOT
 from model_proxy import ModelProxy
 from controlled_effects import digest
@@ -93,7 +93,7 @@ class FullHubAgent(DeepAgentJavaAgent):
                 durable_json(self.control_root/('refusal-'+uuid.uuid4().hex+'.json'),
                              {'call_id': call, 'operation': operation, 'reason': str(error)})
                 return {'success': False, 'error': 'CONTROL_REFUSED',
-                        'content': 'Controller refused this operation: '+str(error)+'. Obtain evidence or ask the customer; do not retry an uncertain write.'}
+                        'content': 'Controller refused this operation: '+str(error)+'. Review the current operation and its prerequisites. Check available records first. Ask the customer only for a specific missing fact or authorization they can provide. Do not retry an uncertain write.'}
         self.facade.invoke = controlled_invoke
         log_dir = Path(os.environ['JAVA_LOG_DIR']); log_dir.mkdir(parents=True, exist_ok=True)
         self.log = (log_dir/(self.session_id+'.stderr.log')).open('a')
@@ -135,6 +135,7 @@ class FullHubAgent(DeepAgentJavaAgent):
 
     def _next(self):
         corrections = 0
+        repair_attempted = False
         while True:
             result = super()._next()
             if result.get('type') == 'control_request':
@@ -170,7 +171,19 @@ class FullHubAgent(DeepAgentJavaAgent):
             context_key = digest({'goals': [{k: g[k] for k in ('goal_id', 'description', 'state', 'outcome')}
                 for g in self.controller.state(int(time.time()))['goals']],
                 'evidence': sorted(self.controller.evidence.visible())})
-            if corrections >= 3 or not self.progress.reserve(context_key):
+            # An interrupted native AskUser expects an answer to its exact text.
+            # Return controller feedback to that checkpoint before changing its question.
+            may_repair = not result.get('waiting') and not repair_attempted
+            allowed_revision = (corrections < 3 or may_repair) and self.progress.reserve(context_key)
+            if may_repair and allowed_revision:
+                repair_attempted = True
+                try:
+                    question = self.controller.repair_question(result['content'], now=int(time.time()))
+                except ProposalFormatError:
+                    question = None
+                if question:
+                    return {'type': 'content', 'waiting': True, 'content': question}
+            if corrections >= 3 or not allowed_revision:
                 durable_json(self.control_root/'output-exhausted.json', {'reason': 'independent-output-validation-failed'})
                 text = 'I cannot verify a complete answer from the available evidence. Please clarify the remaining request or let me obtain the missing information.'
                 self.controller.remember_assistant(text, kind='controller_clarification')
@@ -179,6 +192,8 @@ class FullHubAgent(DeepAgentJavaAgent):
             super()._send({'type': 'controller_review', 'content':
                 'Independent controller review found unsupported claims or unfinished obligations. '
                 'Revise using only actual evidence; explicitly describe missing information. This is not customer consent. '
+                'When a specific customer fact is missing, ask one short neutral question only. Omit statements '
+                'about status, recommendations, options, fees and amounts unless needed to identify the request. '
                 'Validation details: '+json.dumps(verdict, ensure_ascii=False)})
 
     def generate_next_message(self, message, state):
@@ -190,7 +205,9 @@ class FullHubAgent(DeepAgentJavaAgent):
         if isinstance(message, UserMessage):
             route = self.controller.user('user-turn-'+str(len(state.messages)), message.content, now=int(time.time()))
             if route['status'] != 'ready':
-                if route['status'] == 'no_business_action':
+                if route.get('reason') == 'input_format_unresolved':
+                    text = 'I have kept your message and your existing requests. This step is still pending.'
+                elif route['status'] == 'no_business_action':
                     text = 'How can I help with your banking request?'
                 else:
                     text = self.controller.clarification_prompt(now=int(time.time()))
