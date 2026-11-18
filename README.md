@@ -14,7 +14,7 @@
 - `experiments/`：只保留四个实验；各自有README、plan.json、test-design.md、prepare.py、plans和reports。
 - `studies/`：共同基准、22题清单和对比规则；英文22题×4方案×1次，共88个正式位置，尚未执行。
 - [shared/](shared/README.md)：公共输入准备、Skill、Java/MCP组件、工作台和测试；方案1/2复用同一代码。
-- `docs/`：目录设计和迁移记录。
+- `docs/` 包含目录设计、迁移记录和 [openJiuwen Java 智能体框架总体架构建议](docs/architecture/openjiuwen-java-framework.md)。
 - [archive/](archive/README.md)：未压缩旧工程、历史设计、报告和本地轨迹。
 
 隐藏目录 `.deps/`、`.venv*` 是本地基准和环境；`.git/`及工具管理目录保留。历史AGENTS.md按用户原要求保持字节不变，其中旧目录和命令已失效；当前入口以本README和shared/README.md为准。

@@ -6,7 +6,7 @@
 2. [能力装配与配置来源](capability-assembly.md)：四方案能力矩阵、声明/观察/验证区别、配置和报告生成设计、MOA部署拓扑。
 3. [交付与失败定位](delivery-and-diagnosis.md)：W1–W7交付顺序、保护上限检查、两张结果表、五段偏差定位和失败报告模板。
 
-关于银行测试暴露的跨 Agent 规划、授权和部分成功问题，见[基于 Core Java 与 Runtime Java 的框架增强建议](java-business-task-execution.md)。
+跨应用的设计见 [openJiuwen Java 智能体框架总体架构](../../../docs/architecture/openjiuwen-java-framework.md)。银行测试暴露的授权、部分成功及恢复问题见[可靠业务执行专题](java-business-task-execution.md)。
 
 | 方案实施细化 | 当前主要交付目标 |
 | --- | --- |
