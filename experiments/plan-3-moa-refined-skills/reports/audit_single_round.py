@@ -5,10 +5,28 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import re
 
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def timeout_observations(episode):
+    observations = []
+    exception = episode / 'exception.txt'
+    if exception.is_file() and 'A2A task remained working until the bridge call deadline' in exception.read_text():
+        observations.append({'source': exception.name, 'layer': 'parent_bridge', 'phase': 'still_working'})
+    for path in sorted((episode / 'moa').glob('*.stderr.log')):
+        with path.open(errors='replace') as stream:
+            for line in stream:
+                match = re.search(r'model call timeout at (\w+), effective timeout ([\d.]+)s, reason: stream_idle timeout', line)
+                if match:
+                    record = {'source': path.name, 'layer': 'model_stream_idle',
+                              'phase': match[1], 'seconds': float(match[2])}
+                    if record not in observations:
+                        observations.append(record)
+    return observations
 
 
 def main():
@@ -34,10 +52,11 @@ def main():
               'task_ids_and_order': [row['task_id'] for row in progress['cases']] == expected,
               'selection_size': len(progress['cases']) == total,
               'all_started_once': all(row['starts'] == 1 for row in progress['cases'])}
-    rows, identities, prompt_hashes = [], set(), set()
+    rows, identities, prompt_hashes, timeouts = [], set(), set(), {}
     for row in progress['cases']:
         task = row['task_id']
         directory = args.run / task
+        evidence_path = str(directory.relative_to(root)) if directory.is_relative_to(root) else str(directory)
         manifest = json.loads((directory / 'manifest.json').read_text())
         if 'manifest_sha256' in row:
             checks[task + '_manifest'] = digest(directory / 'manifest.json') == row['manifest_sha256']
@@ -54,9 +73,11 @@ def main():
             rows.append({'task_id': task, 'status': row['status'], 'reward': None, 'db_match': None,
                          'unmatched_reference_actions': None, 'termination_reason': None,
                          'duration_seconds': None, 'error_type': None, 'starts': row['starts'],
-                         'evidence': str(directory.relative_to(root))})
+                         'evidence': evidence_path})
             continue
         summary = json.loads(summary_file.read_text())
+        if summary['status'] == 'execution_error':
+            timeouts[task] = timeout_observations(directory / 'episodes' / task)
         checks[task + '_summary_matches_ledger'] = summary == row['result']
         checks[task + '_terminal'] = summary['status'] not in ('planned', 'started')
         prompt = directory / 'episodes' / task / 'moa/main/main-prompt-meta.json'
@@ -70,6 +91,14 @@ def main():
         db_match, unmatched = None, None
         if summary['status'] == 'scored':
             checks[task + '_official_result_and_prompt'] = record.is_file() and prompt.is_file()
+            if 'moa_runtime' in manifest:
+                contract = args.run / 'batch-freeze/studies/banking-architecture-comparison/contracts/business-ownership.json'
+                domains = json.loads(contract.read_text())['agents']
+                expected_docs = {k: v for k, v in manifest['skill_release']['files'].items() if k.endswith('.md')}
+                for domain in domains:
+                    folder = record.parent / 'moa' / domain / 'workspace/skills'
+                    deployed = {str(p.relative_to(folder)): digest(p) for p in folder.rglob('*.md')}
+                    checks[task + '_skill_' + domain] = deployed == expected_docs
         if record.exists() and summary['status'] == 'scored':
             sim, = json.loads(record.read_text())['simulations']
             checks[task + '_official_identity'] = sim['task_id'] == task and sim['trial'] == episode['trial']
@@ -88,7 +117,7 @@ def main():
                      'termination_reason': summary.get('termination_reason'),
                      'duration_seconds': summary.get('duration'),
                      'error_type': summary.get('error_type'), 'starts': row['starts'],
-                     'evidence': str(directory.relative_to(root))})
+                     'evidence': evidence_path})
     checks['single_prompt'] = len(prompt_hashes) <= 1
     checks['single_configuration'] = len(identities) == 1
     checks['frozen_batch_inputs'] = all(digest(root / name) == digest(args.run / 'batch-freeze' / name) == sha
@@ -97,13 +126,15 @@ def main():
     scored = sum(row['status'] == 'scored' for row in rows)
     failed = scored - passed
     unscored = sum(row['status'] not in ('scored', 'planned', 'started') for row in rows)
+    not_started = sum(row['starts'] == 0 for row in rows)
+    checks['outcomes_cover_sample'] = passed + failed + unscored + not_started == total
     result = {'scope': 'single MOA diagnostic, not formal architecture acceptance',
               'batch_status': progress['status'], 'passed': passed, 'failed': failed,
-              'unscored': unscored, 'not_started': sum(row['starts'] == 0 for row in rows),
+              'unscored': unscored, 'not_started': not_started,
               'fixed_denominator': total, 'success_rate': passed / total,
               'scored_success_rate': passed / scored if scored else None,
               'scoring_coverage': scored / total, 'checks': checks,
-              'audit_pass': all(checks.values()), 'rows': rows,
+              'audit_pass': all(checks.values()), 'rows': rows, 'timeout_observations': timeouts,
               'observed_prompt_hashes': sorted(prompt_hashes)}
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / 'batch-audit.json').write_text(json.dumps(result, indent=2) + '\n')
