@@ -5,8 +5,8 @@ import sys
 import unittest
 
 ARM = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ARM / 'python'))
-from domain_boundary import DomainBoundary, moa_ownership_rules
+sys.path[:0] = [str(ARM / 'python'), str(ARM.parents[1] / 'shared/python')]
+from domain_boundary import DomainBoundary, candidate_description, moa_ownership_rules
 
 
 class DomainBoundaryTest(unittest.TestCase):
@@ -53,3 +53,34 @@ class DomainBoundaryTest(unittest.TestCase):
             DomainBoundary(name, rules, events, receipts, lambda *args: None).put(event)
         self.assertEqual(set(receipts), {'cards-one', 'payments-one'})
         self.assertEqual(events.qsize(), 2)
+
+    def test_unlock_and_history_apply_same_domain_permissions(self):
+        rules = {'unlock_discoverable_agent_tool': {'allowed_requesters': ['a', 'b']},
+                 'list_discoverable_agent_tools': {'allowed_requesters': ['a', 'b']},
+                 'op_a': {'allowed_requesters': ['a']}, 'op_b': {'allowed_requesters': ['b']}}
+        events, receipts, delivered = queue.Queue(), {}, []
+        boundary = DomainBoundary('a', rules, events, receipts, lambda *args: delivered.append(args))
+        with self.assertRaises(PermissionError):
+            boundary.put({'type': 'tool_calls', 'tool_calls': [{'id': 'one',
+                'name': 'unlock_discoverable_agent_tool', 'arguments': {'agent_tool_name': 'op_b'}}]})
+        boundary.put({'type': 'tool_calls', 'tool_calls': [{'id': 'history',
+            'name': 'list_discoverable_agent_tools', 'arguments': {}}]})
+        callback, local_id = receipts[events.get_nowait()['tool_calls'][0]['id']]
+        callback(local_id, 'Your called agent tools:\n   tool_name: op_a\n   tool_name: op_b', False)
+        self.assertIn('op_a', delivered[0][1])
+        self.assertNotIn('op_b', delivered[0][1])
+
+    def test_descriptions_cover_owned_allowed_writes_in_effective_contract(self):
+        import json
+        contract = json.loads((ARM.parents[1] /
+            'studies/banking-architecture-comparison/contracts/business-ownership.json').read_text())
+        rules = moa_ownership_rules(contract['operations'], contract['agents'])
+        for actor in contract['agents']:
+            description = candidate_description(actor, 'Public summary', rules)
+            for op, rule in rules.items():
+                if rule['access'] == 'write' and rule['principal'] == actor:
+                    self.assertIn(actor, rule['allowed_requesters'])
+                    name = op.rsplit('_', 1)[0] if op[-4:].isdigit() else op
+                    self.assertIn(name.replace('_', ' '), description)
+                    if rule['discoverable']:
+                        self.assertNotIn(op, description)

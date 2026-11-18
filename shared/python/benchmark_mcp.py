@@ -15,6 +15,14 @@ def digest(value):
     return hashlib.sha256(value.encode()).hexdigest()
 
 
+class OperationNotAuthorized(PermissionError):
+    """An explicit pre-dispatch refusal; nothing has reached the official queue."""
+
+    def __init__(self, owners):
+        super().__init__('Operation is outside this business Agent scope')
+        self.owners = tuple(owners)
+
+
 class KnowledgeProjection:
     # Exact official BM25 formatter; unknown formats always retain the complete response.
     pattern = re.compile(r'(?m)^(\d+)\. ([^\n]*)\n   ID: ([^\n]+)\n   Score: ([^\n]+)\n   Content: ')
@@ -195,7 +203,15 @@ class BenchmarkMcpFacade:
             self.invocations[call_id] = {'signature': signature}
             self.pending[call_id] = slot
             self.log('skill', {'id': call_id, 'mcp_request_id': mcp_id, 'operation': operation, 'arguments': parameters, 'start': time.time()})
-            self.events.put({'type': 'tool_calls', 'tool_calls': [{'id': call_id, 'name': operation, 'arguments': parameters}]})
+            try:
+                self.events.put({'type': 'tool_calls', 'tool_calls': [
+                    {'id': call_id, 'name': operation, 'arguments': parameters}]})
+            except OperationNotAuthorized as refusal:
+                self.pending.pop(call_id)
+                result = {'success': False, 'submitted': False, 'error': 'DOMAIN_NOT_AUTHORIZED',
+                          'authorized_domains': refusal.owners}
+                self.log('refusal', {'id': call_id, 'operation': operation, **result})
+                return result
         try:
             response = slot.get(timeout=self.timeout)
         except queue.Empty:

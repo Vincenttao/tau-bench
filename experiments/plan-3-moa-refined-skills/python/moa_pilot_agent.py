@@ -13,7 +13,7 @@ from java_agent import JavaMoaAgent, PROCESSES
 from deepagent_java_agent import FACADES
 from benchmark_mcp import BenchmarkMcpFacade
 from skill_assets import skill_init_payload
-from domain_boundary import DomainBoundary, moa_ownership_rules
+from domain_boundary import DomainBoundary, candidate_description, moa_ownership_rules
 from runtime_protocol import customer_reply
 from conversation_input import task_input
 
@@ -77,7 +77,7 @@ class MoaPilotAgent(JavaMoaAgent):
         rules = json.loads((ROOT / 'studies/banking-architecture-comparison/contracts/business-ownership.json').read_text())
         rules = moa_ownership_rules(rules['operations'], DOMAINS)
         schemas = [tool.openai_schema for tool in self.tools]
-        candidates = [{'id': name, 'description': description, 'url': 'http://127.0.0.1:1'}
+        candidates = [{'id': name, 'description': candidate_description(name, description, rules), 'url': 'http://127.0.0.1:1'}
                       for name, description in DOMAINS.items()]
         for candidate in candidates:
             name = candidate['id']
