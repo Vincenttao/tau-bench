@@ -101,3 +101,28 @@ class QuestionAndPhaseTests(TestCase):
                 updated, = ctl.state(900)['goals']
                 self.assertEqual((updated['goal_id'], updated['state'], updated['outcome']), (goal,'active','undetermined'))
                 self.assertFalse(ctl.bindings)
+
+    def test_unresolved_receipt_requires_new_official_facts_before_completion_review(self):
+        from controlled_effects import digest
+        from task_session import durable_json
+        ref = self.ctl.evidence.add('official-tool', 'Receipt: delivery change accepted.')
+        self.ctl.bindings['call'] = {'goal': 'delivery', 'effective': {'name':'change_delivery'},
+            'later_obligations': {'P2': {'stage':'receipt','quote':'Verify the recorded update.',
+                                         'ref':self.ctl.policy_ref}}}
+        path = self.ctl.directory/('receipt-'+digest('call')+'.json')
+        durable_json(path, {'receipt': {'status':'accepted'}, 'evidence_ref':ref, 'official_facts_at_receipt':[ref],
+                            'receipt_obligations': {'conditions':{'P2':'unknown'}}})
+        plan = {'status':'proposed','goal_id':'delivery','policy_refs':[self.ctl.policy_ref],
+                'conditions':[{'id':'done','statement':'Updated','evidence_refs':[ref]}]}
+        self.ctl.evidence.add('official-user', 'I think it is done.')
+        with self.assertRaisesRegex(PermissionError, 'lacks a new official observation'):
+            self.ctl._validate_plan('goal-completion', {}, plan, now=900)
+        proof = self.ctl.evidence.add('official-tool', 'Readback: updated delivery on account A.')
+        state = {'evidence':self.ctl.evidence.visible()}
+        plan['conditions'][0]['evidence_refs'] = [proof]
+        with patch.object(self.ctl.judgments, 'requirements', return_value={'status':'unknown',
+                'conditions':{'obligation_0':'unknown'}}) as review:
+            with self.assertRaisesRegex(PermissionError, 'obligation_0=unknown'):
+                self.ctl._validate_plan('goal-completion', state, plan, now=900)
+            self.assertIn('obligation_0', review.call_args.args[1])
+        self.assertEqual(self.ctl._validate_plan('goal-completion', state, plan, now=900)['goal_id'], 'delivery')
