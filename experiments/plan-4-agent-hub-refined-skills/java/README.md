@@ -33,4 +33,8 @@ bash experiments/plan-4-agent-hub-refined-skills/java/build-runtime.sh
 
 `InvocationSequence` 为跨执行器重启的 MCP 调用分配不重复序号；`TodoLimit` 将原生 Todo 创建限制为最多 32 项。模型调用前通过控制协议预扣预算，原生执行器只获得本机私有模型代理的临时令牌。
 
-现有实现已连接官方诊断 driver，但节点类型的完整路径覆盖、依赖规划接线及完整隔离重放仍需分别验收。节点注册表中有名字不等于该路径已经实际执行，不能仅凭本模块测试声明完整设计通过。
+`ControllerAskUserRail`隔离挂起问询期间的内部审查与用户答案。桥接器根据私有事件类型构造来源信封；审查被转换成工具拒绝，真实用户字符串仍由原生`AskUserRail`处理。`ControllerAskUserRailTest`直接调用真实SDK格式化器验证4个正反例，`build-runtime.sh`包含该测试。拒绝问询、再次发布、用户确认及重启恢复另由原生夹具验证。
+
+现有实现已连接官方诊断driver，依赖等待与恢复已有真实Java/Go组件测试。整链隔离重放会重新执行Java协调器和Go Hub，见[运行说明](../python/RUNTIME.md)。离线宿主可通过私有启动参数读取原目标UUID序列，拒绝重复、非规范UUID、已有前缀不匹配或序列耗尽；该参数不在模型RPC中，生产默认仍由协调器生成UUID。`ReplayIdentityTest`检查身份与原预算、期限保持。
+
+节点注册表中有名字不等于完整路径已经验收；本模块测试、原生重启夹具、真实模型官方诊断与39项设计发布验收分别报告。

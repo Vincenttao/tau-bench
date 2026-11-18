@@ -1,0 +1,372 @@
+{
+  "summary": {
+    "overall_score": 77,
+    "risk_level": "high",
+    "primary_pattern": "delegation",
+    "secondary_patterns": [
+      "calling"
+    ],
+    "conclusion": "Focused source review only: common 33/40, pattern 35/50, proportionality 9/10. Not a business score or all-39 acceptance. Provenance defect fixed locally; live business improvement unverified."
+  },
+  "scope": {
+    "repository": "tau3",
+    "revision": "working tree first TDD group; historical diagnostic snapshots reviewed separately",
+    "reviewed_paths": [
+      "experiments/plan-4-agent-hub-refined-skills/python/episode_controller.py",
+      "experiments/plan-4-agent-hub-refined-skills/python/input_router.py",
+      "experiments/plan-4-agent-hub-refined-skills/python/full_hub_agent.py",
+      "experiments/plan-4-agent-hub-refined-skills/python/input_proposals.py",
+      "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/HubDeepAgentBridge.java",
+      "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/ControllerAskUserRail.java"
+    ],
+    "excluded_paths": [
+      "Other three experiment implementations",
+      "Official benchmark tool/simulator/grader modifications",
+      "Full 39-contract release certification"
+    ],
+    "languages": [
+      "Python",
+      "Java"
+    ],
+    "frameworks": [
+      "openJiuwen native DeepAgent",
+      "Go Hub adopt/ledger",
+      "TypeSafe Jev"
+    ]
+  },
+  "entities": [
+    {
+      "id": "coordinator",
+      "entity_type": "controller",
+      "symbol": "EpisodeController",
+      "file": "experiments/plan-4-agent-hub-refined-skills/python/episode_controller.py",
+      "state_owner": "Java TaskCoordinator owns authoritative task state; Python owns evidence and dialogue pointers"
+    },
+    {
+      "id": "executor",
+      "entity_type": "agent",
+      "symbol": "HubDeepAgentAssembly",
+      "file": "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/HubDeepAgentAssembly.java",
+      "tools": [
+        "Native Skill",
+        "Todo",
+        "ask_user",
+        "controlled MCP"
+      ]
+    },
+    {
+      "id": "judgment",
+      "entity_type": "validator",
+      "symbol": "JudgmentService",
+      "file": "experiments/plan-4-agent-hub-refined-skills/python/runtime_guards.py",
+      "model": "Jev configured by RoutingPolicy"
+    },
+    {
+      "id": "bridge",
+      "entity_type": "transport",
+      "symbol": "HubDeepAgentBridge",
+      "file": "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/HubDeepAgentBridge.java"
+    },
+    {
+      "id": "gate",
+      "entity_type": "controller",
+      "symbol": "ControlledEffects",
+      "file": "experiments/plan-4-agent-hub-refined-skills/python/controlled_effects.py",
+      "notes": "Calls real Go Hub; official queue owns bank effects."
+    }
+  ],
+  "interaction_edges": [
+    {
+      "id": "E1",
+      "source": "coordinator",
+      "target": "executor",
+      "classification": "delegation",
+      "classification_confidence": 0.95,
+      "control_owner": "coordinator",
+      "execution_mode": "streaming",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/episode_controller.py",
+          "symbol": "pending_user_questions",
+          "line_start": 92,
+          "confidence": "direct",
+          "summary": "Live user waits determine clarification; accepted input retires an orphaned pointer without accepting business."
+        }
+      ],
+      "rationale": "Native executor chooses bounded intermediate tools; principal validates outputs and effects."
+    },
+    {
+      "id": "E2",
+      "source": "coordinator",
+      "target": "judgment",
+      "classification": "not_agent_interaction",
+      "classification_confidence": 0.99,
+      "execution_mode": "sync",
+      "evidence": [
+        {
+          "file": "logs/full-official-task054-20261118-b02/freeze-sources/experiments/plan-4-agent-hub-refined-skills/python/episode_controller.py",
+          "symbol": "_plan",
+          "line_start": 154,
+          "confidence": "direct",
+          "summary": "One generic condition-completeness question covers tool-step and whole-goal evaluation; recorded identity-log proposal included dispute workflow conditions."
+        }
+      ],
+      "rationale": "Typed model service supplies observations, not autonomous business authority."
+    },
+    {
+      "id": "E3",
+      "source": "coordinator",
+      "target": "executor",
+      "classification": "calling",
+      "classification_confidence": 0.98,
+      "trigger": "Rejected output while native question is pending",
+      "payload_type": "private controller source envelope",
+      "response_type": "QUESTION_NOT_PUBLISHED tool observation",
+      "control_owner": "coordinator",
+      "execution_mode": "event_driven",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/ControllerAskUserRail.java",
+          "symbol": "resumeValue",
+          "line_start": 11,
+          "confidence": "direct",
+          "summary": "Private source envelope becomes a rejected tool result; user text remains String."
+        }
+      ],
+      "rationale": "Bounded feedback retains principal authority; it does not impersonate a customer or create peer negotiation."
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "COM-03",
+      "severity": "medium",
+      "title": "Compatible context duplicates rejected",
+      "conclusion": "Fixed and regression tested; semantic approval remains independent.",
+      "why_it_matters": "Useful customer context was blocked before judgment.",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/input_proposals.py",
+          "symbol": "normalize_context_routes",
+          "line_start": 6,
+          "confidence": "direct",
+          "summary": "Only exact context duplicates merge; other actions and malformed references survive for rejection."
+        }
+      ],
+      "recommendation": "Keep coalescing restricted to context, exact evidence and candidate bounds."
+    },
+    {
+      "rule_id": "COM-04/DEL-02",
+      "severity": "medium",
+      "title": "Stale question pointer reused",
+      "conclusion": "Fixed and restart tested; genuine waits remain pending.",
+      "why_it_matters": "The adapter repeatedly asked for already supplied identity details.",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/episode_controller.py",
+          "symbol": "pending_user_questions",
+          "line_start": 92,
+          "confidence": "direct",
+          "summary": "Live user waits determine clarification; accepted input retires an orphaned pointer without accepting business."
+        }
+      ],
+      "recommendation": "Derive live prompts from authoritative task waits."
+    },
+    {
+      "rule_id": "COM-08/DEL-08",
+      "severity": "high",
+      "title": "Controller review formatted as customer answer",
+      "conclusion": "Historical source failure confirmed in both real traces; fixed in first TDD group.",
+      "why_it_matters": "Unpublished questions were resumed using reviewer content as customer answers.",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/ControllerAskUserRail.java",
+          "symbol": "resumeValue",
+          "line_start": 11,
+          "confidence": "direct",
+          "summary": "Private source envelope becomes a rejected tool result; user text remains String."
+        },
+        {
+          "file": "logs/full-official-task054-20261118-b02/freeze-sources/experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/HubDeepAgentBridge.java",
+          "symbol": "HubDeepAgentBridge.run",
+          "line_start": 91,
+          "line_end": 98,
+          "confidence": "direct",
+          "summary": "Both user and controller_review events enter the same pending InteractiveInput string-resume path."
+        },
+        {
+          "file": "/home/vincent/openjiuwen/tau3/logs/full-official-task003-20261118-b00/episodes/task_003/hub-control/native-transport/28f0bab7c9f140a99303f939e53b087b.request.json",
+          "symbol": "messages[53].content",
+          "confidence": "direct",
+          "summary": "Actual tool message contains both the user-answer formatter and internal controller-review text."
+        },
+        {
+          "file": "/home/vincent/openjiuwen/tau3/logs/full-official-task054-20261118-b02/episodes/task_054/hub-control/native-transport/189c01f25eda4282a9c67d4d369e1262.request.json",
+          "symbol": "messages[47].content",
+          "confidence": "direct",
+          "summary": "Actual tool message contains both the user-answer formatter and internal controller-review text."
+        }
+      ],
+      "recommendation": "Use a private source envelope and tool rejection; retain actual customer-answer semantics."
+    },
+    {
+      "rule_id": "CALL-04/DEL-07",
+      "severity": "high",
+      "title": "Single-action and whole-goal criteria need separation",
+      "conclusion": "Pending next TDD group; runtime coverage refusals remain enforced.",
+      "why_it_matters": "Irrelevant or incomplete action plans cannot safely justify a bank operation.",
+      "evidence": [
+        {
+          "file": "logs/full-official-task054-20261118-b02/freeze-sources/experiments/plan-4-agent-hub-refined-skills/python/episode_controller.py",
+          "symbol": "_plan",
+          "line_start": 154,
+          "confidence": "direct",
+          "summary": "One generic condition-completeness question covers tool-step and whole-goal evaluation; recorded identity-log proposal included dispute workflow conditions."
+        }
+      ],
+      "recommendation": "Test published per-action prerequisites separately from total goal acceptance, with positive and negative fixtures."
+    }
+  ],
+  "hard_failures": [
+    {
+      "rule_id": "COM-08/DEL-08",
+      "severity": "high",
+      "title": "Controller review formatted as customer answer",
+      "conclusion": "Historical source failure confirmed in both real traces; fixed in first TDD group.",
+      "why_it_matters": "Unpublished questions were resumed using reviewer content as customer answers.",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/ControllerAskUserRail.java",
+          "symbol": "resumeValue",
+          "line_start": 11,
+          "confidence": "direct",
+          "summary": "Private source envelope becomes a rejected tool result; user text remains String."
+        },
+        {
+          "file": "logs/full-official-task054-20261118-b02/freeze-sources/experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/HubDeepAgentBridge.java",
+          "symbol": "HubDeepAgentBridge.run",
+          "line_start": 91,
+          "line_end": 98,
+          "confidence": "direct",
+          "summary": "Both user and controller_review events enter the same pending InteractiveInput string-resume path."
+        },
+        {
+          "file": "/home/vincent/openjiuwen/tau3/logs/full-official-task003-20261118-b00/episodes/task_003/hub-control/native-transport/28f0bab7c9f140a99303f939e53b087b.request.json",
+          "symbol": "messages[53].content",
+          "confidence": "direct",
+          "summary": "Actual tool message contains both the user-answer formatter and internal controller-review text."
+        },
+        {
+          "file": "/home/vincent/openjiuwen/tau3/logs/full-official-task054-20261118-b02/episodes/task_054/hub-control/native-transport/189c01f25eda4282a9c67d4d369e1262.request.json",
+          "symbol": "messages[47].content",
+          "confidence": "direct",
+          "summary": "Actual tool message contains both the user-answer formatter and internal controller-review text."
+        }
+      ],
+      "recommendation": "Use a private source envelope and tool rejection; retain actual customer-answer semantics."
+    }
+  ],
+  "design_smells": [
+    {
+      "rule_id": "CALL-04/DEL-07",
+      "severity": "high",
+      "title": "Single-action and whole-goal criteria need separation",
+      "conclusion": "Pending next TDD group; runtime coverage refusals remain enforced.",
+      "why_it_matters": "Irrelevant or incomplete action plans cannot safely justify a bank operation.",
+      "evidence": [
+        {
+          "file": "logs/full-official-task054-20261118-b02/freeze-sources/experiments/plan-4-agent-hub-refined-skills/python/episode_controller.py",
+          "symbol": "_plan",
+          "line_start": 154,
+          "confidence": "direct",
+          "summary": "One generic condition-completeness question covers tool-step and whole-goal evaluation; recorded identity-log proposal included dispute workflow conditions."
+        }
+      ],
+      "recommendation": "Test published per-action prerequisites separately from total goal acceptance, with positive and negative fixtures."
+    }
+  ],
+  "simplification_opportunities": [
+    {
+      "target": "context normalization and question provenance",
+      "current_design": "S2 proposals and native interactive tools",
+      "recommended_design": "function",
+      "reason": "Keep deterministic syntax/lifecycle/source handling in code; retain semantic judgment separately.",
+      "evidence": [
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/python/input_proposals.py",
+          "symbol": "normalize_context_routes",
+          "line_start": 6,
+          "confidence": "direct",
+          "summary": "Only exact context duplicates merge; other actions and malformed references survive for rejection."
+        },
+        {
+          "file": "experiments/plan-4-agent-hub-refined-skills/java/src/main/java/eval/ControllerAskUserRail.java",
+          "symbol": "resumeValue",
+          "line_start": 11,
+          "confidence": "direct",
+          "summary": "Private source envelope becomes a rejected tool result; user text remains String."
+        }
+      ]
+    }
+  ],
+  "remediation_plan": [
+    {
+      "priority": "P0",
+      "action": "Completed first TDD group F01/F02/F03; retain negative paths and genuine waits.",
+      "addresses_rules": [
+        "COM-03",
+        "COM-04",
+        "COM-08",
+        "DEL-08"
+      ],
+      "acceptance_criteria": [
+        "118 Python tests pass",
+        "Four Java source-provenance checks pass",
+        "Rejected question is a tool error, real user confirmation resumes, restart fixture passes"
+      ]
+    },
+    {
+      "priority": "P0",
+      "action": "Next: action-specific policy preconditions and stage-versus-total completion.",
+      "addresses_rules": [
+        "CALL-04",
+        "DEL-07"
+      ],
+      "acceptance_criteria": [
+        "Legitimate action positive case",
+        "Missing policy/identity/confirmation refused",
+        "Partial information does not assert overall completion"
+      ]
+    },
+    {
+      "priority": "P1",
+      "action": "Next: evidence-origin feedback and investigation convergence before fresh official diagnoses.",
+      "addresses_rules": [
+        "COM-04",
+        "COM-06",
+        "COM-09"
+      ],
+      "acceptance_criteria": [
+        "No hidden grader facts in runtime fixtures",
+        "No blanket allow or threshold lowering",
+        "Fresh outcomes preserved separately"
+      ]
+    }
+  ],
+  "limitations": [
+    {
+      "unknown": "Actual task reward after this first TDD group",
+      "impact": "No improvement claim is justified.",
+      "needed_evidence": "New isolated official diagnoses after next group and source freeze."
+    },
+    {
+      "unknown": "All 39 release contracts and other experiment arms",
+      "impact": "This review is not full architecture certification.",
+      "needed_evidence": "Separate contract-by-contract acceptance and controlled comparison."
+    },
+    {
+      "unknown": "Counterfactual contribution of each failure to final reward",
+      "impact": "Source errors and observed refusal counts do not measure causal score impact.",
+      "needed_evidence": "Fixed-version ablations or controlled diagnostic comparison."
+    }
+  ]
+}

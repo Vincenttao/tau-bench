@@ -15,10 +15,23 @@ class Judge:
     class Policy: low=.3; high=.7
     policy=Policy()
     def ask(self, state, questions, now=None):
-        return {k: (.99 if k != 'comparison_needed' else (.99 if state['proposal']['comparison'] else .01)) for k in questions}, 'synthetic-observation'
+        return {k: (.99 if k != 'comparison_needed' else (.99 if state['candidate_response'].startswith('Recommend') else .01)) for k in questions}, 'synthetic-observation'
 
 
 class ResponseReviewTests(unittest.TestCase):
+    def test_surface_classification_cannot_read_unrelated_policy_or_proposed_comparison(self):
+        class IsolatedJudge(Judge):
+            def ask(self, state, questions, now=None):
+                if 'comparison_needed' in questions:
+                    self_surface = set(state)
+                    if self_surface != {'candidate_response', 'goal_index', 'completed_goal_ids'}:
+                        raise AssertionError('Surface classifier received evidence or S2 comparison proposal')
+                return {key: .01 if key == 'comparison_needed' else .99 for key in questions}, 'synthetic-observation'
+        state = {'task': {'goals': []}, 'evidence': {'irrelevant': {'source': 'official-policy',
+            'content': 'Choose the credit card with the lowest fee and maximum credit limit.'}}}
+        review = ResponseReview(Planner({'completed_goal_ids': [], 'comparison': None}), IsolatedJudge())
+        self.assertEqual(review.check('What is your full name?', state, now=900)['status'], 'allow')
+
     def test_plain_question_needs_no_unused_numeric_extraction_judgment(self):
         class QuestionJudge(Judge):
             def ask(self, state, questions, now=None):

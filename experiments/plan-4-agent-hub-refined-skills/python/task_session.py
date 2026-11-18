@@ -7,19 +7,27 @@ import queue
 import subprocess
 import threading
 import uuid
+from input_router import validate_snapshot
 
 ARM = Path(__file__).resolve().parents[1]
 ROOT = ARM.parents[1]
 
 
 class JavaTask:
-    def __init__(self, directory, episode, deadline, call_limit, timeout=10):
+    def __init__(self, directory, episode, deadline, call_limit, timeout=10, *, replay_goal_ids=None, offline_replay=False):
         self.episode, self.timeout = episode, timeout
         directory = Path(directory); directory.mkdir(parents=True, exist_ok=True)
+        self.directory, self.call_limit = directory, call_limit
+        extra = []
+        if replay_goal_ids is not None:
+            if not offline_replay: raise ValueError('Replay identities require explicit offline harness')
+            identity_path = directory/'offline-goal-identities.txt'
+            identity_path.write_text('\n'.join(replay_goal_ids)+'\n' if replay_goal_ids else '')
+            extra = [str(identity_path)]
         classpath = str(ARM/'java/target/task-host') + os.pathsep + (ROOT/'shared/java/classpath.txt').read_text().strip()
         env = {k: v for k, v in os.environ.items() if k in ('PATH', 'JAVA_HOME', 'LANG', 'LC_ALL', 'TMPDIR')}
         self.process = subprocess.Popen(['java', '-cp', classpath, 'eval.hub.TaskHost',
-                                         str(directory/'task.properties'), episode, str(deadline), str(call_limit)],
+                                         str(directory/'task.properties'), episode, str(deadline), str(call_limit), *extra],
                                         env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                         stderr=subprocess.DEVNULL, text=True, bufsize=1)
         self.responses, self.lock = queue.Queue(), threading.Lock()
@@ -87,7 +95,7 @@ class TaskSession:
             self.task.call('social', **common)
         elif proposal['status'] == 'ready':
             actions = [{'kind': item['action'], 'goal_id': item['goal_id'],
-                        'description': proposal['input_snapshot']['content'] if item['action'] == 'modify' else ''}
+                        'description': item.get('description', proposal['input_snapshot']['content']) if item['action'] == 'modify' else ''}
                        for item in proposal['targets']]
             actions += [{'kind': 'new_goal', 'description': item['description']} for item in proposal['new_goal_proposals']]
             if proposal.get('context_only'):
@@ -97,7 +105,7 @@ class TaskSession:
         else:
             raise ValueError('Unknown proposal status')
 
-    def handle(self, message, content, proposals, *, now, last_question='', context_complete=True):
+    def handle(self, message, content, proposals, *, now, last_question='', context_complete=True, route_proposals=None, last_assistant_message='', context_quote=None):
         with self.lock:
             self.task.call('receive', episode=self.task.episode, message=message, content=content)
             stem = hashlib.sha256(message.encode()).hexdigest()
@@ -117,11 +125,23 @@ class TaskSession:
                         'based_on_revision': state['revision'], 'source': 'official-user',
                         'kind': 'free_text', 'content': content, 'last_question': last_question,
                         'context_complete': context_complete, 'goals': [
-                            {k: g[k] for k in ('goal_id', 'episode_id', 'description', 'state', 'waiting_for')}
+                            {k: g[k] for k in ('goal_id', 'episode_id', 'description', 'state', 'waiting_for', 'outcome')}
                             for g in state['goals']],
                         'new_goal_proposals': proposals, 'unresolved_inputs': state['unresolved_inputs']}
+            if route_proposals is not None: snapshot['route_proposals'] = route_proposals
+            if last_assistant_message: snapshot['last_assistant_message'] = last_assistant_message
+            if context_quote is not None: snapshot['context_quote'] = context_quote
             durable_json(attempt_path, {'status': 'attempted', 'snapshot': snapshot})
-            proposal = self.router.interpret(snapshot)
+            try:
+                validate_snapshot(snapshot)
+            except ValueError:
+                # Reject untrusted S2 proposals before inference. Keep the original
+                # input unresolved so a later customer turn can clarify it.
+                proposal = {'status': 'clarify', 'reason': 'invalid_s2_proposal',
+                    'message_id': message, 'based_on_revision': state['revision'],
+                    'input_snapshot': snapshot, 'targets': [], 'new_goal_proposals': []}
+            else:
+                proposal = self.router.interpret(snapshot)
             durable_json(result_path, proposal)
             self.commit(proposal)
             return proposal

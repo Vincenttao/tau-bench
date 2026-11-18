@@ -16,6 +16,20 @@ from jev_provider import NoRedirect
 from task_session import durable_json
 
 
+def public_request(request, path_aliases):
+    """Map trusted runtime directory metadata; preserve customer facts exactly."""
+    def visit(value):
+        if isinstance(value, str):
+            for source in sorted(path_aliases, key=len, reverse=True):
+                if not source: raise ValueError('Empty runtime path alias')
+                value = value.replace(source, path_aliases[source])
+            return value
+        if isinstance(value, dict): return {key: visit(item) for key, item in value.items()}
+        if isinstance(value, list): return [visit(item) for item in value]
+        return value
+    return {**request, 'messages': visit(request.get('messages', []))}
+
+
 def inspect_response(body, content_type):
     if content_type.startswith('text/event-stream'):
         packets = [json.loads(line[5:].strip()) for line in body.decode().splitlines()
@@ -28,7 +42,7 @@ def inspect_response(body, content_type):
 
 
 class ModelProxy:
-    def __init__(self, directory, base, key, model):
+    def __init__(self, directory, base, key, model, *, path_aliases=None):
         self.directory=Path(directory);self.directory.mkdir(parents=True,exist_ok=True)
         self.pin_path=self.directory/'actual-model.json'
         self.actual_model=json.loads(self.pin_path.read_text())['actual_model'] if self.pin_path.exists() else None
@@ -51,6 +65,8 @@ class ModelProxy:
                     if not 0<size<=4_000_000:raise ValueError('Invalid native request length')
                     data=self.rfile.read(size);request=json.loads(data)
                     if request.get('model')!=model:raise ValueError('Unapproved native model route')
+                    request=public_request(request, path_aliases or {})
+                    data=json.dumps(request,ensure_ascii=False).encode()
                     durable_json(identity.with_suffix('.request.json'),request)
                     upstream=urllib.request.Request(base.rstrip('/')+'/chat/completions',data,
                         {'Authorization':'Bearer '+key,'Content-Type':'application/json'})

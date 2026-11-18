@@ -13,7 +13,7 @@ from task_session import durable_json
 
 
 class EvidenceStore:
-    SOURCES = {'official-policy', 'official-tool', 'official-user', 'published-skill', 'controller'}
+    SOURCES = {'official-policy', 'official-tool', 'official-user', 'published-skill', 'published-tool-contract', 'controller'}
 
     def __init__(self, directory, episode):
         self.directory, self.episode = Path(directory), episode
@@ -86,7 +86,11 @@ class JudgmentService:
         if any(type(usage.get(k)) is not int or usage[k] < 0 for k in ('input_tokens', 'output_tokens')):
             raise JevError('Judgment usage missing')
         observations = {key: probability(response, key) for key in questions}
-        return observations, str(path.with_suffix('.response.json'))
+        identity = digest({'request': request, 'response': response})
+        references = self.directory/'references'; references.mkdir(exist_ok=True)
+        durable_json(references/(identity+'.json'), {'request': path.with_suffix('.request.json').name,
+            'response': path.with_suffix('.response.json').name})
+        return observations, 'observation://'+identity
 
     def requirements(self, state, questions, *, now=None):
         values, ref = self.ask(state, questions, now=now)
@@ -157,4 +161,11 @@ def resolve_operation(name, arguments, catalog):
         if not isinstance(parameters, dict): raise PermissionError('Inner arguments must be an object')
     if effective not in catalog or catalog[effective].get('principal') == 'official-user-simulator':
         raise PermissionError('Unknown operation or wrong actor')
-    return {'name': effective, 'arguments': parameters, **catalog[effective]}
+    result = {'name': effective, 'arguments': parameters, **catalog[effective]}
+    if effective == 'unlock_discoverable_agent_tool':
+        target = parameters.get('agent_tool_name')
+        if (target not in catalog or not catalog[target].get('discoverable')
+                or catalog[target].get('principal') == 'official-user-simulator'):
+            raise PermissionError('Unlock target is not a registered discoverable agent capability')
+        result['target_operation'] = target
+    return result

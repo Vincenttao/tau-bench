@@ -11,28 +11,48 @@ import shutil
 from task_session import ARM, ROOT, durable_json
 sys.path.insert(0, str(ROOT/'shared/python'))
 from diagnostic_run import build_manifest as baseline_manifest
+from eval_config import GATEWAY
+from skill_assets import release, skill_release_identity
 from process_tree import terminate_tree
 
 
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def build_manifest(task, model=None):
+def build_manifest(task, model=None, *, api_base=None, skill_manifest=None):
     manifest = baseline_manifest(4, task, runtime_pilot=True)
     manifest.update(driver='hub-evidence-control', revision_id='llm-evidence-control',
                     formal_comparison=False, full_architecture_ready=False, automatic_episode_retries=0,
                     acceptance_scope='single full-control diagnostic; not all-39-contract release')
     if model is not None:
-        if model not in ('deepseek-v4-flash', 'volcengine/deepseek-v4.1-flash'):
+        if model not in ('deepseek-v4-flash', 'volcengine/deepseek-v4.1-flash', 'deepseek-flash'):
             raise ValueError('Unapproved diagnostic model route')
         manifest['baseline_requested_model'] = manifest['model']
         manifest['model'] = model
         manifest['diagnostic_model_override'] = model != manifest['baseline_requested_model']
+    target_base = (api_base or manifest['api_base']).rstrip('/')
+    allowed = {GATEWAY: {'deepseek-v4-flash', 'volcengine/deepseek-v4.1-flash'},
+               'https://api.deepseek.com': {'deepseek-flash'}}
+    if target_base not in allowed or manifest['model'] not in allowed[target_base]:
+        raise ValueError('Unapproved diagnostic endpoint/model pair')
+    if api_base is not None:
+        manifest['baseline_api_base'] = manifest['api_base']
+        manifest['api_base'] = target_base
+        manifest['diagnostic_api_override'] = target_base != manifest['baseline_api_base']
+    if skill_manifest is not None:
+        reference = Path(skill_manifest).resolve()
+        identity = json.loads(reference.read_text())['skill_release']
+        if skill_release_identity(identity['version']) != identity:
+            raise ValueError('Skill release differs from frozen source identity')
+        manifest['baseline_skill_release'] = manifest['skill_release']
+        manifest['skill_release'] = identity
+        manifest['frozen_skill_source'] = {'path': str(reference), 'sha256': sha(reference),
+            'scope': 'Skill identity only; source runner and MAIN prompt are not imported'}
     return manifest
 
 
-def prepare(task, output, model=None):
-    manifest = build_manifest(task, model)
+def prepare(task, output, model=None, *, api_base=None, skill_manifest=None):
+    manifest = build_manifest(task, model, api_base=api_base, skill_manifest=skill_manifest)
     output = Path(output).resolve(); manifest['output'] = str(output)
     files = [*ARM.joinpath('python').glob('*.py'), *ARM.joinpath('java/src').rglob('*.java'),
              *ARM.joinpath('java').glob('*.sh'), ARM/'go/go.mod', ARM/'go/go.sum',
@@ -42,16 +62,26 @@ def prepare(task, output, model=None):
              *ARM.joinpath('java/target').rglob('*.class'), *ARM.joinpath('go').rglob('*.go'),
              ARM/'go/target/banking-gate', ARM/'go/source-pin.json',
              *ROOT.joinpath('shared/python').glob('*.py'), *ROOT.joinpath('shared/java/target/classes').rglob('*.class')]
+    skill_folder, metadata = release(manifest['skill_release']['version'])
+    files += [skill_folder/'release.json', *[skill_folder/name for name in metadata['files']]]
     manifest['implementation_files'] = {str(p.relative_to(ROOT)): sha(p) for p in sorted(set(files))}
     manifest['dependencies'] = {path: sha(path) for path in (ROOT/'shared/java/classpath.txt').read_text().strip().split(os.pathsep)}
     manifest['runtime_bindings'] = {'jev_request_model': 'jev-latest', 'jev_expected_model': 'jev-1.14.0',
-                                   'input_policy': 'banking-evidence-input-policy', 'node_version': 'banking-evidence-control',
+                                   'input_policy': 'banking-proposed-evidence-policy', 'node_version': 'banking-evidence-control',
                                    'proposal_thinking': 'disabled', 'proposal_max_tokens': 4096,
+                                   'response_review_max_tokens': 8192,
+                                   'input_protocol': 's2-proposed-actions-and-shared-context',
+                                   'output_protocol': 'atomic-factual-claims-with-coverage-check',
                                    'actual_model_identity': 'pin-first-response-per-layer; reject-drift',
                                    'native_transport': 'private-loopback-buffered-sse',
                                    'native_ttft_comparable': False}
     manifest['runtime_bindings']['jev_context_policy'] = 'long-context-header-at-65536-json-bytes; no-truncation-or-retry'
     output.mkdir(parents=True, exist_ok=False)
+    if 'frozen_skill_source' in manifest:
+        if sha(manifest['frozen_skill_source']['path']) != manifest['frozen_skill_source']['sha256']:
+            raise RuntimeError('Frozen Skill source changed during preparation')
+        durable_json(output/'frozen-skill-selection.json', {'source': manifest['frozen_skill_source'],
+            'skill_release': manifest['skill_release']})
     for name, expected in manifest['implementation_files'].items():
         source = ROOT/name
         if sha(source) != expected: raise RuntimeError('Implementation drift during freeze')
@@ -139,9 +169,12 @@ def main():
     parser.add_argument('--task', required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--execute', action='store_true')
-    parser.add_argument('--model', choices=['deepseek-v4-flash', 'volcengine/deepseek-v4.1-flash'])
+    parser.add_argument('--model', choices=['deepseek-v4-flash', 'volcengine/deepseek-v4.1-flash', 'deepseek-flash'])
+    parser.add_argument('--api-base', choices=[GATEWAY, 'https://api.deepseek.com'])
+    parser.add_argument('--skill-from-manifest', type=Path, help='Reuse only the exact hash-pinned Skill from a historical manifest')
     args = parser.parse_args()
-    manifest = prepare(args.task, args.output, args.model)
+    manifest = prepare(args.task, args.output, args.model, api_base=args.api_base,
+                       skill_manifest=args.skill_from_manifest)
     if args.execute:
         result = execute(manifest); print(json.dumps(result, ensure_ascii=False))
         raise SystemExit(0 if result['architecture_acceptance'] == 'passed' else 1)

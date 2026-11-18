@@ -3,7 +3,10 @@ import copy
 import json
 from pathlib import Path
 import time
+import threading
 import uuid
+from dataclasses import asdict
+from control_recording import recorded, logical_task, CallTape, AuditPlanner, AuditJev, AuditHub, ControlJournal
 
 from business_judgment import BusinessJudge, parse_credit_dispute_receipt
 from controlled_effects import ControlledEffects, digest
@@ -15,23 +18,37 @@ from response_review import ResponseReview
 from receipt_registry import ReceiptInterpreter
 from completion_policy import permits_completion
 from controlled_nodes import ControlledNodes
+from output_claims import ClaimGate
+from quote_binding import bind_proposal
+from input_proposals import normalize_context_routes
 
 
 class EpisodeController:
+    PUBLIC_READS = {'KB_search', 'get_current_time', 'list_discoverable_agent_tools'}
     NODE_VERSION = 'banking-evidence-control'
     NODES = {'evidence-investigation': 'agent_loop', 'candidate-comparison': 'workflow',
              'guarded-operation': 'tool', 'dependent-goals': 'workflow',
              'receipt-reconciliation': 'workflow', 'await-user': 'wait'}
 
-    def __init__(self, task, hub, planner, jev, policy, directory, catalog, domain_policy, receipt_contracts=None):
+    def __init__(self, task, hub, planner, jev, policy, directory, catalog, domain_policy, receipt_contracts=None, *, capture_replay=False):
         self.task, self.hub, self.planner, self.jev, self.policy = task, hub, planner, jev, policy
+        self._operation_lock = threading.RLock()
         self.directory = Path(directory); self.directory.mkdir(parents=True, exist_ok=True)
+        self.journal = None
+        if capture_replay:
+            if receipt_contracts: raise ValueError('Replay requires published receipt contracts, not injected callbacks')
+            tape = CallTape(self.directory/'replay'/'providers')
+            # Journal creates its root separately, after all initial state is ready.
+            self.planner = planner = AuditPlanner(planner, task, tape)
+            self.jev = jev = AuditJev(jev, tape)
+            self.hub = hub = AuditHub(hub, tape)
         self.catalog = copy.deepcopy(catalog)
         self.receipt_contracts = receipt_contracts or {}
         self.evidence = EvidenceStore(self.directory/'evidence', task.episode)
         self.policy_ref = self.evidence.add('official-policy', domain_policy)
         self.judgments = JudgmentService(jev, task, self.directory/'judgments', policy)
         self.output = OutputGate(self.judgments)
+        self.claims = ClaimGate(self.judgments, self.evidence.resolve_refs)
         self.nodes = ControlledNodes(task, hub, self.directory/'internal-nodes')
         self.review = ResponseReview(planner, self.judgments, self._comparison_workflow)
         self.receipts = ReceiptInterpreter(self.judgments)
@@ -43,15 +60,72 @@ class EpisodeController:
                 not self.catalog[name].get('discoverable', False) or name in self.unlocked))
         question_path = self.directory/'last-question.json'
         self.last_question = json.loads(question_path.read_text())['question'] if question_path.exists() else ''
+        message_path = self.directory/'last-assistant-message.json'
+        self.last_assistant_message = json.loads(message_path.read_text())['content'] if message_path.exists() else ''
         self.bindings_path = self.directory/'call-bindings.json'
         self.bindings = json.loads(self.bindings_path.read_text()) if self.bindings_path.exists() else {}
+        if capture_replay:
+            self.journal = ControlJournal(self, self.directory/'control-replay',
+                {'episode': task.episode, 'catalog': catalog, 'domain_policy': domain_policy,
+                 'policy': asdict(policy), 'call_limit': task.call_limit})
+            # Provider trace belongs to the same sealed artifact.
+            tape.directory = self.journal.directory/'providers'; tape.directory.mkdir()
 
     def state(self, now):
-        return self.task.call('status', now=now)
+        return logical_task(self.task.call('status', now=now))
+
+    def rebind_controls(self, task, hub):
+        if task.episode != self.task.episode: raise PermissionError('Control restart cannot change episode identity')
+        for owner in (self, self.inputs, self.judgments, self.effects, self.nodes, self.planner):
+            owner.task = task
+        if isinstance(self.hub, AuditHub):
+            self.hub.delegate = hub
+            hub = self.hub
+        self.hub = hub
+        self.effects.hub = hub
+        self.nodes.hub = hub
 
     def visible(self, now):
-        return {'task': self.state(now), 'evidence': self.evidence.visible(), 'last_question': self.last_question}
+        return {'task': self.state(now), 'evidence': self.evidence.visible(), 'last_question': self.last_question,
+                'last_assistant_message': self.last_assistant_message}
 
+    def pending_user_questions(self, *, now):
+        return list(dict.fromkeys(goal['waiting_for'] for goal in self.state(now)['goals']
+            if goal['state'] == 'waiting' and goal.get('waiting_kind') == 'user' and goal['waiting_for']))
+
+    def clarification_prompt(self, *, now):
+        questions = self.pending_user_questions(now=now)
+        if questions:
+            return 'Please clarify your answer to the outstanding question: '+'\n'.join(questions)
+        return ('I have kept the details you supplied. Please clarify whether you want to continue '
+                'the existing requests, change one of them, or start a new request.')
+
+    @recorded
+    def reserve_model(self, kind, *, now):
+        self.task.call('charge', now=now, kind=kind)
+
+    @recorded
+    def add_published_evidence(self, source, content):
+        if source not in ('published-skill', 'published-tool-contract'):
+            raise ValueError('Only validated published assets may enter this boundary')
+        return self.evidence.add(source, content)
+
+    @recorded
+    def stop(self, reason):
+        self.task.call('stop', reason=reason)
+
+    def seal_replay(self):
+        if self.journal is not None: self.journal.seal()
+
+    @recorded
+    def remember_assistant(self, content, *, kind='accepted_assistant_message'):
+        if kind not in ('accepted_assistant_message', 'controller_clarification') or not isinstance(content, str) or not content:
+            raise ValueError('Trusted outward conversation event required')
+        self.last_assistant_message = content
+        durable_json(self.directory/'last-assistant-message.json', {'content': content})
+        self.evidence.add('controller', json.dumps({'type': kind, 'content': content}, ensure_ascii=False))
+
+    @recorded
     def user(self, message, content, *, now):
         # Receive before even tool-free S2 planning: new input blocks old dispatch immediately.
         self.task.call('receive', episode=self.task.episode, message=message, content=content)
@@ -63,10 +137,25 @@ class EpisodeController:
             if attempt.exists(): raise RuntimeError('Previous S2 proposal outcome unknown; no replay')
             durable_json(attempt, {'attempted': True})
             proposal = self.planner.complete('new-goals', {'content': content,
-                'task': self.state(now), 'last_question': self.last_question}, GOAL_SCHEMA)
+                'task': self.state(now), 'last_question': self.last_question,
+                'last_assistant_message': self.last_assistant_message}, GOAL_SCHEMA)
             durable_json(plan_path, proposal)
-        result = self.inputs.handle(message, content, proposal['goals'], now=now, last_question=self.last_question)
-        if result['status'] == 'ready': self.nodes.resume_waits(now=now)
+        original = proposal
+        proposal = normalize_context_routes(content, bind_proposal(content, proposal))
+        if proposal != original:
+            durable_json(plan_path.with_suffix('.input-normalization.json'), {'original': original, 'bound': proposal,
+                'rules': ['unique-exact-visible-text; paired-markdown-emphasis-only',
+                          'coalesce-compatible-context-spans-only; preserve-conflicting-actions']})
+        result = self.inputs.handle(message, content, proposal['goals'], now=now, last_question=self.last_question,
+                                    route_proposals=proposal.get('existing_routes'), last_assistant_message=self.last_assistant_message,
+                                    context_quote=proposal.get('context_quote'))
+        if result['status'] == 'ready':
+            self.nodes.resume_waits(now=now)
+            if self.last_question and not self.pending_user_questions(now=now):
+                # Dialogue history remains immutable. This retires only the
+                # live pointer; it never verifies identity or grants an effect.
+                self.last_question = ''
+                durable_json(self.directory/'last-question.json', {'question': ''})
         durable_json(self.directory/'latest-input.json', result)
         return result
 
@@ -125,25 +214,44 @@ class EpisodeController:
         records = self.evidence.visible()
         selected = set(plan['policy_refs']) | {ref for c in plan['conditions'] for ref in c['evidence_refs']}
         evidence = [{'ref': ref, 'episode_id': self.task.episode, 'goal_id': plan['goal_id'],
-                     'source': records[ref]['source'], 'content': records[ref]['content']} for ref in selected]
+                     'source': records[ref]['source'], 'content': records[ref]['content']} for ref in sorted(selected)]
         self.task.call('charge', now=now, kind='judgment')
         result = BusinessJudge(self.jev, self.policy).judge(self.task.episode, plan['goal_id'], payload,
                     digest({'policy_refs': plan['policy_refs'], 'conditions': plan['conditions']}), plan['conditions'], evidence)
         durable_json(self.directory/('business-'+uuid.uuid4().hex+'.json'), result)
         return result
 
-    def tool(self, call, official_queue, *, now):
+    @recorded
+    def tool(self, call, official_queue, *, now, request_deadline=None):
+        with self._operation_lock:
+            return self._tool(call, official_queue, now=now, request_deadline=request_deadline)
+
+    def _tool(self, call, official_queue, *, now, request_deadline=None):
+        if request_deadline is not None and time.monotonic() >= request_deadline:
+            raise PermissionError('Request deadline passed before planning')
         operation = resolve_operation(call['name'], call['arguments'], self.catalog)
         state = self.visible(now)
         if not state['task']['can_dispatch']: raise PermissionError('Input or task blocks dispatch')
         active = [g for g in state['task']['goals'] if g['state'] == 'active']
         if not active: raise PermissionError('No active goal')
+        if operation['access'] == 'write' and operation['name'] != 'unlock_discoverable_agent_tool':
+            self.effects.check_business_ready(active[0]['goal_id'], now)
         payload = {'episode': self.task.episode, 'operation': call['name'], 'arguments': copy.deepcopy(call['arguments'])}
         # Reads supply episode evidence, often shared by several goals. Attribution
         # is bookkeeping; customer scope is the independent authorization check.
-        if operation['access'] == 'read':
+        if operation['name'] == 'unlock_discoverable_agent_tool':
+            target = operation['target_operation']
+            disclosed = [ref for ref, record in state['evidence'].items()
+                         if record['source'] in ('official-policy', 'published-skill') and target in record['content']]
+            if not disclosed: raise PermissionError('Capability was not disclosed by visible published policy or Skill')
+            plan = {'goal_id': active[0]['goal_id']}
+            judgment = {'episode_id': self.task.episode, 'goal_id': plan['goal_id'], 'status': 'allow',
+                'payload_hash': digest(payload), 'rule_version': 'observed-agent-capability-metadata',
+                'evidence_refs': sorted(disclosed), 'model': 'deterministic-capability-boundary',
+                'conditions': {'registered_agent_capability_disclosed': 'satisfied'}}
+        elif operation['access'] == 'read':
             goal = active[0]
-            if operation['name'] not in ('KB_search', 'get_current_time'):
+            if operation['name'] not in self.PUBLIC_READS:
                 scope = self.judgments.requirements({'call': operation,
                     'customer_messages_and_observed_facts': {ref: value for ref, value in state['evidence'].items()
                         if value['source'] in ('official-user', 'official-tool')}, 'goal': goal}, {
@@ -163,7 +271,10 @@ class EpisodeController:
         identifiers = {k: v for k, v in operation['arguments'].items()
                        if k.endswith('_id') or 'last_4' in k or k in ('agent_tool_name', 'discoverable_tool_name')}
         step = (operation['name']+':'+digest(identifiers)) if operation['access'] != 'read' else ('read:'+call['id'])
-        adopted = self.effects.adopt(plan['goal_id'], step, call['name'], call['arguments'], judgment, now=now)
+        if request_deadline is not None and time.monotonic() >= request_deadline:
+            raise PermissionError('Request expired during planning; no operation adopted')
+        final_now = int(time.time()) if request_deadline is not None else now
+        adopted = self.effects.adopt(plan['goal_id'], step, call['name'], call['arguments'], judgment, now=final_now)
         self.bindings[call['id']] = {'operation': adopted, 'effective': operation, 'goal': plan['goal_id']}
         durable_json(self.bindings_path, self.bindings)
         node = 'evidence-investigation' if operation['access'] == 'read' else 'guarded-operation'
@@ -171,9 +282,14 @@ class EpisodeController:
                        kind=node, version=self.NODE_VERSION, decision_ref=adopted, now=now)
         durable_json(self.directory/('node-'+adopted+'.json'), {'node': node, 'version': self.NODE_VERSION,
             'kind': self.NODES[node], 'decision_ref': adopted, 'goal': plan['goal_id'], 'status': 'running'})
-        self.effects.dispatch(adopted, call['id'], official_queue, now=now)
+        self.effects.dispatch(adopted, call['id'], official_queue, now=final_now, deadline=request_deadline)
 
+    @recorded
     def receipt(self, call_id, content, error, *, now):
+        with self._operation_lock:
+            return self._receipt(call_id, content, error, now=now)
+
+    def _receipt(self, call_id, content, error, *, now):
         if call_id not in self.bindings: raise PermissionError('Uncorrelated tool result')
         binding = self.bindings[call_id]
         source = 'official-policy' if binding['effective']['name'] == 'KB_search' else 'official-tool'
@@ -207,6 +323,7 @@ class EpisodeController:
         durable_json(receipt_path, {'call_id': call_id, 'receipt': receipt, 'evidence_ref': ref, 'raw_error': error})
         return receipt
 
+    @recorded
     def response(self, content, *, waiting, now):
         established = []
         proof_failures = []
@@ -235,7 +352,9 @@ class EpisodeController:
         context = {**self.visible(now), 'established_goal_ids': [goal['goal_id'] for goal, _, _ in established],
                    'proposed_acceptance_proofs': [{'goal_id': goal['goal_id'], 'proof': judgment} for goal, _, judgment in established]}
         review = self.review.check(content, context, now=now, proposal=extraction)
-        result = self.output.check(content, context, now=now) if review['status'] == 'allow' else dict(review)
+        if review['status'] != 'allow': result = dict(review)
+        elif 'claims' in extraction: result = self.claims.check(content, extraction['claims'], context, now=now)
+        else: result = self.output.check(content, context, now=now)  # Component fixtures using the older extraction shape.
         if result['status'] == 'allow':
             for goal, plan, judgment in established:
                 self.task.call('configure_goal', goal=goal['goal_id'], revision=self.state(now)['revision'],
@@ -248,6 +367,8 @@ class EpisodeController:
         result['structured_review'] = review
         result['proof_failures'] = proof_failures
         durable_json(self.directory/('output-'+uuid.uuid4().hex+'.json'), {'content': content, 'waiting': waiting, 'validation': result})
+        if result['status'] == 'allow':
+            self.remember_assistant(content)
         if result['status'] == 'allow' and waiting:
             self.last_question = content
             durable_json(self.directory/'last-question.json', {'question': content})

@@ -12,6 +12,7 @@ import subprocess
 import threading
 import time
 import uuid
+from contextlib import contextmanager
 
 from tau2.data_model.message import AssistantMessage, UserMessage
 from tau2.utils.llm_utils import to_litellm_messages
@@ -41,18 +42,21 @@ def close_controllers():
 
 class FullHubAgent(DeepAgentJavaAgent):
     def __init__(self, *args, **kwargs):
+        capture_replay = kwargs.pop('capture_replay', True)
         super().__init__(*args, **kwargs)
+        self._turn_lock = threading.Lock()
+        self.control_failure = False
         self.control_root = Path(os.environ['JAVA_LOG_DIR']).parent/'hub-control'
         self.control_root.mkdir(parents=True, exist_ok=False)
         self.task = JavaTask(self.control_root/'task', self.session_id, int(time.time())+2400, 512)
         self.hub = HubGate(ARM/'go/target/banking-gate', self.control_root/'ledger.jsonl', ROOT.parent/'agent-hub-alpha/agent-festival/schema')
         planner = PlannerClient(self.task, self.control_root/'planner', os.environ['OPENAI_API_KEY'],
                                 os.environ['OPENAI_BASE_URL'], os.environ['OPENAI_MODEL'])
-        self.policy = RoutingPolicy('banking-evidence-input-policy', .3, .7, 'jev-latest', 'jev-1.14.0')
+        self.policy = RoutingPolicy('banking-proposed-evidence-policy', .3, .7, 'jev-latest', 'jev-1.14.0')
         ownership = json.loads((ROOT/'studies/banking-architecture-comparison/contracts/business-ownership.json').read_text())
         catalog = {item['operation']: {k: item[k] for k in ('access', 'principal', 'discoverable')} for item in ownership['operations']}
         self.controller = EpisodeController(self.task, self.hub, planner, JevClient(os.environ['TYPESAFE_API_KEY'], timeout=120, long_context=True),
-                                             self.policy, self.control_root/'controller', catalog, self.domain_policy)
+                                             self.policy, self.control_root/'controller', catalog, self.domain_policy, capture_replay=capture_replay)
         self.current_input = None
         self.closed = False
         self.model_proxy = None
@@ -64,12 +68,14 @@ class FullHubAgent(DeepAgentJavaAgent):
         self.workspace.mkdir(parents=True, exist_ok=True)
         official_events = self.events
         controller = self.controller
+        request_context = threading.local()
 
         class EffectQueue:
             def put(self, event):
                 if event.get('type') != 'tool_calls' or len(event.get('tool_calls', [])) != 1:
                     raise PermissionError('One controlled operation required')
-                controller.tool(copy.deepcopy(event['tool_calls'][0]), official_events, now=int(time.time()))
+                controller.tool(copy.deepcopy(event['tool_calls'][0]), official_events, now=int(time.time()),
+                                request_deadline=getattr(request_context, 'deadline', None))
 
         self.facade = BenchmarkMcpFacade([tool.openai_schema for tool in self.tools], self.session_id,
                                          EffectQueue(), self.workspace/'mcp')
@@ -77,6 +83,7 @@ class FullHubAgent(DeepAgentJavaAgent):
         invoke = self.facade.invoke
 
         def controlled_invoke(operation, args, mcp_id=None):
+            request_context.deadline = time.monotonic()+100  # Native MCP timeout is 120 seconds.
             try:
                 return invoke(operation, args, mcp_id)
             except (PermissionError, RuntimeError) as error:
@@ -96,7 +103,8 @@ class FullHubAgent(DeepAgentJavaAgent):
         env = {k: v for k, v in os.environ.items() if k in allowed}
         if self.model_proxy is None:
             self.model_proxy = ModelProxy(self.control_root/'native-transport', os.environ['OPENAI_BASE_URL'],
-                                          os.environ['OPENAI_API_KEY'], os.environ['OPENAI_MODEL'])
+                                          os.environ['OPENAI_API_KEY'], os.environ['OPENAI_MODEL'],
+                                          path_aliases={str(self.control_root.parent): '/workspace/episode'})
         env['OPENAI_API_KEY'] = self.model_proxy.token
         env['OPENAI_BASE_URL'] = self.model_proxy.url
         env['OPENAI_API_BASE'] = self.model_proxy.url
@@ -132,14 +140,17 @@ class FullHubAgent(DeepAgentJavaAgent):
             if result.get('type') == 'control_request':
                 method = result.get('method')
                 try:
-                    if method == 'reserve_model': self.task.call('charge', now=int(time.time()), kind='execution')
+                    if method == 'reserve_model': self.controller.reserve_model('execution', now=int(time.time()))
                     elif method == 'model_usage':
                         durable_json(self.control_root/('native-model-'+result['id']+'.json'), result['data'])
                     elif method == 'skill_evidence':
                         arguments = result['data'].get('arguments', {})
                         name = arguments.get('relative_path', 'SKILL.md')
                         if arguments.get('skill_name') == 'banking-mcp' and name in skill_documents():
-                            self.controller.evidence.add('published-skill', skill_documents()[name])
+                            self.controller.add_published_evidence('published-skill', skill_documents()[name])
+                        elif arguments.get('skill_name') == 'banking-mcp' and name == 'operations.json':
+                            self.controller.add_published_evidence('published-tool-contract',
+                                (self.workspace/'skills/banking-mcp/operations.json').read_text())
                     else: raise RuntimeError('Unknown native control method')
                 except Exception:
                     super()._send({'type': 'control_response', 'id': result['id'], 'ok': False})
@@ -161,8 +172,9 @@ class FullHubAgent(DeepAgentJavaAgent):
                 'evidence': sorted(self.controller.evidence.visible())})
             if corrections >= 3 or not self.progress.reserve(context_key):
                 durable_json(self.control_root/'output-exhausted.json', {'reason': 'independent-output-validation-failed'})
-                return {'type': 'content', 'waiting': True,
-                        'content': 'I cannot verify a complete answer from the available evidence. Please clarify the remaining request or let me obtain the missing information.'}
+                text = 'I cannot verify a complete answer from the available evidence. Please clarify the remaining request or let me obtain the missing information.'
+                self.controller.remember_assistant(text, kind='controller_clarification')
+                return {'type': 'content', 'waiting': True, 'content': text}
             # Internal event, not another customer turn or new authorization.
             super()._send({'type': 'controller_review', 'content':
                 'Independent controller review found unsupported claims or unfinished obligations. '
@@ -170,16 +182,19 @@ class FullHubAgent(DeepAgentJavaAgent):
                 'Validation details: '+json.dumps(verdict, ensure_ascii=False)})
 
     def generate_next_message(self, message, state):
+        with self._turn_lock:
+            if self.control_failure: raise RuntimeError('Control hosts unavailable; progression refused')
+            return self._generate_controlled_message(message, state)
+
+    def _generate_controlled_message(self, message, state):
         if isinstance(message, UserMessage):
             route = self.controller.user('user-turn-'+str(len(state.messages)), message.content, now=int(time.time()))
             if route['status'] != 'ready':
                 if route['status'] == 'no_business_action':
                     text = 'How can I help with your banking request?'
-                elif self.controller.last_question:
-                    text = ('To confirm my understanding of your reply to this question: '+self.controller.last_question+
-                            '\nShould I continue the same service using the details you just supplied, or did you intend a different change?')
                 else:
-                    text = 'I may have missed part of your request. Could you restate the service you want and its required conditions?'
+                    text = self.controller.clarification_prompt(now=int(time.time()))
+                self.controller.remember_assistant(text, kind='controller_clarification')
                 result = AssistantMessage(role='assistant', content=text,
                     raw_data={'bridge': 'hub-evidence-control', 'controller_response': route['status']})
                 state.messages.extend([message, result]); return result, state
@@ -191,14 +206,66 @@ class FullHubAgent(DeepAgentJavaAgent):
         if self.closed: return
         self.closed = True
         try:
-            self.task.call('stop', reason='official-episode-ended')
-            state = self.task.call('status', now=int(time.time()))
+            if self.control_failure:
+                state = {**self.recovery_snapshot, 'episode_status': 'control-unavailable', 'can_dispatch': False}
+            elif self.controller.journal is not None and self.controller.journal.failed:
+                self.task.call('stop', reason='mandatory-control-audit-unavailable')
+                state = {**self.task.call('status', now=int(time.time())), 'replay_status': 'audit-unavailable'}
+            else:
+                self.controller.stop('official-episode-ended')
+                self.controller.seal_replay()
+                state = self.task.call('status', now=int(time.time()))
             durable_json(self.control_root/'final-task.json', state)
         finally:
             self.hub.close(); self.task.close()
             if self.model_proxy is not None: self.model_proxy.close()
 
+    @contextmanager
+    def _restart_boundary(self):
+        if not self._turn_lock.acquire(blocking=False):
+            raise RuntimeError('Restart requires an official turn boundary')
+        try:
+            if self.closed or self.control_failure or self.facade.pending:
+                raise RuntimeError('Restart refused while closed, unavailable or MCP work is pending')
+            yield
+        finally:
+            self._turn_lock.release()
+
+    def restart_controls(self):
+        """Reopen controls against the same live official environment, never reset it."""
+        with self._restart_boundary():
+            if self.controller.journal is not None:
+                return self.controller.journal.run('restart_controls', {}, self._restart_controls)
+            return self._restart_controls()
+
+    def _restart_controls(self):
+            before = self.task.call('status', now=int(time.time()))
+            self.recovery_snapshot = before
+            self.task.close(); self.hub.close()
+            task = hub = None
+            try:
+                task = JavaTask(self.control_root/'task', self.session_id, before['deadline'], 512)
+                hub = HubGate(ARM/'go/target/banking-gate', self.control_root/'ledger.jsonl', ROOT.parent/'agent-hub-alpha/agent-festival/schema')
+                if not hub.call('health')['ok']: raise RuntimeError('Go recovery health check refused')
+                after = task.call('status', now=int(time.time()))
+                if any(before[key] != after[key] for key in ('episode_id', 'revision', 'calls', 'deadline', 'resumes', 'goals', 'nodes')):
+                    raise RuntimeError('Control recovery changed authoritative state')
+                self.controller.rebind_controls(task, hub)
+                self.task, self.hub = task, hub
+                durable_json(self.control_root/('control-restart-'+uuid.uuid4().hex+'.json'),
+                    {'status': 'ready', 'episode_id': self.session_id, 'calls': after['calls'], 'deadline': after['deadline']})
+            except Exception:
+                self.control_failure = True
+                if hub is not None: hub.close()
+                if task is not None: task.close()
+                durable_json(self.control_root/'control-restart-failed.json', {'status': 'failed', 'new_dispatch_allowed': False})
+                raise
+
     def restart_executor(self, state):
+        with self._restart_boundary():
+            self._restart_executor(state)
+
+    def _restart_executor(self, state):
         """Same official environment only. Never restarts an uncertain in-flight effect."""
         for binding in self.controller.bindings.values():
             effect = self.controller.effects.status(binding['operation'])

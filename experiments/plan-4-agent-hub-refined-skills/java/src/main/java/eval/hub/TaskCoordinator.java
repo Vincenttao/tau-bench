@@ -15,6 +15,17 @@ public final class TaskCoordinator implements AutoCloseable {
     private FileLock lock;
     private Properties state;
     private boolean closed;
+    private List<String> replayGoalIds;
+
+    /** Offline harness only. Never exposed in the model-facing RPC. */
+    public synchronized void useReplayGoalIds(List<String> ids) {
+        open();
+        if (ids == null || new HashSet<>(ids).size() != ids.size()
+                || ids.stream().anyMatch(id -> !UUID.fromString(id).toString().equals(id))
+                || ids.size() < goalIds().size() || !ids.subList(0, goalIds().size()).equals(goalIds()))
+            throw new IllegalArgumentException("Invalid replay identities");
+        replayGoalIds = List.copyOf(ids);
+    }
 
     public TaskCoordinator(Path path, String episode, long deadline, int callLimit) {
         this.path = path.toAbsolutePath();
@@ -141,7 +152,9 @@ public final class TaskCoordinator implements AutoCloseable {
                 requireText(action.description());
                 int count = Integer.parseInt(next.getProperty("goals"));
                 if (count >= 32) throw new IllegalStateException("Goal bound reached");
-                String id = UUID.randomUUID().toString();
+                if (replayGoalIds != null && count >= replayGoalIds.size())
+                    throw new IllegalStateException("Replay identities exhausted");
+                String id = replayGoalIds == null ? UUID.randomUUID().toString() : replayGoalIds.get(count);
                 next.setProperty("goalIndex."+count, id); next.setProperty("goals", ""+(count+1));
                 next.setProperty("goal."+id+".state", "active");
                 next.setProperty("goal."+id+".description", action.description());

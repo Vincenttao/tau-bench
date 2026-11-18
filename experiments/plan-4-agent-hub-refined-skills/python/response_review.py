@@ -18,6 +18,12 @@ COMPARISON = {'type': 'object', 'properties': {
 SCHEMA = {'type': 'object', 'properties': {'completed_goal_ids': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string'}},
                                          'comparison': {'anyOf': [COMPARISON, {'type': 'null'}]}},
           'required': ['completed_goal_ids', 'comparison'], 'additionalProperties': False}
+SCHEMA['properties']['claims'] = {'type': 'array', 'maxItems': 64, 'items': {
+    'type': 'object', 'properties': {'quote': {'type': 'string', 'minLength': 1},
+        'kind': {'enum': ['policy', 'capability', 'operation', 'customer', 'progress']},
+        'evidence_refs': {'type': 'array', 'items': {'type': 'string'}}},
+    'required': ['quote', 'kind', 'evidence_refs'], 'additionalProperties': False}}
+SCHEMA['required'].append('claims')
 
 
 class ResponseReview:
@@ -34,12 +40,15 @@ class ResponseReview:
         if any(goal not in goals or (goals[goal]['outcome'] != 'success' and goal not in established) for goal in proposal['completed_goal_ids']):
             return {'status': 'deny', 'reason': 'unfinished-goal-declared-complete', 'proposal': proposal}
         questions = {
-            'comparison_needed': {'type': 'noul', 'instructions': 'Does candidate_response recommend or select a product by comparing numeric requirements or preferences?'},
-            'extraction_faithful': {'type': 'noul', 'instructions':
-                'Is the structured proposal a faithful extraction from the customer requirements, visible evidence and actual response, including candidate values, units, comparison boundaries and preference order? A null comparison is valid when no numeric product comparison is made.'},
+            'comparison_needed': {'type': 'noul', 'instructions': 'In candidate_response itself, is a product recommended or selected on the basis of numeric costs, limits, requirements or preferences? A request for identity details, even two or more details, is not a product recommendation. Goal descriptions are context, not the outward answer.'},
             'completion_declarations_complete': {'type': 'noul', 'instructions':
                 'Does completed_goal_ids account for every business goal that candidate_response claims is complete? A question or explicit unfinished status claims no goal completion.'}}
-        values, ref = self.judgments.ask({'candidate_response': content, 'visible_state': state, 'proposal': proposal}, questions, now=now)
+        # Classify the outward text, not policy documents or S2's suggested answer.
+        # Evidence is introduced only when a concrete comparison needs validation.
+        surface = {'candidate_response': content, 'goal_index': [
+            {'goal_id': goal['goal_id'], 'description': goal.get('description', '')} for goal in goals.values()],
+            'completed_goal_ids': proposal['completed_goal_ids']}
+        values, ref = self.judgments.ask(surface, questions, now=now)
         policy = self.judgments.policy
         if values['completion_declarations_complete'] <= policy.high:
             return {'status': 'unknown', 'reason': 'unverified-extraction', 'observation_ref': ref, 'proposal': proposal}
@@ -47,8 +56,12 @@ class ResponseReview:
         if comparison is None:
             status = 'allow' if values['comparison_needed'] < policy.low else 'unknown'
             return {'status': status, 'reason': 'no-verified-numeric-comparison', 'proposal': proposal, 'observation_ref': ref}
-        if values['extraction_faithful'] <= policy.high:
+        extraction, extraction_ref = self.judgments.ask({'candidate_response': content,
+            'visible_state': state, 'proposal': proposal}, {'extraction_faithful': {'type': 'noul', 'instructions':
+                'Is the structured comparison a faithful extraction of the customer requirements, visible evidence and actual response, including candidate values, units, boundaries and preference order?'}}, now=now)
+        if extraction['extraction_faithful'] <= policy.high:
             return {'status': 'unknown', 'reason': 'unverified-extraction', 'observation_ref': ref, 'proposal': proposal}
+        ref = extraction_ref
         compute = lambda: self._compare(comparison, proposal, ref)
         if self.workflow is not None:
             return self.workflow(comparison, {'status': 'allow', 'model': policy.expected_model,

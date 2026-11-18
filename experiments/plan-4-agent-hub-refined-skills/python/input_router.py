@@ -36,7 +36,7 @@ def _text(value):
 def validate_snapshot(snapshot):
     fields = {'episode_id', 'message_id', 'based_on_revision', 'source', 'kind', 'content',
               'last_question', 'context_complete', 'goals', 'new_goal_proposals'}
-    if not isinstance(snapshot, dict) or set(snapshot) - {'unresolved_inputs'} != fields:
+    if not isinstance(snapshot, dict) or set(snapshot) - {'unresolved_inputs', 'route_proposals', 'last_assistant_message', 'context_quote'} != fields:
         raise ValueError('Invalid input snapshot fields; evaluator-only data is prohibited')
     for key in ('episode_id', 'message_id', 'content'):
         _text(snapshot[key])
@@ -45,13 +45,18 @@ def validate_snapshot(snapshot):
             or type(snapshot['context_complete']) is not bool
             or not isinstance(snapshot['last_question'], str)):
         raise ValueError('Invalid trusted envelope or revision')
+    if 'last_assistant_message' in snapshot and not isinstance(snapshot['last_assistant_message'], str):
+        raise ValueError('Invalid visible conversation context')
+    if 'context_quote' in snapshot:
+        _text(snapshot['context_quote'])
+        if snapshot['context_quote'] not in snapshot['content']: raise ValueError('Fabricated shared-context quote')
     goals, proposals = snapshot['goals'], snapshot['new_goal_proposals']
     if (not isinstance(goals, list) or not isinstance(proposals, list)
             or len(goals) > 32 or len(proposals) > 32):
         raise ValueError('Candidate bound exceeded or invalid list')
     ids = set()
     for goal in goals:
-        if not isinstance(goal, dict) or set(goal) != {'goal_id', 'episode_id', 'description', 'state', 'waiting_for'}:
+        if not isinstance(goal, dict) or set(goal) - {'outcome'} != {'goal_id', 'episode_id', 'description', 'state', 'waiting_for'}:
             raise ValueError('Invalid goal fields')
         for key in ('goal_id', 'description'):
             _text(goal[key])
@@ -59,6 +64,8 @@ def validate_snapshot(snapshot):
                 or goal['state'] not in ('active', 'waiting', 'closed')
                 or not isinstance(goal['waiting_for'], str)):
             raise ValueError('Invalid candidate scope or state')
+        if 'outcome' in goal and goal['outcome'] not in ('undetermined', 'success', 'failed', 'cancelled', 'unknown', 'partial'):
+            raise ValueError('Invalid goal outcome')
         ids.add(goal['goal_id'])
     seen = set()
     unresolved = snapshot.get('unresolved_inputs', [])
@@ -81,6 +88,19 @@ def validate_snapshot(snapshot):
         if proposal['quote'] not in snapshot['content'] or pair in seen:
             raise ValueError('Fabricated or duplicate proposal evidence')
         seen.add(pair)
+    if 'route_proposals' in snapshot:
+        routes = snapshot['route_proposals']
+        if not isinstance(routes, list) or len(routes) > 32: raise ValueError('Invalid bounded routes')
+        touched = set()
+        for route in routes:
+            if (not isinstance(route, dict) or set(route) - {'description'} != {'goal_id', 'action', 'quote'}
+                    or route['goal_id'] not in ids or route['goal_id'] in touched
+                    or route['action'] not in ('context', 'respond', 'modify', 'query', 'cancel', 'pause', 'resume')):
+                raise ValueError('Invalid proposed goal route')
+            _text(route['quote'])
+            if route['quote'] not in snapshot['content']: raise ValueError('Fabricated route quote')
+            if route['action'] == 'modify': _text(route.get('description'))
+            touched.add(route['goal_id'])
 
 
 class InputRouter:
@@ -93,7 +113,8 @@ class InputRouter:
         validate_snapshot(snapshot)
         questions = {
             'ambiguous': {'type': 'noul', 'instructions':
-                'Does the current user message leave unresolved which existing goal or requested change it refers to?'},
+                'Does the current user message leave unresolved which existing goal or requested change it refers to? '
+                'Closed goals remain valid references for status questions. Missing business facts or an unavailable answer do not by themselves make the referenced goal ambiguous.'},
             'has_new': {'type': 'noul', 'instructions':
                 'Does the current user message request a business service not yet represented in the existing task index `goals`? '
                 '`new_goal_proposals` are uncommitted suggestions, not existing tasks.',
@@ -111,7 +132,40 @@ class InputRouter:
             'modify': 'correct or replace a previously stated specific requirement, rather than provide the first answer to a request for missing requirements',
             'query': 'ask about its progress or known outcome',
         }
-        for i, goal in enumerate(snapshot['goals']):
+        if 'route_proposals' in snapshot:
+            # Each concrete proposed target is independently validated below.
+            # An open-ended ambiguity question is not an additional route grant.
+            questions.pop('ambiguous')
+            if snapshot['goals']:
+                questions['covered'] = {'type': 'noul', 'instructions':
+                    'Is every business request in the current message represented by the new_goal_proposals or the existing route_proposals? '
+                    'Judge interpretation only, not whether a bank operation is ready or eligible to execute.',
+                    'criteria': {'true': 'Each named service is represented. Explicit requested changes, cancellations, pauses, resumes, status questions or replies to recorded questions have the corresponding existing route. New services may be represented by new_goal_proposals. Shared identity/contact information and clarification about the last assistant message may use context_quote without being assigned to every business goal. Supplied facts and restated requests may use context routes.',
+                                 'false': 'A named service or explicitly requested action is missing, or a context route substitutes for a requested state change.'}}
+            goals = {goal['goal_id']: goal for goal in snapshot['goals']}
+            route_questions = {
+                'context': 'Does the quoted current message supply customer facts or restate a request relevant to this goal? This interpretation only preserves context and grants no consent, state change or bank action.',
+                'respond': 'Does the quoted current message answer this goal\'s recorded waiting_for question? Cancelling the service is not an answer or confirmation.',
+                'modify': 'Does the quoted current message request the specific replacement of an earlier requirement described by the proposed updated description, preserving other requirements?',
+                'query': 'Does the quoted current message ask about the progress or known outcome of this goal? Closed, cancelled or completed goals are valid query targets. Judge the question\'s target, not whether the answer is available.',
+                'cancel': 'Does the quoted current message explicitly ask to permanently stop this goal?',
+                'pause': 'Does the quoted current message explicitly ask to defer this goal temporarily?',
+                'resume': 'Does the quoted current message explicitly ask to continue or resume this goal? Continuing an already active goal is a valid idempotent request.',
+            }
+            for i, route in enumerate(snapshot['route_proposals']):
+                questions[f'route{i}_supported'] = {'type': 'noul', 'instructions': {
+                    'question': route_questions[route['action']]+' The action must unambiguously target this goal using the actual conversation; a plausible guess is not support.',
+                    'proposal': route, 'goal': goals[route['goal_id']]}}
+            if 'context_quote' in snapshot:
+                whole_context = (snapshot['context_quote'] == snapshot['content']
+                                 and not snapshot['route_proposals'] and not snapshot['new_goal_proposals'])
+                questions['context_supported'] = {'type': 'noul', 'instructions':
+                    ('Does the ENTIRE quoted message consist only of shared customer identifying/contact information or clarification about how to identify the same customer for the ongoing services? Asking to locate that customer by their supplied name is such clarification. A separate business service, goal change, cancellation, pause, resume or permission confirmation is not only shared context.'
+                     if whole_context else
+                     'Does context_quote provide shared customer information or clarify the last assistant message in this ongoing conversation? It preserves information only: it cannot substitute for a requested cancellation, goal change, pause, resume, or permission confirmation.')}
+                if whole_context: questions.pop('covered')  # Exclusive whole-message classification proves coverage.
+                questions['has_new']['criteria']['false'] += ' Supplying shared identifying details or asking how to locate the same customer record for ongoing services is context, not a new standalone service.'
+        for i, goal in enumerate([] if 'route_proposals' in snapshot else snapshot['goals']):
             if goal['state'] == 'active' and not goal['waiting_for']:
                 questions[f'g{i}_reaffirm'] = {'type': 'noul', 'instructions': {
                     'question': 'Does the current message restate or reaffirm this already active business request without changing its requirements? This supplies no new consent or confirmation.',
@@ -139,7 +193,7 @@ class InputRouter:
                 'proposal': proposal}}
         for i, item in enumerate(snapshot.get('unresolved_inputs', [])):
             questions[f'clarify{i}_resolved'] = {'type': 'noul', 'instructions': {
-                'question': 'Does the complete current message resolve the ambiguity in this earlier user message?',
+                'question': 'Does the complete current message specify the services or requested changes clearly enough to account for this earlier message, leaving no outstanding customer choice about its meaning?',
                 'earlier_message': item}}
         return {'model': self.policy.request_model, 'state': copy.deepcopy(snapshot), 'questions': questions}
 
@@ -189,14 +243,37 @@ class InputRouter:
         yes = {name for name, value in values.items() if value > self.policy.high}
         if 'ambiguous' in yes:
             result['reason'] = 'ambiguous_target'; return result
-        if 'covered' not in yes:
+        if ('covered' in request['questions'] and 'covered' not in yes
+                or 'covered' not in request['questions'] and 'context_supported' not in yes):
             result['reason'] = 'uncovered_requirements'; return result
         unresolved = snapshot.get('unresolved_inputs', [])
         if any(f'clarify{i}_resolved' not in yes for i in range(len(unresolved))):
             result['reason'] = 'prior_clarification_unresolved'; return result
         result['resolved_messages'] = [item['message_id'] for item in unresolved]
         targets = []
-        for i, goal in enumerate(snapshot['goals']):
+        context_supported = 'context_supported' in yes
+        if 'context_quote' in snapshot and not context_supported:
+            result['reason'] = 'unsupported_shared_context'; return result
+        if 'route_proposals' in snapshot:
+            goals = {goal['goal_id']: goal for goal in snapshot['goals']}
+            for i, route in enumerate(snapshot['route_proposals']):
+                goal = goals[route['goal_id']]
+                if f'route{i}_supported' not in yes:
+                    result['reason'] = 'unsupported_route_proposal'; return result
+                action = route['action']
+                if ((goal['state'] == 'closed' and action != 'query')
+                        or (action == 'respond' and not goal['waiting_for'])):
+                    result['reason'] = 'invalid_route_state'; return result
+                if action == 'resume' and goal['state'] == 'active':
+                    context_supported = True  # Already running: no state change or new authority.
+                    continue
+                if action == 'context':
+                    context_supported = True
+                    continue
+                target = {'goal_id': route['goal_id'], 'action': action}
+                if action == 'modify': target['description'] = route['description']
+                targets.append(target)
+        for i, goal in enumerate([] if 'route_proposals' in snapshot else snapshot['goals']):
             actions = [action for action in ('respond', 'modify', 'query') if f'g{i}_{action}' in yes]
             if f'g{i}_reaffirm' in yes and not actions:
                 actions = ['respond']
@@ -219,7 +296,8 @@ class InputRouter:
                 result['reason'] = 'conflicting_social_classification'; return result
             result.update(status='no_business_action', reason='social_only'); return result
         if not targets and not proposals:
-            if any(goal['state'] == 'active' for goal in snapshot['goals']) and 'has_new' not in yes:
+            if (any(goal['state'] == 'active' for goal in snapshot['goals']) and 'has_new' not in yes
+                    and ('route_proposals' not in snapshot or context_supported)):
                 # No requested state transition. Preserve supplied facts without
                 # manufacturing a confirmation, mutation or new business identity.
                 result.update(status='ready', reason='context_only', context_only=True)

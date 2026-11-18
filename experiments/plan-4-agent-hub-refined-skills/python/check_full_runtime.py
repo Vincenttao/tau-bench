@@ -10,7 +10,8 @@ from pathlib import Path
 from benchmark_mcp import BenchmarkMcpFacade
 from skill_assets import project_root, skill_init_payload, skill_documents
 
-p=argparse.ArgumentParser();p.add_argument('--output',required=True);p.add_argument('--skill-version',default='banking-evidence-guides');p.add_argument('--language',choices=['en','zh'],default='en');p.add_argument('--prompt-version',choices=['baseline-v1','evidence-todo-v1'],default='evidence-todo-v1');p.add_argument('--restart-executor',action='store_true');p.add_argument('--read-before-wait',action='store_true');args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--output',required=True);p.add_argument('--skill-version',default='banking-evidence-guides');p.add_argument('--language',choices=['en','zh'],default='en');p.add_argument('--prompt-version',choices=['baseline-v1','evidence-todo-v1'],default='evidence-todo-v1');p.add_argument('--restart-executor',action='store_true');p.add_argument('--read-before-wait',action='store_true');p.add_argument('--restart-controls',action='store_true')
+p.add_argument('--reject-first-question', action='store_true');args=p.parse_args()
 os.environ['TAU3_SKILL_VERSION']=args.skill_version
 documents=skill_documents()
 dispute_guide=next((name for name in documents if name != 'SKILL.md' and ('# Card dispute handling' in documents[name] or '# 卡片交易争议处理' in documents[name])),None)
@@ -27,6 +28,11 @@ script=[
  ('invoke_skill',{'skill_id':'banking-mcp','operation':'write_fixture','arguments':{'amount':8}}),
  ('todo_modify',{'action':'update','todos':[{'id':'fixture','status':'completed'}]}),
  (None,'Synthetic operation completed.')]
+if args.reject_first_question:
+ index=next(i for i,item in enumerate(script) if item[0]=='ask_user')
+ revised=json.loads(json.dumps(script[index][1]))
+ revised['questions'][0]['question']='Please confirm the synthetic value 8 before proceeding?'
+ script.insert(index+1,('ask_user',revised))
 if args.read_before_wait:
  script.insert(0,('invoke_skill',{'skill_id':'banking-mcp','operation':'read_fixture','arguments':{}}))
 if dispute_guide:
@@ -66,9 +72,11 @@ class FakePlanner:
  def complete(self,purpose,state,schema):
   import time
   self.task.call('charge',now=int(time.time()),kind='execution')
-  if purpose=='response-review':return {'completed_goal_ids':([g['goal_id'] for g in state['visible_state']['task']['goals']] if 'completed' in state['candidate_response'] else []),'comparison':None}
+  if purpose=='response-review':return {'completed_goal_ids':([g['goal_id'] for g in state['visible_state']['task']['goals']] if 'completed' in state['candidate_response'] else []),'comparison':None,
+    'claims':[{'quote':state['candidate_response'],'kind':'operation','evidence_refs':[ref for ref, record in state['visible_state']['evidence'].items() if record['source']=='official-tool']}] if 'completed' in state['candidate_response'] else []}
   if purpose=='new-goals':
-   return {'goals':[] if state['task']['goals'] else [{'description':'write synthetic value 8 after confirmation','quote':state['content']}]}
+   return {'goals':[] if state['task']['goals'] else [{'description':'write synthetic value 8 after confirmation','quote':state['content']}],
+     'existing_routes':[{'goal_id':goal['goal_id'],'action':'respond' if goal['waiting_for'] else 'context','quote':state['content']} for goal in state['task']['goals']]}
   goal=state.get('goal') or next(g for g in state['task']['goals'] if g['state']=='active')
   return {'goal_id':goal['goal_id'],'status':'proposed','policy_refs':[ref for ref, record in state['evidence'].items() if record['source'] in ('official-policy','published-skill')],
           'conditions':[{'id':'fixture_result' if purpose=='goal-completion' else 'fixture_consent',
@@ -83,7 +91,7 @@ class FakeJev:
    yes=True
    if name in ['ambiguous','no_business','comparison_needed'] or name.endswith('_violated'):yes=False
    if 'has_new' in request['questions']:
-    yes=name in ['covered'] or (name=='has_new' and bool(request['state']['new_goal_proposals'])) or name.startswith('new')
+    yes=name in ['covered'] or (name=='has_new' and bool(request['state']['new_goal_proposals'])) or name.startswith(('new','route'))
     if name.endswith('_respond'):yes=bool(request['state']['last_question'])
    answers[name]=({'type':'choice','choice':'pause','probabilities':{'cancel':.005,'pause':.99,'resume':.005}} if request['questions'][name]['type']=='choice' else {'type':'noul','noul':.99 if yes else .01})
   return {'model':'jev-1.14.0','answers':answers,'usage':{'input_tokens':1,'output_tokens':1}}
@@ -105,10 +113,20 @@ os.environ.update(OPENAI_API_KEY='synthetic-only',TYPESAFE_API_KEY='synthetic-on
 agent=None
 try:
  with patch('full_hub_agent.PlannerClient',FakePlanner),patch('full_hub_agent.JevClient',FakeJev):
-  agent=FullHubAgent(tools=[Tool(write_fixture),Tool(read_fixture)],domain_policy='Synthetic test only. Confirm before writing.',llm='fixture')
+  # This fixture injects operation/receipt contracts after assembly. It validates
+  # native wiring, while test_control_replay uses a frozen catalog end to end.
+  agent=FullHubAgent(tools=[Tool(write_fixture),Tool(read_fixture)],domain_policy='Synthetic test only. Confirm before writing.',llm='fixture',capture_replay=False)
  agent.controller.catalog={'write_fixture':{'access':'write','principal':'fixture-agent'},'read_fixture':{'access':'read','principal':'shared-read'}}
  agent.controller.effects.catalog=agent.controller.catalog
  agent.controller.receipt_contracts={'write_fixture':lambda content,args:{'status':'succeeded'} if json.loads(content)=={'written':args['amount']} else {'status':'unknown'}}
+ if args.reject_first_question:
+  original_response=agent.controller.response;rejected=[False]
+  def reject_unpublished_once(content,*,waiting,now):
+   if waiting and not rejected[0]:
+    rejected[0]=True
+    return {'status':'deny','reason':'synthetic-unpublished-question'}
+   return original_response(content,waiting=waiting,now=now)
+  agent.controller.response=reject_unpublished_once
  state=agent.get_init_state()
  question,state=agent.generate_next_message(UserMessage(role='user',content='Please write synthetic value 8 after confirmation.'),state)
  first_call_id=None
@@ -117,6 +135,13 @@ try:
   first_call_id=question.tool_calls[0].id
   question,state=agent.generate_next_message(ToolMessage(role='tool',id=first_call_id,name='read_fixture',content=read_fixture(),error=False),state)
  assert question.content and not question.tool_calls,question
+ if args.reject_first_question:
+  assert 'Please confirm the synthetic value 8 before proceeding?' in question.content,question
+ if args.restart_controls:
+  before=agent.task.call('status',now=int(__import__('time').time()))
+  agent.restart_controls()
+  after=agent.task.call('status',now=int(__import__('time').time()))
+  assert all(before[key]==after[key] for key in ('episode_id','revision','calls','deadline','resumes','goals','nodes')),'Control restart lost state or reset budget'
  if args.restart_executor:agent.restart_executor(state)
  call,state=agent.generate_next_message(UserMessage(role='user',content='Yes, confirmed.'),state)
  assert call.tool_calls and call.tool_calls[0].arguments=={'amount':8},call
@@ -124,6 +149,11 @@ try:
  receipt=write_fixture(**call.tool_calls[0].arguments)
  final,state=agent.generate_next_message(ToolMessage(role='tool',id=call.tool_calls[0].id,name='write_fixture',content=receipt,error=False),state)
  assert final.content=='Synthetic operation completed.',final
+ assert str(out) not in json.dumps(requests), 'Local episode path leaked into native model messages'
+ if args.reject_first_question:
+  rejection_messages=[m for req in requests for m in req.get('messages',[]) if 'QUESTION_NOT_PUBLISHED' in str(m.get('content',''))]
+  assert rejection_messages,'Controller rejection did not reach the executor'
+  assert all(m['role']=='tool' and 'User has answered your questions:' not in str(m.get('content','')) for m in rejection_messages),'Controller review became a customer answer'
  final_task=agent.task.call('status',now=int(__import__('time').time()))
  assert final_task['outcome']=='success',final_task
  assert len(final_task['nodes'])==(4 if args.read_before_wait else 3) and all(n['status']=='completed' for n in final_task['nodes']),final_task
@@ -133,6 +163,7 @@ try:
  result={'status':'passed','scope':'real native Java DeepAgent + persistent task + real MCP + real Go; scripted S2 proposals/Jev + synthetic effect',
   'external_model_calls':0,'native_fixture_calls':len(requests),'official_business_score':None,
   'task':final_task,'checks':['per-turn input interpretation','native model budget callback','ask_user waiting/resume','Go dispatch','receipt correlation','goal acceptance','persistent framework checkpoint']}
+ if args.reject_first_question:result['checks'].append('controller rejection remains tool error; real user reply alone resumes as answer')
  (out/'result.json').write_text(json.dumps(result,indent=2))
  print('PASS complete controlled native fixture:',out)
 finally:

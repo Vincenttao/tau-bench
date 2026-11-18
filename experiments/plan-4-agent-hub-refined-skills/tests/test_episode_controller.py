@@ -3,6 +3,7 @@ import queue
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ARM = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ARM/'python'), str(Path(__file__).resolve().parent)]
@@ -41,6 +42,66 @@ class AllSupported(ScriptedClient):
 
 
 class EpisodeControllerTests(unittest.TestCase):
+    def test_fabricated_s2_quote_is_durable_clarification_not_episode_crash(self):
+        class InvalidPlanner(Planner):
+            def complete(self, purpose, state, schema):
+                return {'goals': [], 'existing_routes': [], 'context_quote': 'not in customer message'}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with JavaTask(root/'task', 'episode', 1000, 64) as task:
+                controller = EpisodeController(task, None, InvalidPlanner(), AllSupported({}),
+                    RoutingPolicy('fixture', .3, .7, 'jev-latest', 'jev-1.14.0'), root/'control', {}, 'policy')
+                result = controller.user('m', 'Hello', now=900)
+                self.assertEqual(result['status'], 'clarify')
+                self.assertEqual(task.call('message_status', message='m')['status'], 'clarify')
+                self.assertFalse(controller.state(900)['can_dispatch'])
+                self.assertEqual(controller.state(900)['goals'], [])
+
+    def test_request_expiring_during_planning_never_adopts_or_enqueues(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with JavaTask(root/'task', 'episode', 1000, 64) as task:
+                controller = EpisodeController(task, None, Planner(),
+                    AllSupported({'covered': .99, 'has_new': .99, 'new0_supported': .99}),
+                    RoutingPolicy('fixture', .3, .7, 'jev-latest', 'jev-1.14.0'), root/'control',
+                    {'write_fixture': {'access': 'write', 'principal': 'fixture'}}, 'policy')
+                controller.user('m', 'Please read balance', now=900)
+                output = queue.Queue()
+                with patch('episode_controller.time.monotonic', side_effect=[0, 2]):
+                    with self.assertRaises(PermissionError):
+                        controller.tool({'id': 'late', 'name': 'write_fixture', 'arguments': {}}, output, now=900, request_deadline=1)
+                self.assertTrue(output.empty())
+                self.assertEqual(list((root/'control/effects').glob('*.json')), [])
+
+    def test_unlock_requires_observed_disclosure_but_not_business_completion(self):
+        class MetadataPlanner(Planner):
+            def complete(self, purpose, state, schema):
+                if purpose == 'tool-step': raise AssertionError('Unlock is metadata, not a bank effect')
+                return super().complete(purpose, state, schema)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with JavaTask(root/'task', 'episode', 1000, 64) as task:
+                hub = HubGate(ARM/'go/target/banking-gate', root/'ledger.jsonl', ARM.parents[1].parent/'agent-hub-alpha/agent-festival/schema')
+                self.addCleanup(hub.close)
+                client = AllSupported({'covered': .99, 'has_new': .99, 'new0_supported': .99})
+                controller = EpisodeController(task, hub, MetadataPlanner(), client,
+                    RoutingPolicy('fixture', .3, .7, 'jev-latest', 'jev-1.14.0'), root/'control',
+                    {'unlock_discoverable_agent_tool': {'access': 'write', 'principal': 'broker'},
+                     'special_read': {'access': 'read', 'principal': 'shared-read', 'discoverable': True}}, 'policy')
+                controller.user('m', 'Please read balance', now=900)
+                output = queue.Queue()
+                call = {'id': 'unlock', 'name': 'unlock_discoverable_agent_tool', 'arguments': {'agent_tool_name': 'special_read'}}
+                controller.evidence.add('official-user', 'Please enable special_read')
+                with self.assertRaises(PermissionError): controller.tool(call, output, now=900)
+                self.assertTrue(output.empty())
+                controller.evidence.add('official-policy', 'Use the published internal capability special_read to obtain this fact.')
+                inference_count = len(client.calls)
+                controller.tool(call, output, now=900)
+                self.assertEqual(output.qsize(), 1)
+                self.assertEqual(len(client.calls), inference_count)
+                controller.receipt('unlock', 'Tool unlocked: special_read\nDescription: synthetic reader', False, now=900)
+                self.assertIn('special_read', controller.unlocked)
+
     def test_public_evidence_read_can_support_multiple_active_goals(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

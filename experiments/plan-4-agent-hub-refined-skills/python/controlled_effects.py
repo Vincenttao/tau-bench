@@ -8,6 +8,7 @@ import copy
 import fcntl
 import hashlib
 import json
+import time
 from pathlib import Path
 
 from task_session import durable_json
@@ -39,11 +40,22 @@ class ControlledEffects:
     def status(self, operation):
         return json.loads(self._path(operation).read_text())
 
-    def _task(self, goal, now, *, require_dependencies=False):
+    def check_business_ready(self, goal, now):
+        with self.locked(): self._task(goal, now, require_known_effects=True)
+
+    def _task(self, goal, now, *, require_dependencies=False, require_known_effects=False):
         state = self.task.call('status', now=now)
         if not state['can_dispatch'] or not any(g['goal_id'] == goal and g['state'] == 'active' for g in state['goals']):
             raise PermissionError('Task does not allow this goal to dispatch')
         target = next(g for g in state['goals'] if g['goal_id'] == goal)
+        if require_known_effects:
+            for path in self.directory.glob('*.json'):
+                previous = json.loads(path.read_text())
+                prior_name = previous.get('effective_tool', previous.get('tool'))
+                prior_access = self.catalog.get(prior_name, {}).get('access', 'write')
+                if (previous['phase'] in ('dispatch_attempt', 'dispatched') and previous['business_status'] == 'unknown'
+                        and prior_access != 'read' and prior_name != 'unlock_discoverable_agent_tool'):
+                    raise PermissionError('An earlier business effect is unknown; reconcile before adding writes')
         if require_dependencies:
             outcomes = {g['goal_id']: g.get('outcome') for g in state['goals']}
             if any(outcomes.get(parent) != 'success' for parent in target.get('dependencies', [])):
@@ -57,7 +69,8 @@ class ControlledEffects:
             from runtime_guards import resolve_operation
             resolved = resolve_operation(tool, arguments, self.catalog)
             effective = resolved['name']
-            state = self._task(goal, now, require_dependencies=resolved['access'] != 'read')
+            bank_write = resolved['access'] == 'write' and effective != 'unlock_discoverable_agent_tool'
+            state = self._task(goal, now, require_dependencies=bank_write, require_known_effects=bank_write)
             if not isinstance(step, str) or not step.strip() or not self.live_permission(effective):
                 raise PermissionError('Unregistered step/tool or permission unavailable')
             if resolved.get('access') not in ('read', 'write', 'control'):
@@ -100,11 +113,18 @@ class ControlledEffects:
             record['phase'] = 'adopted'; durable_json(path, record)
             return operation
 
-    def dispatch(self, operation, call_id, official_queue, *, now):
+    def dispatch(self, operation, call_id, official_queue, *, now, deadline=None):
         with self.locked():
+            if deadline is not None and time.monotonic() >= deadline:
+                raise PermissionError('Request deadline passed before Go dispatch')
             record = self.status(operation)
+            from runtime_guards import resolve_operation
+            resolved = resolve_operation(record['payload']['operation'], record['payload']['arguments'], self.catalog)
+            if record['tool'] != record['payload']['operation'] or record.get('effective_tool', record['tool']) != resolved['name']:
+                raise PermissionError('Stored operation metadata differs from its bound payload')
+            bank_write = resolved['access'] == 'write' and resolved['name'] != 'unlock_discoverable_agent_tool'
             state = self._task(record['goal_id'], now,
-                require_dependencies=self.catalog[record.get('effective_tool', record['tool'])]['access'] != 'read')
+                require_dependencies=bank_write, require_known_effects=bank_write)
             if (record['phase'] != 'adopted' or state['revision'] != record['task_revision']
                     or not isinstance(call_id, str) or not call_id or not self.live_permission(record.get('effective_tool', record['tool']))):
                 raise PermissionError('Duplicate, stale or unauthorized dispatch')
@@ -115,6 +135,8 @@ class ControlledEffects:
             if not response['ok']:
                 raise PermissionError('Go final dispatch refused')
             record['phase'] = 'dispatched'; durable_json(self._path(operation), record)
+            if deadline is not None and time.monotonic() >= deadline:
+                raise RuntimeError('Go admitted the operation but the request expired before enqueue; retain unknown, do not retry')
             official_queue.put({'type': 'tool_calls', 'tool_calls': [{
                 'id': call_id, 'name': record['tool'], 'arguments': copy.deepcopy(record['payload']['arguments'])}]})
 

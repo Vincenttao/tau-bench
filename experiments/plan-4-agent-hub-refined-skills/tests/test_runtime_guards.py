@@ -10,6 +10,14 @@ from input_router import RoutingPolicy
 
 
 class RuntimeGuardsTests(unittest.TestCase):
+    def test_unlock_validates_the_registered_inner_actor(self):
+        catalog = {'unlock_discoverable_agent_tool': {'access': 'write', 'principal': 'broker'},
+            'agent_read': {'access': 'read', 'principal': 'shared-read', 'discoverable': True},
+            'user_apply': {'access': 'write', 'principal': 'official-user-simulator', 'discoverable': True}}
+        self.assertEqual(resolve_operation('unlock_discoverable_agent_tool', {'agent_tool_name': 'agent_read'}, catalog)['target_operation'], 'agent_read')
+        for target in ('user_apply', 'absent'):
+            with self.assertRaises(PermissionError): resolve_operation('unlock_discoverable_agent_tool', {'agent_tool_name': target}, catalog)
+
     def test_evidence_scope_and_version_are_checked(self):
         with tempfile.TemporaryDirectory() as directory:
             store = EvidenceStore(Path(directory), 'episode')

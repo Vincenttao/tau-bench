@@ -25,6 +25,7 @@ public final class TaskHost {
     public static void main(String[] args) throws Exception {
         try (var task = new TaskCoordinator(Path.of(args[0]), args[1], Long.parseLong(args[2]), Integer.parseInt(args[3]));
              var input = new BufferedReader(new InputStreamReader(System.in))) {
+            if (args.length == 5) task.useReplayGoalIds(java.nio.file.Files.readAllLines(Path.of(args[4])));
             String line;
             while ((line = input.readLine()) != null) {
                 Map<String,Object> request = Map.of();

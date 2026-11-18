@@ -50,6 +50,7 @@ func main() {
         }
         if err == nil {
             switch input.Method {
+            case "health": err = nil
             case "decide": err = machine.Decide(input.Decision, input.Payload)
             case "dispatch": err = machine.Dispatch(input.Operation, input.Payload, input.Grants)
             case "complete": err = machine.Complete(input.Operation, input.Success)

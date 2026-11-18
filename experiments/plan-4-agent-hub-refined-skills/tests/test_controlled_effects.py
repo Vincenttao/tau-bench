@@ -4,6 +4,7 @@ import queue
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ARM = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ARM/'python'), str(Path(__file__).resolve().parent)]
@@ -15,6 +16,28 @@ from controlled_effects import ControlledEffects, digest
 
 
 class ControlledEffectsTests(unittest.TestCase):
+    def test_expiry_after_go_admission_keeps_unknown_and_does_not_enqueue(self):
+        clock = [0]
+        class Task:
+            episode = 'episode'
+            def call(self, method, **values):
+                return {'can_dispatch': True, 'revision': 1, 'goals': [{'goal_id': 'goal', 'state': 'active'}]}
+        class Hub:
+            def call(self, method, **values):
+                if method == 'dispatch': clock[0] = 2
+                return {'ok': True}
+        with tempfile.TemporaryDirectory() as directory:
+            effects = ControlledEffects(Task(), Hub(), Path(directory), {'write': {'access': 'write'}})
+            proof = {'episode_id': 'episode', 'goal_id': 'goal', 'status': 'allow',
+                'payload_hash': digest({'episode': 'episode', 'operation': 'write', 'arguments': {}}),
+                'evidence_refs': ['fixture'], 'rule_version': 'fixture', 'model': 'fixture', 'conditions': {'valid': 'satisfied'}}
+            operation = effects.adopt('goal', 'step', 'write', {}, proof, now=900)
+            output = queue.Queue()
+            with patch('controlled_effects.time.monotonic', side_effect=lambda: clock[0]):
+                with self.assertRaises(RuntimeError): effects.dispatch(operation, 'late', output, now=900, deadline=1)
+            self.assertTrue(output.empty())
+            self.assertEqual(effects.status(operation)['business_status'], 'unknown')
+
     def test_stable_step_cannot_silently_reuse_a_different_payload(self):
         class Task:
             episode = 'episode'
@@ -52,6 +75,8 @@ class ControlledEffectsTests(unittest.TestCase):
                 with self.assertRaises(RuntimeError): effects.dispatch(operation, 'call-one', BrokenQueue(), now=900)
                 reopened = ControlledEffects(task, hub, root/'effects', {'synthetic_submit': {'access': 'write'}})
                 with self.assertRaises(PermissionError): reopened.dispatch(operation, 'call-two', queue.Queue(), now=900)
+                with self.assertRaises(PermissionError):
+                    reopened.adopt(goal, 'unsafe-followup', 'synthetic_submit', {}, judgment, now=900)
                 # Authoritative late observation can still close the operation after task stop.
                 task.call('stop', reason='official-stop')
                 reopened.receipt(operation, 'call-one', {'status': 'succeeded'}, error=False)

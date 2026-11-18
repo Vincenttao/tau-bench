@@ -90,7 +90,7 @@ public final class HubDeepAgentAssembly implements AutoCloseable {
         log("mcp_connect",Map.of("start_ms",start,"end_ms",System.currentTimeMillis()));
         var rails = new ArrayList<Object>();
         rails.add(new SkillUseRail(List.of(skillRoot.toString()),"all",List.of(),List.of(),List.of(),true,false));
-        rails.add(new AskUserRail());
+        rails.add(new ControllerAskUserRail());
         rails.add(new Boundary());
         String promptVersion = String.valueOf(init.getOrDefault("system_prompt_version", DEFAULT_PROMPT_VERSION));
         String prompt = systemPrompt(language, String.valueOf(init.get("domain_policy")), promptVersion);

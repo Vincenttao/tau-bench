@@ -27,7 +27,7 @@ original_completion=llm_utils.completion
 usage_file=out/'user-usage.jsonl'
 def metered_completion(*args,**kwargs):
  global user_model_pin
- if ACTIVE_AGENT is not None:ACTIVE_AGENT.task.call('charge',now=int(time.time()),kind='user')
+ if ACTIVE_AGENT is not None:ACTIVE_AGENT.controller.reserve_model('user',now=int(time.time()))
  model=kwargs.get('model','')
  if model not in ['openai/'+m['model'],m['model'],'gpt-4.1-2025-04-14']:raise ValueError('Unapproved model route '+model)
  # Route even the official judge only to the user's specified gateway, never api.openai.com.

@@ -1,0 +1,187 @@
+{
+  "scope": "development implementation and scoped control-chain acceptance",
+  "implementation": "integrated; full-design-release-not-accepted",
+  "formal_comparison": false,
+  "all_39_contracts_passed": false,
+  "python_tests": 109,
+  "java_task_assertions": 47,
+  "go_tests": 2,
+  "verification": "logs/control-regression-20261118-b03/result.json",
+  "official_runs": [
+    {
+      "path": "logs/full-official-task054-20261118-b00",
+      "status": "scored",
+      "domain": "banking_knowledge",
+      "task_id": "task_054",
+      "trial": 0,
+      "reward": 0.0,
+      "termination_reason": "user_stop",
+      "duration": 144.20328031700046,
+      "architecture_acceptance": "passed",
+      "all_39_contracts_passed": false,
+      "formal_comparison": false,
+      "replay": {
+        "path": "logs/full-official-task054-control-replay-20261118-b01",
+        "status": "passed",
+        "events": 56,
+        "provider_calls": 36,
+        "external_inference_calls": 0,
+        "official_bank_calls": 0
+      }
+    },
+    {
+      "path": "logs/full-official-task054-20261118-b02",
+      "status": "scored",
+      "domain": "banking_knowledge",
+      "task_id": "task_054",
+      "trial": 0,
+      "reward": 0.0,
+      "termination_reason": "user_stop",
+      "duration": 419.39811528500286,
+      "architecture_acceptance": "passed",
+      "all_39_contracts_passed": false,
+      "formal_comparison": false,
+      "replay": {
+        "path": "logs/full-official-task054-control-replay-20261118-b03",
+        "status": "passed",
+        "events": 140,
+        "provider_calls": 140,
+        "external_inference_calls": 0,
+        "official_bank_calls": 0
+      }
+    },
+    {
+      "path": "logs/full-official-task003-20261118-b00",
+      "status": "scored",
+      "domain": "banking_knowledge",
+      "task_id": "task_003",
+      "trial": 0,
+      "reward": 0.0,
+      "termination_reason": "user_stop",
+      "duration": 620.3770549860055,
+      "architecture_acceptance": "passed",
+      "all_39_contracts_passed": false,
+      "formal_comparison": false,
+      "replay": {
+        "path": "logs/full-official-task003-control-replay-20261118-b00",
+        "status": "passed",
+        "events": 135,
+        "provider_calls": 126,
+        "external_inference_calls": 0,
+        "official_bank_calls": 0
+      }
+    }
+  ],
+  "model_probes": [
+    {
+      "path": "logs/atomic-output-live-20261118-b00/result.json",
+      "status": "passed",
+      "scope": "synthetic atomic-output probes; no bank tool calls",
+      "formal_comparison": false,
+      "budgeted_inference_calls": 11,
+      "results": [
+        {
+          "case": "name-question",
+          "passed": true,
+          "status": "allow",
+          "reason": "atomic-output-claims"
+        },
+        {
+          "case": "submission-is-pending",
+          "passed": true,
+          "status": "allow",
+          "reason": "atomic-output-claims"
+        },
+        {
+          "case": "false-approval-in-question",
+          "passed": true,
+          "status": "deny",
+          "reason": "atomic-output-claims"
+        },
+        {
+          "case": "unsupported-delivery-in-question",
+          "passed": true,
+          "status": "deny",
+          "reason": "atomic-output-claims"
+        },
+        {
+          "case": "unsupported-no-fee",
+          "passed": true,
+          "status": "deny",
+          "reason": "atomic-output-claims"
+        },
+        {
+          "case": "empty-extraction-attack",
+          "passed": true,
+          "status": "deny",
+          "reason": "atomic-output-claims"
+        }
+      ]
+    },
+    {
+      "path": "logs/response-surface-live-20261118-b00/result.json",
+      "status": "passed",
+      "scope": "five synthetic response-surface and numeric checks only",
+      "formal_comparison": false,
+      "inference_calls": 12,
+      "bank_calls": 0,
+      "automatic_retries": 0,
+      "results": [
+        {
+          "case": "identity-question-with-numeric-policy",
+          "passed": true,
+          "status": "allow",
+          "reason": "no-verified-numeric-comparison"
+        },
+        {
+          "case": "unfinished-question",
+          "passed": true,
+          "status": "allow",
+          "reason": "no-verified-numeric-comparison"
+        },
+        {
+          "case": "false-all-complete",
+          "passed": true,
+          "status": "unknown",
+          "reason": "unverified-extraction"
+        },
+        {
+          "case": "correct-low-fee",
+          "passed": true,
+          "status": "allow",
+          "reason": "numeric-preference-check"
+        },
+        {
+          "case": "incorrect-high-fee",
+          "passed": true,
+          "status": "deny",
+          "reason": "numeric-preference-check"
+        }
+      ]
+    },
+    {
+      "path": "logs/native-path-transport-live-20261118-b00/result.json",
+      "status": "passed",
+      "scope": "one synthetic native transport request with virtual episode paths",
+      "external_inference_calls": 1,
+      "bank_calls": 0,
+      "actual_model": "deepseek-v4-1-flash-261017",
+      "case_id_in_forwarded_request": false,
+      "formal_comparison": false
+    }
+  ],
+  "limitations": [
+    "Official scores precede final native path isolation change.",
+    "All 39 design contracts have not been individually accepted.",
+    "No formal English22 comparison was executed."
+  ],
+  "retained_failure": {
+    "path": "logs/full-official-task054-20261118-b01",
+    "reason": "Business PermissionError misclassified as mandatory audit outage; fixed and regression tested."
+  },
+  "native_fixture": {
+    "path": "logs/full-native-case-isolation-20261118-b00/episodes/task_999/result.json",
+    "status": "passed",
+    "external_model_calls": 0
+  }
+}

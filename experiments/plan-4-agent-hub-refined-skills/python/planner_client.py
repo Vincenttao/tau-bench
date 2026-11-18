@@ -24,7 +24,8 @@ class PlannerClient:
 
     def complete(self, purpose, visible_state, schema):
         self.task.call('charge', now=int(time.time()), kind='execution')
-        request = {'model': self.model, 'temperature': 0, 'stream': False, 'max_tokens': 4096,
+        request = {'model': self.model, 'temperature': 0, 'stream': False,
+                   'max_tokens': 8192 if purpose == 'response-review' else 4096,
                    'thinking': {'type': 'disabled'},
                    'response_format': {'type': 'json_object'}, 'messages': [
                        {'role': 'system', 'content': 'You propose bounded banking task data, with no tools or execution authority. '
@@ -44,9 +45,23 @@ class PlannerClient:
                         'A service and its product features, constraints and preferences form ONE goal; include those constraints in its description, '
                         'do not create separate goals for each feature. quote must be an exact contiguous substring of current content, '
                         'never copied from an earlier message. Return goals=[] for a reply, cancellation, modification or status query about existing work. '
+                        'Preserve Markdown markers, punctuation and amounts inside every quote. Do not paraphrase or strip bold markers. '
+                        'If unsure which literal span to copy, quote the entire current content exactly. '
+                        'Also return existing_routes for each existing goal addressed by the CURRENT message. Each route names its goal_id, action and an exact quote from the current message. '
+                        'Use context for supplied facts or a restated request that needs no committed change; respond only for a recorded waiting question; '
+                        'modify only for replacing a specific earlier requirement, and include the complete revised description of that goal alone. '
+                        'Use cancel/pause/resume only for explicit lifecycle requests, and query for asking status. Do not mistake repeated requests for new goals. '
+                        'For identifying/contact information shared by multiple ongoing services, use context_quote, '
+                        'an exact current-message quote, instead of duplicating per-goal context routes. Clarification about the last assistant message can use the same field. '
+                        'Use respond routes for recorded per-goal waiting questions. Shared context creates no goal change or permission confirmation. '
                         'For response-review, completed_goal_ids includes goals the actual response claims to have fulfilled '
                         '(including supplying the requested recommendation or information), not goals that are merely mentioned or asked about. '
                         'A question for missing information does not complete a goal. '
+                        'For response-review, claims must extract each concrete bank/customer fact or actual operation status, one assertion per item, '
+                        'including facts embedded in a question (fees, delivery times, policy conditions). quote must be an exact substring of candidate_response. '
+                        'Use policy/capability/operation/customer/progress kinds and cite observed evidence references. Empty references mean evidence is missing. '
+                        'controller-state is allowed only for the controller own progress, never to prove bank approval. '
+                        'Greetings, pure requests for information and intended future help are not factual outcome assertions. Use claims=[] only when there are no such facts. '
                         'Purpose: '+purpose+'\nSchema: '+json.dumps(schema)},
                        {'role': 'user', 'content': json.dumps(visible_state, ensure_ascii=False)}]}
         identity = self.directory/uuid.uuid4().hex
@@ -80,6 +95,14 @@ GOAL_SCHEMA = {'type': 'object', 'properties': {'goals': {'type': 'array', 'maxI
     'type': 'object', 'properties': {'description': {'type': 'string', 'minLength': 1},
                                   'quote': {'type': 'string', 'minLength': 1}},
     'required': ['description', 'quote'], 'additionalProperties': False}}}, 'required': ['goals'], 'additionalProperties': False}
+GOAL_SCHEMA['properties']['existing_routes'] = {'type': 'array', 'maxItems': 32, 'items': {
+    'type': 'object', 'properties': {'goal_id': {'type': 'string', 'minLength': 1},
+        'action': {'enum': ['context', 'respond', 'modify', 'query', 'cancel', 'pause', 'resume']},
+        'quote': {'type': 'string', 'minLength': 1}, 'description': {'type': 'string', 'minLength': 1}},
+    'required': ['goal_id', 'action', 'quote'], 'additionalProperties': False,
+    'allOf': [{'if': {'properties': {'action': {'const': 'modify'}}}, 'then': {'required': ['description']}}]}}
+GOAL_SCHEMA['required'].append('existing_routes')
+GOAL_SCHEMA['properties']['context_quote'] = {'type': 'string', 'minLength': 1}
 
 STEP_SCHEMA = {'type': 'object', 'properties': {
     'goal_id': {'type': 'string'}, 'status': {'enum': ['proposed', 'unknown']},

@@ -1,5 +1,5 @@
 // Package bankingeval binds actual Hub adoption decisions to final dispatch payloads.
-// This component is not yet wired to the live Python MCP effect boundary.
+// Used by the full-control Python boundary and the historical read-only pilot.
 package bankingeval
 
 import (

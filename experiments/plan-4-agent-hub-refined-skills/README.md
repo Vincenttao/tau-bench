@@ -1,8 +1,12 @@
 # 方案 4：plan-4-agent-hub-refined-skills
 
-本轮交付见[完整控制链实现与验收记录](reports/full-control-runtime-acceptance-20261117.md)：80项 Python 测试、完整原生重启夹具及官方单题接线检查通过；真实业务分数仍为0，完整发布验收尚未通过。正式比较保持关闭。
+最新交付：[003/054逐轮失败分析与第一组TDD修复](reports/failure-analysis-003-054-20261118/README.md)。覆盖136条官方消息，确认审查意见曾被格式化为用户回答，并修复来源隔离、上下文提案归并和旧问题生命周期。118项Python回归、Java4项来源检查及拒绝问询后的完整原生恢复夹具通过；本轮未重跑官方评分。
 
-当前已增加独立的完整控制链运行器：见[运行说明](python/RUNTIME.md)。`FullHubAgent` 已连接 Java 持久任务、S2、Jev、原生 DeepAgent/Skill/Todo、Go Hub 和官方工具环境；完整本机重启夹具通过，真实用例仍在开发验收，尚不能宣称 39 条契约全部通过。下面的阶段报告保留其历史范围。
+上一阶段见[控制链重放、输入绑定与验收记录](reports/control-replay-and-routing-20261118.md)：109项Python测试通过，已增加整链隔离重放、无效提案澄清、格式引用绑定、审计故障停止和模型工作目录去标识化。真实模型探针、原生恢复、官方接线与业务评分分别报告；完整39项发布验收及正式比较仍未开启。
+
+当前独立运行器见[运行说明](python/RUNTIME.md)。`FullHubAgent`已连接Java持久任务、S2、Jev、原生DeepAgent/Skill/Todo、Go Hub和官方工具环境。执行链通过、业务完成和完整设计发布验收是不同结论。
+
+下面的阶段报告保留其历史范围，状态以各报告日期为准：
 
 最新接线与验收：[Java/Jev/Go控制链阶段报告](reports/controlled-chain-acceptance-20261117.md)。真实Jev＋隔离官方工具实现的单项提交链通过，多意图恢复仍进入未决；DeepAgent正式driver、完整政策及目标验收尚未接齐，完整方案未通过验收。历史报告保持各自证据范围。
 
@@ -12,7 +16,7 @@ J1进展：[输入路由提案](python/INPUT_ROUTING.md)完成离线TDD，[本�
 
 Jev 原生接口进展：[接入与图片验证报告](reports/jev-native-integration.md)。6次合成推理已完成，实际响应为 `jev-1.14.0`；尚未接入Hub采纳/派发或正式银行测试，图片扩展不改变22题文本基准。
 
-最新候选修订：[LLM Evidence Control 测试方案](plans/llm-evidence-control/test-design.md)、[设计规格](plans/llm-evidence-control/test-spec.json)与[设计复核](plans/llm-evidence-control/design-review.md)。目标是完整执行既定22题，覆盖每轮输入解释、子目标推进、Jev/S1判断、Hub控制及官方结果验收；不扩展成手机银行产品。当前仅完成设计，未替换原配置或开启正式执行。下列设计和只读 pilot 保留为历史基线。
+实施基线：[LLM Evidence Control测试方案](plans/llm-evidence-control/test-design.md)、[设计规格](plans/llm-evidence-control/test-spec.json)与[设计复核](plans/llm-evidence-control/design-review.md)。目标是执行既定22题，覆盖每轮输入解释、子目标推进、Jev/S1判断、Hub控制及官方结果验收；不扩展成手机银行产品。完整控制运行器已用于独立诊断，设计规格中的正式发布开关保持关闭。下列原方案设计和只读pilot保留为历史基线。
 
 先读[本方案准备报告](readiness-report.md)：区分本方案已有证据、专属缺口、共同依赖与下一放行条件。
 
