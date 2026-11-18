@@ -3,7 +3,7 @@
 2026-11-17范围更新：以agent-solution现有MOA机制为准，不新增远端恢复协议、动态依赖调度器或任务事务账本。保留七领域银行适配及既有slow-only实验裁剪；后者不同于上游默认快慢路由。
 
 - [测试设计](test-design.md)：22个细化用例，20核心阻塞、1模型观察、1可选本地暂停专项。
-- 面向业务汇报可使用[八页图解 PDF](reports/moa-testing-briefing-20261118.pdf)或[可编辑的汇报稿](reports/moa-main-task054-debug-retrospective-20261117.md)。工程核查可查阅[技术复盘](reports/moa-debug-technical-notes-through-v10.md)和[逐题回归结果](reports/moa-v10-three-case-regression.md)。
+- 面向业务汇报可使用[图解汇报 PDF](reports/moa-testing-briefing-20261118.pdf)或[可编辑的汇报稿](reports/moa-main-task054-debug-retrospective-20261117.md)。工程核查可查阅[技术复盘](reports/moa-debug-technical-notes-through-v10.md)和[逐题回归结果](reports/moa-v10-three-case-regression.md)。
 - [本次范围修订与剩余调整](reports/native-moa-scope-20261117.md)：上游依据、退出项和验证边界。
 - [实现检查与修订结果](reports/implementation-check-20261117.md)：MAIN提示词、确认条件、只读采集及真实Runtime补参验证。
 - [技术接入与能力边界](technical-design.md)、[架构](architecture.md)、[业务场景](scenario-design.md)。
